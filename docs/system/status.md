@@ -1,12 +1,12 @@
 # Lab status
 
-Last updated: 2026-11-21.
+Last updated: 2026-11-21 (five-cell plant).
 
 ## Done
 
 **Phase 0: environment and plumbing (verified)**
 
-- [x] Compose stack / devcontainer: Ignition 8.3.10 (standard, trial),
+- [x] Compose stack / devcontainer: Ignition 8.3.10 (Maker Edition since 2026-11-21),
       PostgreSQL 19, simulated controller, workspace shell (uid-mapped,
       asyncua, pymodbus, psql).
 - [x] Gateway commissioned from `.env`; `ignition/data` bind-mounted, owned by
@@ -54,25 +54,54 @@ Last updated: 2026-11-21.
       Modbus. All 187 read Good. Writes through Ignition tags reach the
       controller; read-only tags refuse writes.
 
+**Phase 2: five cells, UDTs, MES first slice, HMI, history (verified 2026-11-21)**
+
+- [x] Plant layout: five PIC-200 cells C01..C05 in bays 1..5
+      (docs/plant-layout.md), instance table docs/cells.csv (identity,
+      upstream rate, reject rate, bin chute, qualified part types).
+- [x] Controllers: services `plc-c01`..`plc-c05` from one image; `CELL_ID`
+      renames the cell's nodes (`C03.*`), applies identification and
+      simulation start values; part serials unique across cells (k × 10⁸).
+      Smoke test passes on C02, C03 and C05 (`cell_smoke_test.py C0n`).
+- [x] Ignition: OPC connections C01..C05 and Modbus devices C01_IO01..C05_IO01
+      from templates; UDT `PIC200_Cell` (parameters CellId, OpcServer,
+      IoDevice) with 5 instances, UDT `PIC200_Sim` with 5 instances. The
+      single-cell device `IO01` and the atomic C01 tags are retired.
+- [x] SQL Historian `Historian` on DB connection `historian` (schema
+      `historian`), 22 members per cell; storing (96 tags registered after
+      30 min, the rest register on their first change).
+- [x] MES first slice (docs/system/mes.md): schema `mes`, traceability with
+      ack after commit, PackML state log with PLC timestamps, order status
+      following the cell, orders replaced on a cell closed short. MES good and
+      reject counts equal the PLC counts on all 19 orders completed in the
+      first 35 min.
+- [x] Lab autopilot: planner and operator stand-in, per-cell `MES/AutoRun`.
+- [x] Perspective project `plant` (docs/system/hmi.md): area overview,
+      cell page with mimic and PackML commands, instructor page. Checked by
+      screenshots (Playwright).
+- [x] Behaviour without a trial licence measured (operations.md): OPC UA
+      and scripts keep running; Modbus, historian, Perspective stop.
+- [x] Moved to Maker Edition (2026-11-21): licence activated, gateway
+      re-commissioned from the versioned config, all five cells producing,
+      Modbus, historian and HMI running. No part record lost across the
+      switch (controller buffers, sequences without gaps).
+
 ## Next (recommended order)
 
-1. **UDTs**: turn CV01/CV02 (identical conveyors) and the cell's PackML block
-   into UDTs, the key Ignition reuse concept (Panorama E2: classes and instances).
-2. **First Perspective project**: a cell overview (state, order, counters,
-   conveyors with parts, robot step), command buttons with CmdResult
-   feedback, and an instructor view on `[sim]`.
-3. **Alarms** on `C01/Alarms/*`, `RJ01`, `SF01` (fault-catalogue.md priorities),
-   alarm journal in `mes`.
-4. **Tag history** to PostgreSQL (SQL Historian) for counters, speeds,
-   energy; trends.
-5. **MES MVP** (docs/mes-requirements.md): order table and dispatch, the
-   traceability transaction group with the DataReady/AckSequence handshake,
-   downtime with StopReason, OEE per shift.
-6. **Phase 2**: fault injection, one fault at a time (fault-catalogue.md).
+1. **Trends and OEE**: Power Chart on the historised members; OEE per cell
+   from `mes.cell_state` and `mes.part_result` (availability, performance
+   from ideal cycle time, quality), first without the shift calendar.
+2. **Alarms** on `Alarms/*`, `RJ01`, `SF01` in the UDT (fault-catalogue.md
+   priorities), alarm journal in schema `alarms`, alarm table on the HMI.
+3. **MES operator screens**: order list, release, dispatch by hand, close
+   short (MES-ORD-03/04/08, DSP-01/02), product check after load (DSP-03).
+4. **Phase 2 faults**: fault injection, one fault at a time
+   (fault-catalogue.md), driven from the instructor page.
+5. Conveyor UDT: not possible cleanly with the current Modbus map, because
+   CV01 and CV02 signals are interleaved (C1/C2, DI1-4/DI5-8...). A real
+   project would map I/O per equipment block so that one UDT with a base
+   address fits; a learning point to keep.
 
 ## Open decisions
 
-- Licence path: standard edition in trial mode (2 h resets). Maker Edition is
-  possible for purely personal tests; switching requires re-commissioning
-  (docs/system/operations.md).
-- MES shift calendar (docs/README.md decision 7) is to be settled with the MES work.
+- MES shift calendar (docs/README.md decision 7) is to be settled with the OEE work.

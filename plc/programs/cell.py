@@ -51,6 +51,7 @@ CV01_LEN, CV02_LEN, PITCH = 2000.0, 1500.0, 100.0
 SETTLE_S, INSPECT_S = 0.2, 0.4
 TRACE_FIFO = 200
 SERIAL_EPOCH = dt.datetime(2026, 1, 1, tzinfo=UTC)
+SERIAL_BLOCK = 100_000_000          # serials of cell k start at k x 10^8 (section 4.1), unique until 2029-03
 ACTING_TIMEOUTS = {CLEARING: (1.0, STOPPED), STARTING: (1.0, EXECUTE), ABORTING: (0.5, ABORTED),
                    UNHOLDING: (1.0, EXECUTE), UNSUSPENDING: (1.0, EXECUTE)}
 CONVEYORS_ON = {STARTING, SUSPENDED, EXECUTE, STOPPING, HOLDING, UNHOLDING, SUSPENDING, UNSUSPENDING,
@@ -77,11 +78,11 @@ class Part:
 
 
 class Program:
-    def __init__(self, tags: Tags):
+    def __init__(self, tags: Tags, cell_number: int = 1):
         self.t = tags
         self.now = dt.datetime.now(UTC)
         self.startup = self.now
-        self.serial = int((self.now - SERIAL_EPOCH).total_seconds())
+        self.serial = cell_number * SERIAL_BLOCK + int((self.now - SERIAL_EPOCH).total_seconds())
         self.state, self.state_time, self.uptime = STOPPED, 0.0, 0.0
         self.cv01: list[Part] = []          # front (closest to the end stop) first
         self.cv02: list[float] = []         # front positions, front first

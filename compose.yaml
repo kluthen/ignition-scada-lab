@@ -73,25 +73,43 @@ services:
       retries: 20
     restart: unless-stopped
 
-  plc:
-    build:
-      context: ./plc
-    image: ignition-lab-plc
-    hostname: plc
-    working_dir: /app
-    environment:
-      PLC_PROGRAM: cell
-      PLC_SCAN_MS: "100"
-      MODBUS_PORT: "502"
-      OPCUA_ENDPOINT: opc.tcp://0.0.0.0:4840/ignition-lab/
-      REGISTRY_CSV: /registry/opcua-registry.csv
-    volumes:
-      - ./plc:/app:ro
-      - ./docs/opcua-registry.csv:/registry/opcua-registry.csv:ro   # single source of truth
-    ports:
-      - "127.0.0.1:5020:502"     # Modbus TCP (device IO01), reachable from the host for testing
-      - "127.0.0.1:4840:4840"    # OPC UA server of the cell controller (security None, lab)
-    restart: unless-stopped
+  # Five identical PIC-200 cells (docs/plant-layout.md), one simulated controller
+  # each. CELL_ID selects the row of docs/cells.csv. Host ports: OPC UA 484n,
+  # Modbus 502n for cell Cn (security None, lab).
+  plc-c01:
+    <<: &plc
+      build:
+        context: ./plc
+      image: ignition-lab-plc
+      working_dir: /app
+      volumes:
+        - ./plc:/app:ro
+        - ./docs/opcua-registry.csv:/registry/opcua-registry.csv:ro   # signal registry (type), single source of truth
+        - ./docs/cells.csv:/registry/cells.csv:ro                     # cell instances
+      restart: unless-stopped
+    hostname: plc-c01
+    environment: { CELL_ID: C01 }
+    ports: ["127.0.0.1:4841:4840", "127.0.0.1:5021:502"]
+  plc-c02:
+    <<: *plc
+    hostname: plc-c02
+    environment: { CELL_ID: C02 }
+    ports: ["127.0.0.1:4842:4840", "127.0.0.1:5022:502"]
+  plc-c03:
+    <<: *plc
+    hostname: plc-c03
+    environment: { CELL_ID: C03 }
+    ports: ["127.0.0.1:4843:4840", "127.0.0.1:5023:502"]
+  plc-c04:
+    <<: *plc
+    hostname: plc-c04
+    environment: { CELL_ID: C04 }
+    ports: ["127.0.0.1:4844:4840", "127.0.0.1:5024:502"]
+  plc-c05:
+    <<: *plc
+    hostname: plc-c05
+    environment: { CELL_ID: C05 }
+    ports: ["127.0.0.1:4845:4840", "127.0.0.1:5025:502"]
 
   # Development shell used by the devcontainer (VS Code "Reopen in Container").
   workspace:

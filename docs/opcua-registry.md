@@ -15,9 +15,9 @@ The plant itself is described in [`scenario.md`](scenario.md).
 
 | Item | Value |
 |---|---|
-| Endpoint (inside compose network) | `opc.tcp://plc:4840/ignition-lab/` |
-| Endpoint (from the host) | `opc.tcp://127.0.0.1:4840/ignition-lab/` (port to be published by compose) |
-| Application URI | `urn:ignition-lab:plc-sim` |
+| Endpoint (inside compose network) | `opc.tcp://plc-c0n:4840/ignition-lab/`, one server per cell (`plc-c01`..`plc-c05`) |
+| Endpoint (from the host) | `opc.tcp://127.0.0.1:484n/ignition-lab/` (C03 → 4843, see [cells.csv](cells.csv)) |
+| Application URI | `urn:ignition-lab:plc-sim:c0n` |
 | Security, phase 1 | SecurityPolicy None, MessageSecurityMode None, anonymous user |
 | Server implementation | Python `asyncua`, same process as the Modbus server and the cell program |
 
@@ -29,6 +29,14 @@ The plant itself is described in [`scenario.md`](scenario.md).
 
 The server registers the namespaces in this order, so asyncua gives them indexes 2, 3 and 4.
 Clients must not hard-code the index: use the namespace URI.
+
+This registry is the **type** of one PIC-200 cell, written for the instance C01.
+The five cells of the area ([plant-layout.md](plant-layout.md)) serve the same
+address space, with one substitution: the cell's own nodes (`C01` and `C01.*`)
+carry the cell id in their NodeId and BrowsePath (`C03.Status.StateCurrent`
+under `Machines/C03`). Equipment inside a cell (`QS01`, `RB01`, `CV01`…) and
+`Sim.*` keep their names, which are local to each server. Identification values
+and `Sim.Process.*` start values come from docs/cells.csv (`plc/instance.py`).
 
 ## 2. NodeId convention
 
@@ -445,11 +453,12 @@ Columns as in the CSV. "Ph" = phase; "prop" = PropertyType. Ranges are in engine
 
 ## 8. Ignition connection notes
 
-- OPC UA: the lab's connection is named **`C01`** (`gateway-config/opc-connection-c01.json`, endpoint
-  `opc.tcp://plc:4840/ignition-lab/`, security None, host override `plc`). The `nsu=` item paths in the
-  `node_id` column work as-is in Ignition 8.3.10 (verified). Tags are generated from this CSV by
-  `scripts/generate_tags.py` (UInt32 becomes Int8, UInt16 becomes Int4).
-- Modbus TCP: device host `plc`, port 502, unit id 1, default settings: one-based addressing (`HR1` = PDU 0) and high word first for 32-bit values.
+- OPC UA: one connection per cell, named like the cell (**`C03`**, from `gateway-config/opc-connection.template.json`,
+  endpoint `opc.tcp://plc-c03:4840/ignition-lab/`, security None, host override `plc-c03`). The `nsu=` item paths in the
+  `node_id` column work as-is in Ignition 8.3.10 (verified). `scripts/generate_tags.py` turns this CSV into the
+  UDT `PIC200_Cell`, with `s=C01.` replaced by the parameter `s={CellId}.` (UInt32 becomes Int8, UInt16 becomes Int4).
+  The `ignition_tag_path` column gives the member path relative to the instance (`[default]ANN/FIN/C01/` = the instance).
+- Modbus TCP: one device per cell (`C03_IO01`, host `plc-c03`), port 502, unit id 1, default settings: one-based addressing (`HR1` = PDU 0) and high word first for 32-bit values.
   If `UT01.Status.EnergyTotal` looks wrong, toggle "Reverse Word Order": that is a deliberate learning point.
   Apply `modbus_scale` with tag scaling (linear, raw × scale).
 - Keep `Sim.*` in a separate tag provider (`[sim]`), visible only to an instructor screen.

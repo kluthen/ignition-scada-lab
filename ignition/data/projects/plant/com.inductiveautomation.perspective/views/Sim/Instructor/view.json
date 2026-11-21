@@ -1,0 +1,259 @@
+{
+  "custom": {},
+  "params": {},
+  "props": {
+    "defaultSize": {
+      "width": 1000,
+      "height": 500
+    }
+  },
+  "root": {
+    "type": "ia.container.flex",
+    "meta": {
+      "name": "root"
+    },
+    "props": {
+      "direction": "column",
+      "style": {
+        "backgroundColor": "#FFFFFF",
+        "borderStyle": "solid",
+        "borderWidth": "1px",
+        "borderColor": "#B8BEC6",
+        "borderRadius": "4px",
+        "padding": "8px",
+        "margin": "10px"
+      }
+    },
+    "children": [
+      {
+        "type": "ia.display.label",
+        "meta": {
+          "name": "Title"
+        },
+        "props": {
+          "style": {
+            "fontSize": "18px",
+            "fontWeight": "bold",
+            "color": "#1F2933"
+          },
+          "text": "Instructor: simulation settings per cell ([sim] provider, not part of the plant)"
+        },
+        "position": {
+          "basis": "30px",
+          "shrink": 0,
+          "grow": 0
+        }
+      },
+      {
+        "type": "ia.display.label",
+        "meta": {
+          "name": "Help"
+        },
+        "props": {
+          "style": {
+            "fontSize": "12px",
+            "color": "#5F6B7A"
+          },
+          "text": "Phase-2 faults (Sim/Faults) come later (docs/fault-catalogue.md). The autopilot stands in for the shift lead and the operator (labsim.autopilot)."
+        },
+        "position": {
+          "basis": "20px",
+          "shrink": 0,
+          "grow": 0
+        }
+      },
+      {
+        "type": "ia.container.flex",
+        "meta": {
+          "name": "Header"
+        },
+        "props": {
+          "direction": "row",
+          "style": {
+            "marginTop": "10px"
+          }
+        },
+        "position": {
+          "basis": "24px",
+          "shrink": 0
+        },
+        "children": [
+          {
+            "type": "ia.display.label",
+            "meta": {
+              "name": "H0"
+            },
+            "props": {
+              "style": {
+                "fontSize": "12px",
+                "color": "#5F6B7A",
+                "fontWeight": "bold"
+              },
+              "text": "Cell"
+            },
+            "position": {
+              "basis": "70px",
+              "shrink": 0,
+              "grow": 0
+            }
+          },
+          {
+            "type": "ia.display.label",
+            "meta": {
+              "name": "H1"
+            },
+            "props": {
+              "style": {
+                "fontSize": "12px",
+                "color": "#5F6B7A",
+                "fontWeight": "bold"
+              },
+              "text": "Feed interval (s)"
+            },
+            "position": {
+              "basis": "122px",
+              "shrink": 0,
+              "grow": 0
+            }
+          },
+          {
+            "type": "ia.display.label",
+            "meta": {
+              "name": "H2"
+            },
+            "props": {
+              "style": {
+                "fontSize": "12px",
+                "color": "#5F6B7A",
+                "fontWeight": "bold"
+              },
+              "text": "Reject every N"
+            },
+            "position": {
+              "basis": "122px",
+              "shrink": 0,
+              "grow": 0
+            }
+          },
+          {
+            "type": "ia.display.label",
+            "meta": {
+              "name": "H3"
+            },
+            "props": {
+              "style": {
+                "fontSize": "12px",
+                "color": "#5F6B7A",
+                "fontWeight": "bold"
+              },
+              "text": "Upstream feed"
+            },
+            "position": {
+              "basis": "120px",
+              "shrink": 0,
+              "grow": 0
+            }
+          },
+          {
+            "type": "ia.display.label",
+            "meta": {
+              "name": "H4"
+            },
+            "props": {
+              "style": {
+                "fontSize": "12px",
+                "color": "#5F6B7A",
+                "fontWeight": "bold"
+              },
+              "text": "Auto-empty bin"
+            },
+            "position": {
+              "basis": "120px",
+              "shrink": 0,
+              "grow": 0
+            }
+          },
+          {
+            "type": "ia.display.label",
+            "meta": {
+              "name": "H5"
+            },
+            "props": {
+              "style": {
+                "fontSize": "12px",
+                "color": "#5F6B7A",
+                "fontWeight": "bold"
+              },
+              "text": "Autopilot (MES)"
+            },
+            "position": {
+              "basis": "120px",
+              "shrink": 0,
+              "grow": 0
+            }
+          },
+          {
+            "type": "ia.display.label",
+            "meta": {
+              "name": "H6"
+            },
+            "props": {
+              "style": {
+                "fontSize": "12px",
+                "color": "#5F6B7A",
+                "fontWeight": "bold"
+              },
+              "text": ""
+            },
+            "position": {
+              "basis": "1px",
+              "shrink": 0,
+              "grow": 0
+            }
+          }
+        ]
+      },
+      {
+        "type": "ia.display.flex-repeater",
+        "meta": {
+          "name": "Rows"
+        },
+        "props": {
+          "path": "Sim/CellRow",
+          "direction": "column",
+          "instances": [],
+          "elementPosition": {
+            "basis": "44px",
+            "shrink": 0
+          }
+        },
+        "position": {
+          "basis": "auto",
+          "shrink": 0
+        },
+        "propConfig": {
+          "props.instances": {
+            "binding": {
+              "type": "query",
+              "config": {
+                "queryPath": "Area/Cells",
+                "returnFormat": "json",
+                "parameters": {},
+                "polling": {
+                  "enabled": true,
+                  "rate": "60"
+                }
+              },
+              "transforms": [
+                {
+                  "type": "script",
+                  "code": "\treturn [{'cell': row['cell']} for row in value]"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
+}

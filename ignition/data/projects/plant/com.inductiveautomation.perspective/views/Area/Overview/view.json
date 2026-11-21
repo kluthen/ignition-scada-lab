@@ -1,0 +1,285 @@
+{
+  "custom": {},
+  "params": {},
+  "props": {
+    "defaultSize": {
+      "width": 1400,
+      "height": 800
+    }
+  },
+  "root": {
+    "type": "ia.container.flex",
+    "meta": {
+      "name": "root"
+    },
+    "props": {
+      "direction": "column",
+      "style": {
+        "backgroundColor": "#E5E7EA",
+        "padding": "10px"
+      }
+    },
+    "children": [
+      {
+        "type": "ia.display.label",
+        "meta": {
+          "name": "Upstream"
+        },
+        "props": {
+          "style": {
+            "color": "#FFFFFF",
+            "padding": "4px 10px",
+            "fontSize": "13px",
+            "borderRadius": "3px",
+            "backgroundColor": "#6B7280",
+            "textAlign": "center"
+          },
+          "text": "\u25bc from the deburring line: machined housings, one feed per cell \u25bc"
+        },
+        "position": {
+          "basis": "26px",
+          "shrink": 0,
+          "grow": 0
+        }
+      },
+      {
+        "type": "ia.display.flex-repeater",
+        "meta": {
+          "name": "Cells"
+        },
+        "props": {
+          "path": "Cell/Tile",
+          "direction": "row",
+          "wrap": "wrap",
+          "justify": "space-between",
+          "elementPosition": {
+            "basis": "230px",
+            "grow": 1,
+            "shrink": 0
+          },
+          "instances": [],
+          "style": {
+            "gap": "10px",
+            "marginTop": "8px",
+            "marginBottom": "8px"
+          }
+        },
+        "position": {
+          "basis": "auto",
+          "shrink": 0
+        },
+        "propConfig": {
+          "props.instances": {
+            "binding": {
+              "type": "query",
+              "config": {
+                "queryPath": "Area/Cells",
+                "returnFormat": "json",
+                "parameters": {},
+                "polling": {
+                  "enabled": true,
+                  "rate": "60"
+                }
+              },
+              "transforms": [
+                {
+                  "type": "script",
+                  "code": "\treturn [{'cell': row['cell']} for row in value]"
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "type": "ia.display.label",
+        "meta": {
+          "name": "Packing"
+        },
+        "props": {
+          "style": {
+            "color": "#FFFFFF",
+            "padding": "4px 10px",
+            "fontSize": "13px",
+            "borderRadius": "3px",
+            "backgroundColor": "#4F6D8A",
+            "textAlign": "center"
+          },
+          "text": "\u25bc good parts to the packing conveyor \u25bc   \u00b7   rejects stay in each cell's bin (RJ01)"
+        },
+        "position": {
+          "basis": "26px",
+          "shrink": 0,
+          "grow": 0
+        }
+      },
+      {
+        "type": "ia.container.flex",
+        "meta": {
+          "name": "Lower"
+        },
+        "props": {
+          "direction": "row",
+          "style": {
+            "marginTop": "10px"
+          }
+        },
+        "position": {
+          "grow": 1,
+          "basis": "260px"
+        },
+        "children": [
+          {
+            "type": "ia.container.flex",
+            "meta": {
+              "name": "Today"
+            },
+            "props": {
+              "direction": "column",
+              "style": {
+                "backgroundColor": "#FFFFFF",
+                "borderStyle": "solid",
+                "borderWidth": "1px",
+                "borderColor": "#B8BEC6",
+                "borderRadius": "4px",
+                "padding": "8px",
+                "marginRight": "10px"
+              }
+            },
+            "position": {
+              "grow": 1,
+              "basis": "50%"
+            },
+            "children": [
+              {
+                "type": "ia.display.label",
+                "meta": {
+                  "name": "TodayTitle"
+                },
+                "props": {
+                  "style": {
+                    "fontWeight": "bold",
+                    "color": "#1F2933"
+                  },
+                  "text": "Today, per cell (from mes.part_result)"
+                },
+                "position": {
+                  "basis": "24px",
+                  "shrink": 0,
+                  "grow": 0
+                }
+              },
+              {
+                "type": "ia.display.table",
+                "meta": {
+                  "name": "TodayTable"
+                },
+                "props": {
+                  "data": [],
+                  "pager": {
+                    "top": false,
+                    "bottom": false
+                  }
+                },
+                "position": {
+                  "grow": 1,
+                  "basis": "180px"
+                },
+                "propConfig": {
+                  "props.data": {
+                    "binding": {
+                      "type": "query",
+                      "config": {
+                        "queryPath": "Area/TodayByCell",
+                        "returnFormat": "json",
+                        "parameters": {},
+                        "polling": {
+                          "enabled": true,
+                          "rate": "10"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "ia.container.flex",
+            "meta": {
+              "name": "Queue"
+            },
+            "props": {
+              "direction": "column",
+              "style": {
+                "backgroundColor": "#FFFFFF",
+                "borderStyle": "solid",
+                "borderWidth": "1px",
+                "borderColor": "#B8BEC6",
+                "borderRadius": "4px",
+                "padding": "8px"
+              }
+            },
+            "position": {
+              "grow": 1,
+              "basis": "50%"
+            },
+            "children": [
+              {
+                "type": "ia.display.label",
+                "meta": {
+                  "name": "QueueTitle"
+                },
+                "props": {
+                  "style": {
+                    "fontWeight": "bold",
+                    "color": "#1F2933"
+                  },
+                  "text": "Order queue (Running, Dispatched, Released)"
+                },
+                "position": {
+                  "basis": "24px",
+                  "shrink": 0,
+                  "grow": 0
+                }
+              },
+              {
+                "type": "ia.display.table",
+                "meta": {
+                  "name": "QueueTable"
+                },
+                "props": {
+                  "data": [],
+                  "pager": {
+                    "top": false,
+                    "bottom": false
+                  }
+                },
+                "position": {
+                  "grow": 1,
+                  "basis": "180px"
+                },
+                "propConfig": {
+                  "props.data": {
+                    "binding": {
+                      "type": "query",
+                      "config": {
+                        "queryPath": "Area/OrderQueue",
+                        "returnFormat": "json",
+                        "parameters": {},
+                        "polling": {
+                          "enabled": true,
+                          "rate": "5"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

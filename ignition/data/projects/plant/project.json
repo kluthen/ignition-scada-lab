@@ -1,0 +1,7 @@
+{
+  "title": "Brevent ANN/FIN",
+  "description": "Lab project: Perspective HMI for the finishing area (5 cells) and gateway scripts (MES dispatcher, lab simulation helpers).",
+  "enabled": true,
+  "inheritable": false,
+  "parent": ""
+}

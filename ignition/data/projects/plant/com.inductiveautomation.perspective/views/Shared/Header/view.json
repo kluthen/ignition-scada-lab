@@ -1,0 +1,129 @@
+{
+  "custom": {},
+  "params": {},
+  "props": {
+    "defaultSize": {
+      "width": 1400,
+      "height": 50
+    }
+  },
+  "root": {
+    "type": "ia.container.flex",
+    "meta": {
+      "name": "root"
+    },
+    "props": {
+      "direction": "row",
+      "style": {
+        "backgroundColor": "#2B3A4A",
+        "padding": "6px 12px",
+        "alignItems": "center"
+      },
+      "alignItems": "center"
+    },
+    "children": [
+      {
+        "type": "ia.display.label",
+        "meta": {
+          "name": "Title"
+        },
+        "props": {
+          "style": {
+            "fontSize": "18px",
+            "fontWeight": "bold",
+            "color": "#FFFFFF"
+          },
+          "text": "Brevent Hydraulics \u00b7 Annecy \u00b7 Finishing area (FIN)"
+        },
+        "position": {
+          "grow": 1,
+          "shrink": 0
+        }
+      },
+      {
+        "type": "ia.input.button",
+        "meta": {
+          "name": "Overview"
+        },
+        "props": {
+          "text": "Overview",
+          "primary": false,
+          "style": {
+            "marginLeft": "8px"
+          }
+        },
+        "position": {
+          "basis": "120px",
+          "shrink": 0
+        },
+        "events": {
+          "dom": {
+            "onClick": {
+              "type": "script",
+              "scope": "G",
+              "config": {
+                "script": "\tsystem.perspective.navigate('/')"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "ia.input.button",
+        "meta": {
+          "name": "Instructor"
+        },
+        "props": {
+          "text": "Instructor",
+          "primary": false,
+          "style": {
+            "marginLeft": "8px"
+          }
+        },
+        "position": {
+          "basis": "120px",
+          "shrink": 0
+        },
+        "events": {
+          "dom": {
+            "onClick": {
+              "type": "script",
+              "scope": "G",
+              "config": {
+                "script": "\tsystem.perspective.navigate('/instructor')"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "ia.display.label",
+        "meta": {
+          "name": "Clock"
+        },
+        "props": {
+          "style": {
+            "color": "#FFFFFF",
+            "marginLeft": "16px",
+            "textAlign": "right"
+          }
+        },
+        "position": {
+          "basis": "170px",
+          "shrink": 0,
+          "grow": 0
+        },
+        "propConfig": {
+          "props.text": {
+            "binding": {
+              "type": "expr",
+              "config": {
+                "expression": "dateFormat(now(1000), 'dd/MM/yyyy HH:mm:ss')"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

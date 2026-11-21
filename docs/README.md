@@ -1,12 +1,14 @@
 # Ignition lab: design documents
 
-Design of the simulated plant (Cell 01 at the fictional Brevent Hydraulics) and of the small MES
-to be built on Ignition 8.3. The simulation in `plc/` and the Ignition project are built from these
-documents.
+Design of the simulated plant (the finishing area of the fictional Brevent Hydraulics: five
+identical cells, each described by Cell 01) and of the small MES to be built on Ignition 8.3. The
+simulation in `plc/` and the Ignition project are built from these documents.
 
 | Document | Content |
 |---|---|
 | [scenario.md](scenario.md) | The plant. A pick-and-inspect cell: infeed conveyor, camera (DataMatrix + bore gauge), SCARA robot with vacuum gripper, reject bin, outfeed conveyor. It covers the equipment list and naming convention, the OPC UA / Modbus split, the part types (recipes), the physical model of each item with exact timings and formulas, the PackML state model (states, commands, internal transitions, interlocks), unit modes and the OPC 40001 machinery state mapping, the order download handshake, the traceability handshake, the expected production rates, and the restart rules. Phase 1 is deterministic and fault-free. |
+| [plant-layout.md](plant-layout.md) | The finishing area: five PIC-200 cells C01..C05 in bays 1..5, what differs between them, how one cell type becomes five instances at every layer (controller, OPC UA, Ignition UDT, MES, HMI), and how to add a cell. |
+| [cells.csv](cells.csv) | **Single source of truth** for the cell instances: id, bay, controller host and ports, Modbus device name, serial numbers, simulation start values, qualified part types. |
 | [opcua-registry.md](opcua-registry.md) | Human-readable registry: server endpoint, the three namespaces, the NodeId convention (`nsu=<uri>;s=<signal>`), the address space tree, the CSV column definitions, all enumerations, the alignment with OPC 40001-1 / 40010-1 / 30050 and where it diverges, and one table per equipment (generated from the CSV). |
 | [opcua-registry.csv](opcua-registry.csv) | **Single source of truth** for every signal: 193 OPC UA nodes (42 objects/folders, 151 variables; 109 in `urn:ignition-lab:cell`, 57 in `urn:ignition-lab:robot`, 27 in `urn:ignition-lab:sim`) and 36 Modbus TCP points. It is meant to drive the generation of the OPC UA address space, the Modbus map and later the Ignition tags. Each row has a `phase` column: 1 = behaviour now, 2 = node exists now, behaviour comes with faults. |
 | [fault-catalogue.md](fault-catalogue.md) | 14 faults (e-stop, guard door, vacuum loss, pick failure, jam, drive trip, stuck sensor, camera, unreadable DataMatrix, quality drift, low air, robot comms, downstream blocked, SCADA comms loss). Each comes with its injection node in the simulation-only `Sim` namespace, its detection signals, its effect on the state machine and StopReason, the reset procedure, and the Ignition alarm with its priority. |

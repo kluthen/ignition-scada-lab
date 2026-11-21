@@ -4,6 +4,8 @@ Every scan:  OPC UA client writes -> program.scan(dt) -> OPC UA publish.
 Modbus clients read/write the I/O image directly (tags.py maps it to signals).
 
 Environment:
+  CELL_ID          which cell of docs/cells.csv this controller is (default: C01)
+  CELLS_CSV        default /registry/cells.csv (docs/cells.csv, mounted)
   PLC_PROGRAM      module under programs/ (default: cell)
   PLC_SCAN_MS      scan period in ms (default: 100)
   MODBUS_PORT      Modbus TCP port (default: 502)
@@ -20,6 +22,7 @@ import logging
 import os
 import time
 
+import instance
 import registry
 from io_image import IOImage
 from modbus_server import start_server
@@ -58,15 +61,18 @@ async def main() -> None:
     port = int(os.environ.get("MODBUS_PORT", "502"))
     endpoint = os.environ.get("OPCUA_ENDPOINT", "opc.tcp://0.0.0.0:4840/ignition-lab/")
 
-    signals = registry.load()
-    log.info("registry: %d signals (%d OPC UA, %d Modbus)", len(signals),
+    cell = os.environ.get("CELL_ID", instance.TEMPLATE_CELL)
+    row = instance.load(cell)
+    signals = instance.apply(registry.load(), row)
+    log.info("cell %s (%s, serial %s): registry %d signals (%d OPC UA, %d Modbus)", cell, row["bay"],
+             row["serial_number"], len(signals),
              sum(s.protocol == "opcua" for s in signals.values()),
              sum(s.protocol == "modbus" for s in signals.values()))
     io = IOImage()
     tags = Tags(signals, io, dt.datetime.now(dt.timezone.utc))
-    program = importlib.import_module(f"programs.{name}").Program(tags)
+    program = importlib.import_module(f"programs.{name}").Program(tags, cell_number=instance.number(cell))
 
-    opc = OpcUaServer(tags, endpoint)
+    opc = OpcUaServer(tags, endpoint, cell)
     await opc.start()
     modbus = await start_server(io, "0.0.0.0", port)
     log.info("program '%s' running, scan %.0f ms", name, period * 1000)

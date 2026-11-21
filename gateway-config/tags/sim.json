@@ -1,282 +1,487 @@
 {
   "tags": [
     {
-      "name": "Sim",
+      "name": "_types_",
       "tagType": "Folder",
       "tags": [
         {
-          "name": "Process",
-          "tagType": "Folder",
+          "name": "PIC200_Sim",
+          "tagType": "UdtType",
           "tags": [
             {
-              "name": "FeedInterval",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Float8",
-              "documentation": "Minimum time between two parts released by upstream onto CV01.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Process.FeedInterval",
-              "tagGroup": "Fast",
-              "engUnit": "s",
-              "engLow": 1.0,
-              "engHigh": 60.0
+              "name": "Process",
+              "tagType": "Folder",
+              "tags": [
+                {
+                  "name": "FeedInterval",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Float8",
+                  "documentation": "Minimum time between two parts released by upstream onto CV01.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Process.FeedInterval"
+                  },
+                  "tagGroup": "Fast",
+                  "engUnit": "s",
+                  "engLow": 1.0,
+                  "engHigh": 60.0
+                },
+                {
+                  "name": "UpstreamFeedEnable",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Boolean",
+                  "documentation": "False = upstream stops releasing parts (starvation).",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Process.UpstreamFeedEnable"
+                  },
+                  "tagGroup": "Fast"
+                },
+                {
+                  "name": "RejectEveryN",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Int4",
+                  "documentation": "Every Nth part serial is out of tolerance (0 = no rejects).",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Process.RejectEveryN"
+                  },
+                  "tagGroup": "Fast",
+                  "engUnit": "count",
+                  "engLow": 0.0,
+                  "engHigh": 1000.0
+                },
+                {
+                  "name": "AutoEmptyRejectBin",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Boolean",
+                  "documentation": "True = the bin empties itself when it reaches RJ01.Parameters.NearFullLevel (no holds).",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Process.AutoEmptyRejectBin"
+                  },
+                  "tagGroup": "Fast"
+                }
+              ]
             },
             {
-              "name": "UpstreamFeedEnable",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Boolean",
-              "documentation": "False = upstream stops releasing parts (starvation).",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Process.UpstreamFeedEnable",
-              "tagGroup": "Fast"
+              "name": "Panel",
+              "tagType": "Folder",
+              "tags": [
+                {
+                  "name": "EStopPressed",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Boolean",
+                  "documentation": "Mushroom e-stop pressed (latched while true).",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Panel.EStopPressed"
+                  },
+                  "tagGroup": "Fast"
+                },
+                {
+                  "name": "SafetyResetButton",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Boolean",
+                  "documentation": "Blue safety reset button (pulse: the sim resets it to false after one scan).",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Panel.SafetyResetButton"
+                  },
+                  "tagGroup": "Fast"
+                },
+                {
+                  "name": "GuardDoorOpen",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Boolean",
+                  "documentation": "Guard door open while true.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Panel.GuardDoorOpen"
+                  },
+                  "tagGroup": "Fast"
+                }
+              ]
             },
             {
-              "name": "RejectEveryN",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Int4",
-              "documentation": "Every Nth part serial is out of tolerance (0 = no rejects).",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Process.RejectEveryN",
-              "tagGroup": "Fast",
-              "engUnit": "count",
-              "engLow": 0.0,
-              "engHigh": 1000.0
-            },
-            {
-              "name": "AutoEmptyRejectBin",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Boolean",
-              "documentation": "True = the bin empties itself when it reaches RJ01.Parameters.NearFullLevel (no holds).",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Process.AutoEmptyRejectBin",
-              "tagGroup": "Fast"
+              "name": "Faults",
+              "tagType": "Folder",
+              "tags": [
+                {
+                  "name": "VacuumLossNext",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Boolean",
+                  "documentation": "One-shot: vacuum is lost halfway through the next MoveToPlace. Self-clears when triggered.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Faults.VacuumLossNext"
+                  },
+                  "tagGroup": "Fast"
+                },
+                {
+                  "name": "PickFailCount",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Int4",
+                  "documentation": "The next N grip attempts fail to build vacuum. Decrements per failed attempt.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Faults.PickFailCount"
+                  },
+                  "tagGroup": "Fast",
+                  "engUnit": "count",
+                  "engLow": 0.0,
+                  "engHigh": 100.0
+                },
+                {
+                  "name": "InfeedJam",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Boolean",
+                  "documentation": "While true parts on CV01 stop moving although the belt runs.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Faults.InfeedJam"
+                  },
+                  "tagGroup": "Fast"
+                },
+                {
+                  "name": "InfeedDriveTrip",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Boolean",
+                  "documentation": "One-shot: CV01 drive trips (fault code 1 overcurrent). Self-clears when triggered.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Faults.InfeedDriveTrip"
+                  },
+                  "tagGroup": "Fast"
+                },
+                {
+                  "name": "OutfeedDriveTrip",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Boolean",
+                  "documentation": "One-shot: CV02 drive trips (fault code 1 overcurrent). Self-clears when triggered.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Faults.OutfeedDriveTrip"
+                  },
+                  "tagGroup": "Fast"
+                },
+                {
+                  "name": "PartSensorStuckOn",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Boolean",
+                  "documentation": "While true CV01.Sensors.PartAtPick reads true.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Faults.PartSensorStuckOn"
+                  },
+                  "tagGroup": "Fast"
+                },
+                {
+                  "name": "CameraNoResult",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Boolean",
+                  "documentation": "While true QS01 never returns a result.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Faults.CameraNoResult"
+                  },
+                  "tagGroup": "Fast"
+                },
+                {
+                  "name": "IdUnreadableCount",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Int4",
+                  "documentation": "The next N inspections cannot read the DataMatrix. Decrements per inspection.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Faults.IdUnreadableCount"
+                  },
+                  "tagGroup": "Fast",
+                  "engUnit": "count",
+                  "engLow": 0.0,
+                  "engHigh": 100.0
+                },
+                {
+                  "name": "QualityDriftRate",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Float8",
+                  "documentation": "Drift added to Sim.Faults.QualityOffset for every inspected part.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Faults.QualityDriftRate"
+                  },
+                  "tagGroup": "Fast",
+                  "engUnit": "mm/100 parts",
+                  "engLow": -0.5,
+                  "engHigh": 0.5
+                },
+                {
+                  "name": "QualityOffset",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Float8",
+                  "documentation": "Current bias added to every measurement. Write 0 to remove the drift.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Faults.QualityOffset"
+                  },
+                  "tagGroup": "Fast",
+                  "engUnit": "mm",
+                  "engLow": -5.0,
+                  "engHigh": 5.0
+                },
+                {
+                  "name": "AirPressureLow",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Boolean",
+                  "documentation": "While true air pressure ramps down to 4.8 bar in 30 s; when false it recovers to 6.2 bar in 10 s.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Faults.AirPressureLow"
+                  },
+                  "tagGroup": "Fast"
+                },
+                {
+                  "name": "RobotHeartbeatFreeze",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Boolean",
+                  "documentation": "While true RB01.Status.Heartbeat stops incrementing.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Faults.RobotHeartbeatFreeze"
+                  },
+                  "tagGroup": "Fast"
+                },
+                {
+                  "name": "DownstreamBlocked",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Boolean",
+                  "documentation": "While true parts cannot leave CV02 at the exit.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Faults.DownstreamBlocked"
+                  },
+                  "tagGroup": "Fast"
+                },
+                {
+                  "name": "ModbusOutage",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Int4",
+                  "documentation": "Write N: the Modbus server closes all connections and refuses new ones for N s. Counts down to 0.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Faults.ModbusOutage"
+                  },
+                  "tagGroup": "Fast",
+                  "engUnit": "s",
+                  "engLow": 0.0,
+                  "engHigh": 600.0
+                },
+                {
+                  "name": "OpcUaOutage",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Int4",
+                  "documentation": "Write N: 1 s later the OPC UA server stops; it restarts after N s and this node reads 0 again.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Faults.OpcUaOutage"
+                  },
+                  "tagGroup": "Fast",
+                  "engUnit": "s",
+                  "engLow": 0.0,
+                  "engHigh": 600.0
+                },
+                {
+                  "name": "ClearAll",
+                  "tagType": "AtomicTag",
+                  "valueSource": "opc",
+                  "dataType": "Boolean",
+                  "documentation": "Pulse: reset every Sim.Faults and Sim.Panel node to its initial value.",
+                  "opcServer": {
+                    "bindType": "parameter",
+                    "binding": "{OpcServer}"
+                  },
+                  "opcItemPath": {
+                    "bindType": "parameter",
+                    "binding": "nsu=urn:ignition-lab:sim;s=Sim.Faults.ClearAll"
+                  },
+                  "tagGroup": "Fast"
+                }
+              ]
             }
-          ]
-        },
-        {
-          "name": "Panel",
-          "tagType": "Folder",
-          "tags": [
-            {
-              "name": "EStopPressed",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Boolean",
-              "documentation": "Mushroom e-stop pressed (latched while true).",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Panel.EStopPressed",
-              "tagGroup": "Fast"
-            },
-            {
-              "name": "SafetyResetButton",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Boolean",
-              "documentation": "Blue safety reset button (pulse: the sim resets it to false after one scan).",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Panel.SafetyResetButton",
-              "tagGroup": "Fast"
-            },
-            {
-              "name": "GuardDoorOpen",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Boolean",
-              "documentation": "Guard door open while true.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Panel.GuardDoorOpen",
-              "tagGroup": "Fast"
+          ],
+          "parameters": {
+            "OpcServer": {
+              "dataType": "String",
+              "value": "C01"
             }
-          ]
-        },
-        {
-          "name": "Faults",
-          "tagType": "Folder",
-          "tags": [
-            {
-              "name": "VacuumLossNext",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Boolean",
-              "documentation": "One-shot: vacuum is lost halfway through the next MoveToPlace. Self-clears when triggered.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Faults.VacuumLossNext",
-              "tagGroup": "Fast"
-            },
-            {
-              "name": "PickFailCount",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Int4",
-              "documentation": "The next N grip attempts fail to build vacuum. Decrements per failed attempt.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Faults.PickFailCount",
-              "tagGroup": "Fast",
-              "engUnit": "count",
-              "engLow": 0.0,
-              "engHigh": 100.0
-            },
-            {
-              "name": "InfeedJam",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Boolean",
-              "documentation": "While true parts on CV01 stop moving although the belt runs.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Faults.InfeedJam",
-              "tagGroup": "Fast"
-            },
-            {
-              "name": "InfeedDriveTrip",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Boolean",
-              "documentation": "One-shot: CV01 drive trips (fault code 1 overcurrent). Self-clears when triggered.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Faults.InfeedDriveTrip",
-              "tagGroup": "Fast"
-            },
-            {
-              "name": "OutfeedDriveTrip",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Boolean",
-              "documentation": "One-shot: CV02 drive trips (fault code 1 overcurrent). Self-clears when triggered.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Faults.OutfeedDriveTrip",
-              "tagGroup": "Fast"
-            },
-            {
-              "name": "PartSensorStuckOn",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Boolean",
-              "documentation": "While true CV01.Sensors.PartAtPick reads true.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Faults.PartSensorStuckOn",
-              "tagGroup": "Fast"
-            },
-            {
-              "name": "CameraNoResult",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Boolean",
-              "documentation": "While true QS01 never returns a result.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Faults.CameraNoResult",
-              "tagGroup": "Fast"
-            },
-            {
-              "name": "IdUnreadableCount",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Int4",
-              "documentation": "The next N inspections cannot read the DataMatrix. Decrements per inspection.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Faults.IdUnreadableCount",
-              "tagGroup": "Fast",
-              "engUnit": "count",
-              "engLow": 0.0,
-              "engHigh": 100.0
-            },
-            {
-              "name": "QualityDriftRate",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Float8",
-              "documentation": "Drift added to Sim.Faults.QualityOffset for every inspected part.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Faults.QualityDriftRate",
-              "tagGroup": "Fast",
-              "engUnit": "mm/100 parts",
-              "engLow": -0.5,
-              "engHigh": 0.5
-            },
-            {
-              "name": "QualityOffset",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Float8",
-              "documentation": "Current bias added to every measurement. Write 0 to remove the drift.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Faults.QualityOffset",
-              "tagGroup": "Fast",
-              "engUnit": "mm",
-              "engLow": -5.0,
-              "engHigh": 5.0
-            },
-            {
-              "name": "AirPressureLow",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Boolean",
-              "documentation": "While true air pressure ramps down to 4.8 bar in 30 s; when false it recovers to 6.2 bar in 10 s.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Faults.AirPressureLow",
-              "tagGroup": "Fast"
-            },
-            {
-              "name": "RobotHeartbeatFreeze",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Boolean",
-              "documentation": "While true RB01.Status.Heartbeat stops incrementing.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Faults.RobotHeartbeatFreeze",
-              "tagGroup": "Fast"
-            },
-            {
-              "name": "DownstreamBlocked",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Boolean",
-              "documentation": "While true parts cannot leave CV02 at the exit.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Faults.DownstreamBlocked",
-              "tagGroup": "Fast"
-            },
-            {
-              "name": "ModbusOutage",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Int4",
-              "documentation": "Write N: the Modbus server closes all connections and refuses new ones for N s. Counts down to 0.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Faults.ModbusOutage",
-              "tagGroup": "Fast",
-              "engUnit": "s",
-              "engLow": 0.0,
-              "engHigh": 600.0
-            },
-            {
-              "name": "OpcUaOutage",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Int4",
-              "documentation": "Write N: 1 s later the OPC UA server stops; it restarts after N s and this node reads 0 again.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Faults.OpcUaOutage",
-              "tagGroup": "Fast",
-              "engUnit": "s",
-              "engLow": 0.0,
-              "engHigh": 600.0
-            },
-            {
-              "name": "ClearAll",
-              "tagType": "AtomicTag",
-              "valueSource": "opc",
-              "dataType": "Boolean",
-              "documentation": "Pulse: reset every Sim.Faults and Sim.Panel node to its initial value.",
-              "opcServer": "C01",
-              "opcItemPath": "nsu=urn:ignition-lab:sim;s=Sim.Faults.ClearAll",
-              "tagGroup": "Fast"
-            }
-          ]
+          }
         }
       ]
+    },
+    {
+      "name": "C01",
+      "tagType": "UdtInstance",
+      "typeId": "PIC200_Sim",
+      "parameters": {
+        "OpcServer": {
+          "dataType": "String",
+          "value": "C01"
+        }
+      }
+    },
+    {
+      "name": "C02",
+      "tagType": "UdtInstance",
+      "typeId": "PIC200_Sim",
+      "parameters": {
+        "OpcServer": {
+          "dataType": "String",
+          "value": "C02"
+        }
+      }
+    },
+    {
+      "name": "C03",
+      "tagType": "UdtInstance",
+      "typeId": "PIC200_Sim",
+      "parameters": {
+        "OpcServer": {
+          "dataType": "String",
+          "value": "C03"
+        }
+      }
+    },
+    {
+      "name": "C04",
+      "tagType": "UdtInstance",
+      "typeId": "PIC200_Sim",
+      "parameters": {
+        "OpcServer": {
+          "dataType": "String",
+          "value": "C04"
+        }
+      }
+    },
+    {
+      "name": "C05",
+      "tagType": "UdtInstance",
+      "typeId": "PIC200_Sim",
+      "parameters": {
+        "OpcServer": {
+          "dataType": "String",
+          "value": "C05"
+        }
+      }
     }
   ]
 }

@@ -1,8 +1,9 @@
 """OPC UA server whose address space is generated from the registry (asyncua).
 
 - Namespaces are registered in the order cell, robot, sim (indexes 2, 3, 4).
-- Each node's string NodeId is its signal name; BrowseName/DisplayName is the
-  last path segment; Description is the CSV description.
+- Each node's string NodeId is its signal name, with the cell id of this
+  instance for the cell's own nodes (instance.py: C03.Status.StateCurrent);
+  BrowseName/DisplayName is the last path segment; Description is the CSV description.
 - RW variables are writable by clients. Each scan:
     pull()  copies client writes from the address space into the Tags,
     push()  publishes values the program changed.
@@ -29,9 +30,10 @@ VTYPES = {
 
 
 class OpcUaServer:
-    def __init__(self, tags: Tags, endpoint: str):
+    def __init__(self, tags: Tags, endpoint: str, cell: str):
         self.tags = tags
         self.endpoint = endpoint
+        self.cell = cell
         self.server = Server()
         self.ns: dict[str, int] = {}
         self.nodeids: dict[str, ua.NodeId] = {}
@@ -43,8 +45,8 @@ class OpcUaServer:
         srv = self.server
         await srv.init()
         srv.set_endpoint(self.endpoint)
-        srv.set_server_name("Ignition lab: Cell 01 controller (simulation)")
-        await srv.set_application_uri("urn:ignition-lab:plc-sim")
+        srv.set_server_name(f"Ignition lab: Cell {self.cell[1:]} controller (simulation)")
+        await srv.set_application_uri(f"urn:ignition-lab:plc-sim:{self.cell.lower()}")
         srv.set_security_policy([ua.SecurityPolicyType.NoSecurity])
         for uri in NAMESPACES:
             self.ns[uri] = await srv.register_namespace(uri)
@@ -63,7 +65,7 @@ class OpcUaServer:
             parent_path, _, leaf = s.browse_path.rpartition("/")
             parent = nodes_by_path[parent_path]
             idx = self.ns[s.namespace_uri]
-            nodeid = ua.NodeId(s.name, idx)
+            nodeid = ua.NodeId(s.node_id, idx)
             bname = ua.QualifiedName(leaf, idx)
             if s.node_class == "Object":
                 if s.type_definition == "FolderType":

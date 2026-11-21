@@ -1,0 +1,1792 @@
+{
+  "custom": {
+    "state": null,
+    "stateName": null,
+    "stopText": null,
+    "speed": null,
+    "orderId": null,
+    "product": null,
+    "good": null,
+    "rejects": null,
+    "target": null,
+    "bin": null,
+    "binCap": null,
+    "auto": null,
+    "location": null,
+    "mode": null,
+    "remaining": null,
+    "cmdResult": null,
+    "cmdCounter": null,
+    "cv01Parts": null,
+    "cv01Speed": null,
+    "cv02Speed": null,
+    "cv01Run": null,
+    "cv02Run": null,
+    "lastMeas": null,
+    "lastResult": null,
+    "lastPart": null,
+    "step": null,
+    "cycle": null,
+    "vacuum": null,
+    "inGripper": null,
+    "safety": null,
+    "air": null,
+    "power": null,
+    "energy": null,
+    "lower": null,
+    "upper": null,
+    "processed": null,
+    "defective": null
+  },
+  "params": {
+    "cell": "C01"
+  },
+  "props": {
+    "defaultSize": {
+      "width": 1400,
+      "height": 800
+    }
+  },
+  "root": {
+    "type": "ia.container.flex",
+    "meta": {
+      "name": "root"
+    },
+    "props": {
+      "direction": "column",
+      "style": {
+        "backgroundColor": "#E5E7EA",
+        "padding": "10px"
+      }
+    },
+    "children": [
+      {
+        "type": "ia.container.flex",
+        "meta": {
+          "name": "Top"
+        },
+        "props": {
+          "direction": "row",
+          "style": {}
+        },
+        "position": {
+          "basis": "360px",
+          "shrink": 0
+        },
+        "children": [
+          {
+            "type": "ia.container.flex",
+            "meta": {
+              "name": "Left"
+            },
+            "props": {
+              "direction": "column",
+              "style": {
+                "backgroundColor": "#FFFFFF",
+                "borderStyle": "solid",
+                "borderWidth": "1px",
+                "borderColor": "#B8BEC6",
+                "borderRadius": "4px",
+                "padding": "8px"
+              }
+            },
+            "position": {
+              "grow": 1,
+              "basis": "860px"
+            },
+            "children": [
+              {
+                "type": "ia.display.label",
+                "meta": {
+                  "name": "Title"
+                },
+                "props": {
+                  "style": {
+                    "fontSize": "22px",
+                    "fontWeight": "bold",
+                    "color": "#1F2933"
+                  }
+                },
+                "position": {
+                  "basis": "32px",
+                  "shrink": 0,
+                  "grow": 0
+                },
+                "propConfig": {
+                  "props.text": {
+                    "binding": {
+                      "type": "expr",
+                      "config": {
+                        "expression": "'Cell ' + {view.params.cell} + '  \u00b7  ' + {view.custom.location}"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "ia.container.coord",
+                "meta": {
+                  "name": "Mimic"
+                },
+                "props": {
+                  "style": {
+                    "backgroundColor": "#FFFFFF"
+                  }
+                },
+                "position": {
+                  "basis": "300px",
+                  "shrink": 0
+                },
+                "children": [
+                  {
+                    "type": "ia.display.label",
+                    "meta": {
+                      "name": "Feed"
+                    },
+                    "props": {
+                      "style": {
+                        "fontSize": "12px",
+                        "color": "#5F6B7A"
+                      },
+                      "text": "\u25b6 upstream"
+                    },
+                    "position": {
+                      "x": 4,
+                      "y": 52,
+                      "width": 80,
+                      "height": 20
+                    }
+                  },
+                  {
+                    "type": "ia.display.label",
+                    "meta": {
+                      "name": "CV01"
+                    },
+                    "props": {
+                      "style": {
+                        "backgroundColor": "#F4F5F7",
+                        "borderStyle": "solid",
+                        "borderWidth": "2px",
+                        "borderColor": "#6B7280",
+                        "borderRadius": "4px",
+                        "padding": "4px 8px",
+                        "fontSize": "13px",
+                        "color": "#1F2933",
+                        "whiteSpace": "pre"
+                      }
+                    },
+                    "position": {
+                      "x": 80,
+                      "y": 35,
+                      "width": 330,
+                      "height": 56
+                    },
+                    "propConfig": {
+                      "props.text": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "'CV01 infeed conveyor' + '\\n' + {view.custom.cv01Parts} + ' parts   ' + {view.custom.cv01Speed} + ' mm/s'"
+                          }
+                        }
+                      },
+                      "props.style.borderColor": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "if({view.custom.cv01Run}, '#2E7D32', '#6B7280')"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "ia.display.label",
+                    "meta": {
+                      "name": "QS01"
+                    },
+                    "props": {
+                      "style": {
+                        "backgroundColor": "#F4F5F7",
+                        "borderStyle": "solid",
+                        "borderWidth": "2px",
+                        "borderColor": "#6B7280",
+                        "borderRadius": "4px",
+                        "padding": "4px 8px",
+                        "fontSize": "13px",
+                        "color": "#1F2933",
+                        "whiteSpace": "pre"
+                      }
+                    },
+                    "position": {
+                      "x": 420,
+                      "y": 10,
+                      "width": 220,
+                      "height": 56
+                    },
+                    "propConfig": {
+                      "props.text": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "'QS01 camera' + '\\n' + numberFormat({view.custom.lastMeas}, '0.000') + ' mm  ' + case({view.custom.lastResult}, 1, 'GOOD', 2, 'REJECT', '-')"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "ia.display.label",
+                    "meta": {
+                      "name": "RB01"
+                    },
+                    "props": {
+                      "style": {
+                        "backgroundColor": "#F4F5F7",
+                        "borderStyle": "solid",
+                        "borderWidth": "2px",
+                        "borderColor": "#6B7280",
+                        "borderRadius": "4px",
+                        "padding": "4px 8px",
+                        "fontSize": "13px",
+                        "color": "#1F2933",
+                        "whiteSpace": "pre"
+                      }
+                    },
+                    "position": {
+                      "x": 420,
+                      "y": 82,
+                      "width": 220,
+                      "height": 74
+                    },
+                    "propConfig": {
+                      "props.text": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "'RB01 SCARA' + '\\n' + {view.custom.step} + '\\ncycle ' + numberFormat({view.custom.cycle}, '0.00') + ' s   vac ' + numberFormat({view.custom.vacuum}, '0') + ' kPa'"
+                          }
+                        }
+                      },
+                      "props.style.borderColor": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "if({view.custom.inGripper}, '#2E7D32', '#6B7280')"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "ia.display.label",
+                    "meta": {
+                      "name": "RJ01"
+                    },
+                    "props": {
+                      "style": {
+                        "backgroundColor": "#F4F5F7",
+                        "borderStyle": "solid",
+                        "borderWidth": "2px",
+                        "borderColor": "#6B7280",
+                        "borderRadius": "4px",
+                        "padding": "4px 8px",
+                        "fontSize": "13px",
+                        "color": "#1F2933",
+                        "whiteSpace": "pre"
+                      }
+                    },
+                    "position": {
+                      "x": 300,
+                      "y": 190,
+                      "width": 200,
+                      "height": 56
+                    },
+                    "propConfig": {
+                      "props.text": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "'RJ01 reject bin' + '\\n' + {view.custom.bin} + ' / ' + {view.custom.binCap} + ' parts'"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "ia.display.label",
+                    "meta": {
+                      "name": "CV02"
+                    },
+                    "props": {
+                      "style": {
+                        "backgroundColor": "#F4F5F7",
+                        "borderStyle": "solid",
+                        "borderWidth": "2px",
+                        "borderColor": "#6B7280",
+                        "borderRadius": "4px",
+                        "padding": "4px 8px",
+                        "fontSize": "13px",
+                        "color": "#1F2933",
+                        "whiteSpace": "pre"
+                      }
+                    },
+                    "position": {
+                      "x": 520,
+                      "y": 190,
+                      "width": 330,
+                      "height": 56
+                    },
+                    "propConfig": {
+                      "props.text": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "'CV02 outfeed conveyor' + '\\n' + {view.custom.cv02Speed} + ' mm/s   \u25b6 packing'"
+                          }
+                        }
+                      },
+                      "props.style.borderColor": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "if({view.custom.cv02Run}, '#2E7D32', '#6B7280')"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "ia.display.label",
+                    "meta": {
+                      "name": "Utilities"
+                    },
+                    "props": {
+                      "style": {
+                        "backgroundColor": "#F4F5F7",
+                        "borderStyle": "solid",
+                        "borderWidth": "2px",
+                        "borderColor": "#6B7280",
+                        "borderRadius": "4px",
+                        "padding": "4px 8px",
+                        "fontSize": "13px",
+                        "color": "#1F2933",
+                        "whiteSpace": "pre"
+                      }
+                    },
+                    "position": {
+                      "x": 660,
+                      "y": 10,
+                      "width": 190,
+                      "height": 74
+                    },
+                    "propConfig": {
+                      "props.text": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "'SF01 / UT01' + '\\n' + if({view.custom.safety}, 'safety OK', 'SAFETY NOT OK') + '\\nair ' + numberFormat({view.custom.air}, '0.00') + ' bar   ' + numberFormat({view.custom.power}, '0.00') + ' kW'"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "ia.display.label",
+                    "meta": {
+                      "name": "Tolerance"
+                    },
+                    "props": {
+                      "style": {
+                        "fontSize": "12px",
+                        "color": "#5F6B7A"
+                      }
+                    },
+                    "position": {
+                      "x": 80,
+                      "y": 110,
+                      "width": 330,
+                      "height": 40
+                    },
+                    "propConfig": {
+                      "props.text": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "'Tolerance ' + numberFormat({view.custom.lower}, '0.000') + ' .. ' + numberFormat({view.custom.upper}, '0.000') + ' mm   \u00b7   last part ' + {view.custom.lastPart}"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "ia.container.flex",
+            "meta": {
+              "name": "Status"
+            },
+            "props": {
+              "direction": "column",
+              "style": {
+                "backgroundColor": "#FFFFFF",
+                "borderStyle": "solid",
+                "borderWidth": "1px",
+                "borderColor": "#B8BEC6",
+                "borderRadius": "4px",
+                "padding": "8px",
+                "marginLeft": "10px"
+              }
+            },
+            "position": {
+              "basis": "460px",
+              "shrink": 0
+            },
+            "children": [
+              {
+                "type": "ia.container.flex",
+                "meta": {
+                  "name": "StateRow"
+                },
+                "props": {
+                  "direction": "row",
+                  "style": {}
+                },
+                "position": {
+                  "basis": "34px",
+                  "shrink": 0
+                },
+                "children": [
+                  {
+                    "type": "ia.display.label",
+                    "meta": {
+                      "name": "State"
+                    },
+                    "props": {
+                      "style": {
+                        "color": "#FFFFFF",
+                        "fontWeight": "bold",
+                        "fontSize": "18px",
+                        "textAlign": "center",
+                        "borderRadius": "3px"
+                      }
+                    },
+                    "position": {
+                      "grow": 1,
+                      "shrink": 0
+                    },
+                    "propConfig": {
+                      "props.text": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "{view.custom.stateName} + '   (' + {view.custom.mode} + ')'"
+                          }
+                        }
+                      },
+                      "props.style.backgroundColor": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "{view.custom.state}"
+                          },
+                          "transforms": [
+                            {
+                              "type": "map",
+                              "inputType": "scalar",
+                              "outputType": "color",
+                              "mappings": [
+                                {
+                                  "input": 6,
+                                  "output": "#2E7D32"
+                                },
+                                {
+                                  "input": 4,
+                                  "output": "#4F6D8A"
+                                },
+                                {
+                                  "input": 17,
+                                  "output": "#4F6D8A"
+                                },
+                                {
+                                  "input": 2,
+                                  "output": "#6B7280"
+                                },
+                                {
+                                  "input": 5,
+                                  "output": "#C99A06"
+                                },
+                                {
+                                  "input": 13,
+                                  "output": "#C99A06"
+                                },
+                                {
+                                  "input": 14,
+                                  "output": "#C99A06"
+                                },
+                                {
+                                  "input": 10,
+                                  "output": "#D9480F"
+                                },
+                                {
+                                  "input": 11,
+                                  "output": "#D9480F"
+                                },
+                                {
+                                  "input": 12,
+                                  "output": "#D9480F"
+                                },
+                                {
+                                  "input": 8,
+                                  "output": "#B91C1C"
+                                },
+                                {
+                                  "input": 9,
+                                  "output": "#B91C1C"
+                                },
+                                {
+                                  "input": 1,
+                                  "output": "#8896A6"
+                                },
+                                {
+                                  "input": 3,
+                                  "output": "#8896A6"
+                                },
+                                {
+                                  "input": 7,
+                                  "output": "#8896A6"
+                                },
+                                {
+                                  "input": 15,
+                                  "output": "#8896A6"
+                                },
+                                {
+                                  "input": 16,
+                                  "output": "#8896A6"
+                                }
+                              ],
+                              "fallback": "#9E9E9E"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "ia.display.label",
+                "meta": {
+                  "name": "Stop"
+                },
+                "props": {
+                  "style": {
+                    "fontSize": "13px",
+                    "color": "#D9480F"
+                  }
+                },
+                "position": {
+                  "basis": "20px",
+                  "shrink": 0,
+                  "grow": 0
+                },
+                "propConfig": {
+                  "props.text": {
+                    "binding": {
+                      "type": "expr",
+                      "config": {
+                        "expression": "'Stop reason: ' + {view.custom.stopText}"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "ia.container.flex",
+                "meta": {
+                  "name": "Buttons"
+                },
+                "props": {
+                  "direction": "row",
+                  "style": {},
+                  "wrap": "wrap"
+                },
+                "position": {
+                  "basis": "auto",
+                  "shrink": 0
+                },
+                "children": [
+                  {
+                    "type": "ia.input.button",
+                    "meta": {
+                      "name": "CmdReset"
+                    },
+                    "props": {
+                      "text": "Reset",
+                      "style": {
+                        "margin": "2px"
+                      }
+                    },
+                    "position": {
+                      "basis": "80px",
+                      "shrink": 0
+                    },
+                    "propConfig": {
+                      "props.enabled": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "{view.custom.state} = 2 || {view.custom.state} = 17"
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "dom": {
+                        "onClick": {
+                          "type": "script",
+                          "scope": "G",
+                          "config": {
+                            "script": "\tpath = '[default]ANN/FIN/%s/Command/CntrlCmd' % self.view.params.cell\n\tsystem.tag.writeBlocking([path], [self.custom.code])"
+                          }
+                        }
+                      }
+                    },
+                    "custom": {
+                      "code": 1
+                    }
+                  },
+                  {
+                    "type": "ia.input.button",
+                    "meta": {
+                      "name": "CmdStart"
+                    },
+                    "props": {
+                      "text": "Start",
+                      "style": {
+                        "margin": "2px"
+                      }
+                    },
+                    "position": {
+                      "basis": "80px",
+                      "shrink": 0
+                    },
+                    "propConfig": {
+                      "props.enabled": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "{view.custom.state} = 4"
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "dom": {
+                        "onClick": {
+                          "type": "script",
+                          "scope": "G",
+                          "config": {
+                            "script": "\tpath = '[default]ANN/FIN/%s/Command/CntrlCmd' % self.view.params.cell\n\tsystem.tag.writeBlocking([path], [self.custom.code])"
+                          }
+                        }
+                      }
+                    },
+                    "custom": {
+                      "code": 2
+                    }
+                  },
+                  {
+                    "type": "ia.input.button",
+                    "meta": {
+                      "name": "CmdStop"
+                    },
+                    "props": {
+                      "text": "Stop",
+                      "style": {
+                        "margin": "2px"
+                      }
+                    },
+                    "position": {
+                      "basis": "80px",
+                      "shrink": 0
+                    },
+                    "propConfig": {
+                      "props.enabled": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "!({view.custom.state} = 1 || {view.custom.state} = 2 || {view.custom.state} = 7 || {view.custom.state} = 8 || {view.custom.state} = 9)"
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "dom": {
+                        "onClick": {
+                          "type": "script",
+                          "scope": "G",
+                          "config": {
+                            "script": "\tpath = '[default]ANN/FIN/%s/Command/CntrlCmd' % self.view.params.cell\n\tsystem.tag.writeBlocking([path], [self.custom.code])"
+                          }
+                        }
+                      }
+                    },
+                    "custom": {
+                      "code": 3
+                    }
+                  },
+                  {
+                    "type": "ia.input.button",
+                    "meta": {
+                      "name": "CmdHold"
+                    },
+                    "props": {
+                      "text": "Hold",
+                      "style": {
+                        "margin": "2px"
+                      }
+                    },
+                    "position": {
+                      "basis": "80px",
+                      "shrink": 0
+                    },
+                    "propConfig": {
+                      "props.enabled": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "{view.custom.state} = 6"
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "dom": {
+                        "onClick": {
+                          "type": "script",
+                          "scope": "G",
+                          "config": {
+                            "script": "\tpath = '[default]ANN/FIN/%s/Command/CntrlCmd' % self.view.params.cell\n\tsystem.tag.writeBlocking([path], [self.custom.code])"
+                          }
+                        }
+                      }
+                    },
+                    "custom": {
+                      "code": 4
+                    }
+                  },
+                  {
+                    "type": "ia.input.button",
+                    "meta": {
+                      "name": "CmdUnhold"
+                    },
+                    "props": {
+                      "text": "Unhold",
+                      "style": {
+                        "margin": "2px"
+                      }
+                    },
+                    "position": {
+                      "basis": "80px",
+                      "shrink": 0
+                    },
+                    "propConfig": {
+                      "props.enabled": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "{view.custom.state} = 11"
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "dom": {
+                        "onClick": {
+                          "type": "script",
+                          "scope": "G",
+                          "config": {
+                            "script": "\tpath = '[default]ANN/FIN/%s/Command/CntrlCmd' % self.view.params.cell\n\tsystem.tag.writeBlocking([path], [self.custom.code])"
+                          }
+                        }
+                      }
+                    },
+                    "custom": {
+                      "code": 5
+                    }
+                  },
+                  {
+                    "type": "ia.input.button",
+                    "meta": {
+                      "name": "CmdAbort"
+                    },
+                    "props": {
+                      "text": "Abort",
+                      "style": {
+                        "margin": "2px"
+                      }
+                    },
+                    "position": {
+                      "basis": "80px",
+                      "shrink": 0
+                    },
+                    "propConfig": {
+                      "props.enabled": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "!({view.custom.state} = 8 || {view.custom.state} = 9)"
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "dom": {
+                        "onClick": {
+                          "type": "script",
+                          "scope": "G",
+                          "config": {
+                            "script": "\tpath = '[default]ANN/FIN/%s/Command/CntrlCmd' % self.view.params.cell\n\tsystem.tag.writeBlocking([path], [self.custom.code])"
+                          }
+                        }
+                      }
+                    },
+                    "custom": {
+                      "code": 8
+                    }
+                  },
+                  {
+                    "type": "ia.input.button",
+                    "meta": {
+                      "name": "CmdClear"
+                    },
+                    "props": {
+                      "text": "Clear",
+                      "style": {
+                        "margin": "2px"
+                      }
+                    },
+                    "position": {
+                      "basis": "80px",
+                      "shrink": 0
+                    },
+                    "propConfig": {
+                      "props.enabled": {
+                        "binding": {
+                          "type": "expr",
+                          "config": {
+                            "expression": "{view.custom.state} = 9"
+                          }
+                        }
+                      }
+                    },
+                    "events": {
+                      "dom": {
+                        "onClick": {
+                          "type": "script",
+                          "scope": "G",
+                          "config": {
+                            "script": "\tpath = '[default]ANN/FIN/%s/Command/CntrlCmd' % self.view.params.cell\n\tsystem.tag.writeBlocking([path], [self.custom.code])"
+                          }
+                        }
+                      }
+                    },
+                    "custom": {
+                      "code": 9
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "ia.display.label",
+                "meta": {
+                  "name": "CmdResult"
+                },
+                "props": {
+                  "style": {
+                    "fontSize": "12px",
+                    "color": "#5F6B7A"
+                  }
+                },
+                "position": {
+                  "basis": "20px",
+                  "shrink": 0,
+                  "grow": 0
+                },
+                "propConfig": {
+                  "props.text": {
+                    "binding": {
+                      "type": "expr",
+                      "config": {
+                        "expression": "'Last command (#' + {view.custom.cmdCounter} + '): ' + case({view.custom.cmdResult}, 1, 'accepted', 2, 'refused, not allowed in this state', 3, 'refused, interlock', 4, 'invalid command', '-')"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "ia.container.flex",
+                "meta": {
+                  "name": "AutoRow"
+                },
+                "props": {
+                  "direction": "row",
+                  "style": {},
+                  "alignItems": "center"
+                },
+                "position": {
+                  "basis": "34px",
+                  "shrink": 0
+                },
+                "children": [
+                  {
+                    "type": "ia.input.toggle-switch",
+                    "meta": {
+                      "name": "AutoRun"
+                    },
+                    "props": {
+                      "selected": false
+                    },
+                    "position": {
+                      "basis": "50px",
+                      "shrink": 0
+                    },
+                    "propConfig": {
+                      "props.selected": {
+                        "binding": {
+                          "type": "tag",
+                          "config": {
+                            "mode": "indirect",
+                            "tagPath": "[default]ANN/FIN/{cell}/MES/AutoRun",
+                            "references": {
+                              "cell": "{view.params.cell}"
+                            },
+                            "fallbackDelay": 2.5,
+                            "bidirectional": true
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "ia.display.label",
+                    "meta": {
+                      "name": "AutoText"
+                    },
+                    "props": {
+                      "style": {
+                        "fontSize": "12px",
+                        "color": "#5F6B7A"
+                      },
+                      "text": "Lab autopilot (dispatch, start, reset, bin)"
+                    },
+                    "position": {
+                      "grow": 1,
+                      "shrink": 0
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "ia.display.label",
+                "meta": {
+                  "name": "OrderTitle"
+                },
+                "props": {
+                  "style": {
+                    "fontWeight": "bold",
+                    "color": "#1F2933",
+                    "marginTop": "8px"
+                  },
+                  "text": "Active order"
+                },
+                "position": {
+                  "basis": "22px",
+                  "shrink": 0,
+                  "grow": 0
+                }
+              },
+              {
+                "type": "ia.display.label",
+                "meta": {
+                  "name": "Order"
+                },
+                "props": {
+                  "style": {
+                    "fontSize": "14px",
+                    "color": "#1F2933"
+                  }
+                },
+                "position": {
+                  "basis": "20px",
+                  "shrink": 0,
+                  "grow": 0
+                },
+                "propConfig": {
+                  "props.text": {
+                    "binding": {
+                      "type": "expr",
+                      "config": {
+                        "expression": "if(len({view.custom.orderId}) > 0, {view.custom.orderId} + '  \u00b7  ' + {view.custom.product}, 'no order')"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "ia.display.progress",
+                "meta": {
+                  "name": "Progress"
+                },
+                "props": {
+                  "max": 100,
+                  "value": 0,
+                  "bar": {
+                    "color": "#2E7D32"
+                  }
+                },
+                "position": {
+                  "basis": "16px",
+                  "shrink": 0
+                },
+                "propConfig": {
+                  "props.max": {
+                    "binding": {
+                      "type": "expr",
+                      "config": {
+                        "expression": "max({view.custom.target}, 1)"
+                      }
+                    }
+                  },
+                  "props.value": {
+                    "binding": {
+                      "type": "expr",
+                      "config": {
+                        "expression": "{view.custom.good}"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "ia.display.label",
+                "meta": {
+                  "name": "Counts"
+                },
+                "props": {
+                  "style": {
+                    "fontSize": "14px",
+                    "color": "#1F2933"
+                  }
+                },
+                "position": {
+                  "basis": "20px",
+                  "shrink": 0,
+                  "grow": 0
+                },
+                "propConfig": {
+                  "props.text": {
+                    "binding": {
+                      "type": "expr",
+                      "config": {
+                        "expression": "'Good ' + {view.custom.good} + ' / ' + {view.custom.target} + '   Rejects ' + {view.custom.rejects} + '   Remaining ' + {view.custom.remaining}"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "type": "ia.display.label",
+                "meta": {
+                  "name": "Speed"
+                },
+                "props": {
+                  "style": {
+                    "fontSize": "14px",
+                    "color": "#1F2933"
+                  }
+                },
+                "position": {
+                  "basis": "20px",
+                  "shrink": 0,
+                  "grow": 0
+                },
+                "propConfig": {
+                  "props.text": {
+                    "binding": {
+                      "type": "expr",
+                      "config": {
+                        "expression": "numberFormat({view.custom.speed}, '0.0') + ' parts/min   \u00b7   since start: ' + {view.custom.processed} + ' processed, ' + {view.custom.defective} + ' defective   \u00b7   ' + numberFormat({view.custom.energy}, '0.000') + ' kWh'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "ia.container.flex",
+        "meta": {
+          "name": "Bottom"
+        },
+        "props": {
+          "direction": "row",
+          "style": {
+            "marginTop": "10px"
+          }
+        },
+        "position": {
+          "grow": 1,
+          "basis": "300px"
+        },
+        "children": [
+          {
+            "type": "ia.container.flex",
+            "meta": {
+              "name": "Parts"
+            },
+            "props": {
+              "direction": "column",
+              "style": {
+                "backgroundColor": "#FFFFFF",
+                "borderStyle": "solid",
+                "borderWidth": "1px",
+                "borderColor": "#B8BEC6",
+                "borderRadius": "4px",
+                "padding": "8px",
+                "marginRight": "10px"
+              }
+            },
+            "position": {
+              "grow": 3,
+              "basis": "60%"
+            },
+            "children": [
+              {
+                "type": "ia.display.label",
+                "meta": {
+                  "name": "PartsTitle"
+                },
+                "props": {
+                  "style": {
+                    "fontWeight": "bold",
+                    "color": "#1F2933"
+                  },
+                  "text": "Last parts (mes.part_result)"
+                },
+                "position": {
+                  "basis": "24px",
+                  "shrink": 0,
+                  "grow": 0
+                }
+              },
+              {
+                "type": "ia.display.table",
+                "meta": {
+                  "name": "PartsTable"
+                },
+                "props": {
+                  "data": [],
+                  "pager": {
+                    "top": false,
+                    "bottom": false
+                  }
+                },
+                "position": {
+                  "grow": 1,
+                  "basis": "200px"
+                },
+                "propConfig": {
+                  "props.data": {
+                    "binding": {
+                      "type": "query",
+                      "config": {
+                        "queryPath": "Cell/LastParts",
+                        "returnFormat": "json",
+                        "parameters": {
+                          "cell": "{view.params.cell}"
+                        },
+                        "polling": {
+                          "enabled": true,
+                          "rate": "3"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "ia.container.flex",
+            "meta": {
+              "name": "Orders"
+            },
+            "props": {
+              "direction": "column",
+              "style": {
+                "backgroundColor": "#FFFFFF",
+                "borderStyle": "solid",
+                "borderWidth": "1px",
+                "borderColor": "#B8BEC6",
+                "borderRadius": "4px",
+                "padding": "8px"
+              }
+            },
+            "position": {
+              "grow": 2,
+              "basis": "40%"
+            },
+            "children": [
+              {
+                "type": "ia.display.label",
+                "meta": {
+                  "name": "OrdersTitle"
+                },
+                "props": {
+                  "style": {
+                    "fontWeight": "bold",
+                    "color": "#1F2933"
+                  },
+                  "text": "Orders on this cell"
+                },
+                "position": {
+                  "basis": "24px",
+                  "shrink": 0,
+                  "grow": 0
+                }
+              },
+              {
+                "type": "ia.display.table",
+                "meta": {
+                  "name": "OrdersTable"
+                },
+                "props": {
+                  "data": [],
+                  "pager": {
+                    "top": false,
+                    "bottom": false
+                  }
+                },
+                "position": {
+                  "grow": 1,
+                  "basis": "200px"
+                },
+                "propConfig": {
+                  "props.data": {
+                    "binding": {
+                      "type": "query",
+                      "config": {
+                        "queryPath": "Cell/Orders",
+                        "returnFormat": "json",
+                        "parameters": {
+                          "cell": "{view.params.cell}"
+                        },
+                        "polling": {
+                          "enabled": true,
+                          "rate": "5"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "propConfig": {
+    "params.cell": {
+      "paramDirection": "input",
+      "persistent": true
+    },
+    "custom.state": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Status/StateCurrent",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.stateName": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Status/StateCurrentName",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.stopText": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Admin/StopReasonText",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.speed": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Status/CurMachSpeed",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.orderId": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/OrderId",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.product": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/ProductCode",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.good": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/GoodCount",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.rejects": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/RejectCount",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.target": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/TargetQuantity",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.bin": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/RJ01/Status/Count",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.binCap": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/RJ01/Parameters/Capacity",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.auto": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/MES/AutoRun",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.location": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Identification/Location",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.mode": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Status/UnitModeCurrentName",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.remaining": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/RemainingQuantity",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.cmdResult": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Command/CmdResult",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.cmdCounter": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Command/CmdCounter",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.cv01Parts": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/CV01/Status/PartsOnConveyor",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.cv01Speed": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/CV01/Status/ActualSpeed",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.cv02Speed": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/CV02/Status/ActualSpeed",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.cv01Run": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/CV01/Status/Running",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.cv02Run": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/CV02/Status/Running",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.lastMeas": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/QS01/Status/LastMeasurement",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.lastResult": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/QS01/Status/LastResult",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.lastPart": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/QS01/Status/LastPartId",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.step": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/RB01/Status/CycleStepName",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.cycle": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/RB01/Status/LastCycleTime",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.vacuum": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/RB01/Status/VacuumLevel",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.inGripper": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/RB01/Status/PartInGripper",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.safety": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/SF01/Status/SafetyOk",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.air": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/UT01/Status/AirPressure",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.power": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/UT01/Status/ActivePower",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.energy": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/UT01/Status/EnergyTotal",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.lower": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/LowerLimit",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.upper": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/UpperLimit",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.processed": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Admin/ProdProcessedCount",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.defective": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Admin/ProdDefectiveCount",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    }
+  }
+}

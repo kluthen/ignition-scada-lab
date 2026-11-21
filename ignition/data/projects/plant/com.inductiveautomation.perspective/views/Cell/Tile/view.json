@@ -1,0 +1,622 @@
+{
+  "custom": {
+    "state": null,
+    "stateName": null,
+    "stopText": null,
+    "speed": null,
+    "orderId": null,
+    "product": null,
+    "good": null,
+    "rejects": null,
+    "target": null,
+    "bin": null,
+    "binCap": null,
+    "auto": null,
+    "location": null
+  },
+  "params": {
+    "cell": "C01"
+  },
+  "props": {
+    "defaultSize": {
+      "width": 240,
+      "height": 230
+    }
+  },
+  "root": {
+    "type": "ia.container.flex",
+    "meta": {
+      "name": "root"
+    },
+    "props": {
+      "direction": "column",
+      "style": {
+        "backgroundColor": "#FFFFFF",
+        "borderStyle": "solid",
+        "borderWidth": "1px",
+        "borderColor": "#B8BEC6",
+        "borderRadius": "4px",
+        "padding": "8px",
+        "cursor": "pointer"
+      }
+    },
+    "children": [
+      {
+        "type": "ia.container.flex",
+        "meta": {
+          "name": "Head"
+        },
+        "props": {
+          "direction": "row",
+          "style": {},
+          "alignItems": "center"
+        },
+        "position": {
+          "basis": "34px",
+          "shrink": 0
+        },
+        "children": [
+          {
+            "type": "ia.display.label",
+            "meta": {
+              "name": "Cell"
+            },
+            "props": {
+              "style": {
+                "fontSize": "22px",
+                "fontWeight": "bold",
+                "color": "#1F2933"
+              }
+            },
+            "position": {
+              "grow": 1,
+              "shrink": 0
+            },
+            "propConfig": {
+              "props.text": {
+                "binding": {
+                  "type": "expr",
+                  "config": {
+                    "expression": "{view.params.cell}"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "ia.display.label",
+            "meta": {
+              "name": "Auto"
+            },
+            "props": {
+              "style": {
+                "fontSize": "11px",
+                "color": "#FFFFFF",
+                "backgroundColor": "#4F6D8A",
+                "borderRadius": "3px",
+                "padding": "2px 6px"
+              },
+              "text": "AUTO"
+            },
+            "position": {
+              "basis": "auto",
+              "shrink": 0,
+              "grow": 0
+            },
+            "propConfig": {
+              "meta.visible": {
+                "binding": {
+                  "type": "expr",
+                  "config": {
+                    "expression": "{view.custom.auto}"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ia.display.label",
+        "meta": {
+          "name": "Location"
+        },
+        "props": {
+          "style": {
+            "fontSize": "12px",
+            "color": "#5F6B7A"
+          }
+        },
+        "position": {
+          "basis": "16px",
+          "shrink": 0,
+          "grow": 0
+        },
+        "propConfig": {
+          "props.text": {
+            "binding": {
+              "type": "expr",
+              "config": {
+                "expression": "{view.custom.location}"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "ia.display.label",
+        "meta": {
+          "name": "State"
+        },
+        "props": {
+          "style": {
+            "color": "#FFFFFF",
+            "fontWeight": "bold",
+            "fontSize": "16px",
+            "textAlign": "center",
+            "borderRadius": "3px",
+            "marginTop": "6px",
+            "marginBottom": "6px"
+          }
+        },
+        "position": {
+          "basis": "30px",
+          "shrink": 0,
+          "grow": 0
+        },
+        "propConfig": {
+          "props.text": {
+            "binding": {
+              "type": "expr",
+              "config": {
+                "expression": "{view.custom.stateName}"
+              }
+            }
+          },
+          "props.style.backgroundColor": {
+            "binding": {
+              "type": "expr",
+              "config": {
+                "expression": "{view.custom.state}"
+              },
+              "transforms": [
+                {
+                  "type": "map",
+                  "inputType": "scalar",
+                  "outputType": "color",
+                  "mappings": [
+                    {
+                      "input": 6,
+                      "output": "#2E7D32"
+                    },
+                    {
+                      "input": 4,
+                      "output": "#4F6D8A"
+                    },
+                    {
+                      "input": 17,
+                      "output": "#4F6D8A"
+                    },
+                    {
+                      "input": 2,
+                      "output": "#6B7280"
+                    },
+                    {
+                      "input": 5,
+                      "output": "#C99A06"
+                    },
+                    {
+                      "input": 13,
+                      "output": "#C99A06"
+                    },
+                    {
+                      "input": 14,
+                      "output": "#C99A06"
+                    },
+                    {
+                      "input": 10,
+                      "output": "#D9480F"
+                    },
+                    {
+                      "input": 11,
+                      "output": "#D9480F"
+                    },
+                    {
+                      "input": 12,
+                      "output": "#D9480F"
+                    },
+                    {
+                      "input": 8,
+                      "output": "#B91C1C"
+                    },
+                    {
+                      "input": 9,
+                      "output": "#B91C1C"
+                    },
+                    {
+                      "input": 1,
+                      "output": "#8896A6"
+                    },
+                    {
+                      "input": 3,
+                      "output": "#8896A6"
+                    },
+                    {
+                      "input": 7,
+                      "output": "#8896A6"
+                    },
+                    {
+                      "input": 15,
+                      "output": "#8896A6"
+                    },
+                    {
+                      "input": 16,
+                      "output": "#8896A6"
+                    }
+                  ],
+                  "fallback": "#9E9E9E"
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "type": "ia.display.label",
+        "meta": {
+          "name": "StopReason"
+        },
+        "props": {
+          "style": {
+            "fontSize": "12px",
+            "color": "#D9480F"
+          }
+        },
+        "position": {
+          "basis": "16px",
+          "shrink": 0,
+          "grow": 0
+        },
+        "propConfig": {
+          "props.text": {
+            "binding": {
+              "type": "expr",
+              "config": {
+                "expression": "if({view.custom.state} = 6 || {view.custom.stopText} = 'None', '', {view.custom.stopText})"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "ia.display.label",
+        "meta": {
+          "name": "Order"
+        },
+        "props": {
+          "style": {
+            "fontSize": "13px",
+            "color": "#1F2933"
+          }
+        },
+        "position": {
+          "basis": "18px",
+          "shrink": 0,
+          "grow": 0
+        },
+        "propConfig": {
+          "props.text": {
+            "binding": {
+              "type": "expr",
+              "config": {
+                "expression": "if(len({view.custom.orderId}) > 0, {view.custom.orderId} + '  \u00b7  ' + {view.custom.product}, 'no order')"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "ia.display.progress",
+        "meta": {
+          "name": "Progress"
+        },
+        "props": {
+          "max": 100,
+          "value": 0,
+          "bar": {
+            "color": "#2E7D32"
+          }
+        },
+        "position": {
+          "basis": "14px",
+          "shrink": 0
+        },
+        "propConfig": {
+          "props.max": {
+            "binding": {
+              "type": "expr",
+              "config": {
+                "expression": "max({view.custom.target}, 1)"
+              }
+            }
+          },
+          "props.value": {
+            "binding": {
+              "type": "expr",
+              "config": {
+                "expression": "{view.custom.good}"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "ia.display.label",
+        "meta": {
+          "name": "Counts"
+        },
+        "props": {
+          "style": {
+            "fontSize": "13px",
+            "color": "#1F2933"
+          }
+        },
+        "position": {
+          "basis": "18px",
+          "shrink": 0,
+          "grow": 0
+        },
+        "propConfig": {
+          "props.text": {
+            "binding": {
+              "type": "expr",
+              "config": {
+                "expression": "'Good ' + {view.custom.good} + ' / ' + {view.custom.target} + '   Rej ' + {view.custom.rejects}"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "ia.display.label",
+        "meta": {
+          "name": "Speed"
+        },
+        "props": {
+          "style": {
+            "fontSize": "13px",
+            "color": "#1F2933"
+          }
+        },
+        "position": {
+          "basis": "18px",
+          "shrink": 0,
+          "grow": 0
+        },
+        "propConfig": {
+          "props.text": {
+            "binding": {
+              "type": "expr",
+              "config": {
+                "expression": "numberFormat({view.custom.speed}, '0.0') + ' parts/min'"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "ia.display.label",
+        "meta": {
+          "name": "Bin"
+        },
+        "props": {
+          "style": {
+            "fontSize": "13px",
+            "color": "#1F2933"
+          }
+        },
+        "position": {
+          "basis": "18px",
+          "shrink": 0,
+          "grow": 0
+        },
+        "propConfig": {
+          "props.text": {
+            "binding": {
+              "type": "expr",
+              "config": {
+                "expression": "'Reject bin ' + {view.custom.bin} + ' / ' + {view.custom.binCap}"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "events": {
+      "dom": {
+        "onClick": {
+          "type": "script",
+          "scope": "G",
+          "config": {
+            "script": "\tsystem.perspective.navigate('/cell/' + self.view.params.cell)"
+          }
+        }
+      }
+    }
+  },
+  "propConfig": {
+    "params.cell": {
+      "paramDirection": "input",
+      "persistent": true
+    },
+    "custom.state": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Status/StateCurrent",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.stateName": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Status/StateCurrentName",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.stopText": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Admin/StopReasonText",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.speed": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Status/CurMachSpeed",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.orderId": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/OrderId",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.product": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/ProductCode",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.good": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/GoodCount",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.rejects": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/RejectCount",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.target": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/TargetQuantity",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.bin": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/RJ01/Status/Count",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.binCap": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/RJ01/Parameters/Capacity",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.auto": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/MES/AutoRun",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    },
+    "custom.location": {
+      "binding": {
+        "type": "tag",
+        "config": {
+          "mode": "indirect",
+          "tagPath": "[default]ANN/FIN/{cell}/Identification/Location",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "fallbackDelay": 2.5
+        }
+      }
+    }
+  }
+}

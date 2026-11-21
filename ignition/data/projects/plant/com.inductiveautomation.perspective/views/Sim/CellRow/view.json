@@ -1,0 +1,213 @@
+{
+  "custom": {},
+  "params": {
+    "cell": "C01"
+  },
+  "props": {
+    "defaultSize": {
+      "width": 900,
+      "height": 44
+    }
+  },
+  "root": {
+    "type": "ia.container.flex",
+    "meta": {
+      "name": "root"
+    },
+    "props": {
+      "direction": "row",
+      "style": {
+        "borderBottom": "1px solid #B8BEC6",
+        "padding": "4px 0"
+      },
+      "alignItems": "center"
+    },
+    "children": [
+      {
+        "type": "ia.display.label",
+        "meta": {
+          "name": "Cell"
+        },
+        "props": {
+          "style": {
+            "fontSize": "16px",
+            "fontWeight": "bold",
+            "color": "#1F2933"
+          }
+        },
+        "position": {
+          "basis": "70px",
+          "shrink": 0,
+          "grow": 0
+        },
+        "propConfig": {
+          "props.text": {
+            "binding": {
+              "type": "expr",
+              "config": {
+                "expression": "{view.params.cell}"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "ia.input.numeric-entry-field",
+        "meta": {
+          "name": "FeedInterval"
+        },
+        "props": {
+          "value": 0,
+          "style": {
+            "margin": "0 6px"
+          }
+        },
+        "position": {
+          "basis": "110px",
+          "shrink": 0
+        },
+        "propConfig": {
+          "props.value": {
+            "binding": {
+              "type": "tag",
+              "config": {
+                "mode": "indirect",
+                "tagPath": "[sim]{cell}/Process/FeedInterval",
+                "references": {
+                  "cell": "{view.params.cell}"
+                },
+                "fallbackDelay": 2.5,
+                "bidirectional": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "ia.input.numeric-entry-field",
+        "meta": {
+          "name": "RejectEveryN"
+        },
+        "props": {
+          "value": 0,
+          "style": {
+            "margin": "0 6px"
+          }
+        },
+        "position": {
+          "basis": "110px",
+          "shrink": 0
+        },
+        "propConfig": {
+          "props.value": {
+            "binding": {
+              "type": "tag",
+              "config": {
+                "mode": "indirect",
+                "tagPath": "[sim]{cell}/Process/RejectEveryN",
+                "references": {
+                  "cell": "{view.params.cell}"
+                },
+                "fallbackDelay": 2.5,
+                "bidirectional": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "ia.input.toggle-switch",
+        "meta": {
+          "name": "UpstreamFeed"
+        },
+        "props": {
+          "selected": false
+        },
+        "position": {
+          "basis": "120px",
+          "shrink": 0
+        },
+        "propConfig": {
+          "props.selected": {
+            "binding": {
+              "type": "tag",
+              "config": {
+                "mode": "indirect",
+                "tagPath": "[sim]{cell}/Process/UpstreamFeedEnable",
+                "references": {
+                  "cell": "{view.params.cell}"
+                },
+                "fallbackDelay": 2.5,
+                "bidirectional": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "ia.input.toggle-switch",
+        "meta": {
+          "name": "AutoEmptyBin"
+        },
+        "props": {
+          "selected": false
+        },
+        "position": {
+          "basis": "120px",
+          "shrink": 0
+        },
+        "propConfig": {
+          "props.selected": {
+            "binding": {
+              "type": "tag",
+              "config": {
+                "mode": "indirect",
+                "tagPath": "[sim]{cell}/Process/AutoEmptyRejectBin",
+                "references": {
+                  "cell": "{view.params.cell}"
+                },
+                "fallbackDelay": 2.5,
+                "bidirectional": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "ia.input.toggle-switch",
+        "meta": {
+          "name": "AutoRun"
+        },
+        "props": {
+          "selected": false
+        },
+        "position": {
+          "basis": "120px",
+          "shrink": 0
+        },
+        "propConfig": {
+          "props.selected": {
+            "binding": {
+              "type": "tag",
+              "config": {
+                "mode": "indirect",
+                "tagPath": "[default]ANN/FIN/{cell}/MES/AutoRun",
+                "references": {
+                  "cell": "{view.params.cell}"
+                },
+                "fallbackDelay": 2.5,
+                "bidirectional": true
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "propConfig": {
+    "params.cell": {
+      "paramDirection": "input",
+      "persistent": true
+    }
+  }
+}

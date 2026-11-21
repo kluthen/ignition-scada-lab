@@ -20,6 +20,12 @@ ignition/data/config/resources/core/ignition/user-source/*/users.json
 ignition/data/config/resources/core/ignition/api-token/
 ignition/data/config/resources/core/ignition/database-connection/
 ignition/data/config/resources/core/ignition/opc-connection/
+# The licence system tags are named after the licence key: never publish them.
+ignition/data/config/resources/core/ignition/tag-definition/System/Gateway/Licenses/
+# Commissioning on top of the versioned config (user source "default" without
+# its git-ignored users.json) creates "temp" sources; see operations.md.
+ignition/data/config/resources/core/ignition/identity-provider/temp/
+ignition/data/config/resources/core/ignition/user-source/temp/
 # Per-gateway bootstrap state: the OPC UA module creates its loopback connection
 # and user source once and records it here. Versioning it would stop a fresh
 # gateway (clone) from creating them.

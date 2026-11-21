@@ -110,15 +110,26 @@ from `ignition/database-translator`.
 ### Applying gateway-config/ in one go
 
 `scripts/apply_gateway_config.py` creates or updates, with PUT and the current
-signature, every OPC connection (`opc-connection-*.json`) and device
-(`device-*.json`) in `gateway-config/`, then the OPC UA server singleton. It is
-idempotent; `--dry-run` shows what it would do.
+signature:
+- one OPC connection and one Modbus device per row of `docs/cells.csv`, from
+  `opc-connection.template.json` and `device.template.json` (placeholders
+  `{cell}`, `{bay}`, `{host}`, `{io_device}`), plus any plain
+  `opc-connection-*.json` / `device-*.json`;
+- historian providers (`historian-provider-*.json`);
+- `system-properties.patch.json`, merged into the `ignition/system-properties`
+  singleton (sets the gateway scripting project);
+- the OPC UA server singleton.
+
+Resources listed in its `RETIRED` table are deleted (`DELETE
+/resources/<type>/<name>/<signature>`); the single-cell device `IO01` is one.
+It is idempotent; `--dry-run` shows what it would do.
 
 ### OPC UA client connection (to the cell controller)
 
-`gateway-config/opc-connection-c01.json`: type `com.inductiveautomation.OpcUaServerType`,
-endpoint `opc.tcp://plc:4840/ignition-lab/`, security `None`/`None`,
-`authenticationType: ANONYMOUS`, `hostOverride: plc`. The asyncua server
+`gateway-config/opc-connection.template.json` (one connection per cell, named
+like the cell): type `com.inductiveautomation.OpcUaServerType`, endpoint
+`opc.tcp://plc-c03:4840/ignition-lab/`, security `None`/`None`,
+`authenticationType: ANONYMOUS`, `hostOverride: plc-c03`. The asyncua server
 advertises `0.0.0.0` in its endpoints, and the override replaces it.
 
 **Pitfall**: even with security None, the connection needs
@@ -134,13 +145,13 @@ Item paths: Ignition 8.3.10 accepts the namespace-URI form
 
 ### Modbus TCP device
 
-`gateway-config/device-io01.json`. **Pitfall**: give every settings group
+`gateway-config/device.template.json` (one device per cell, `C03_IO01`). **Pitfall**: give every settings group
 (`connectivity`, `requestOptimization`, `writeRequests`, `readRequests`,
 `advanced`, `stringHandling`). Leaving one out gives HTTP 500
 `NullPointerException … requestOptimization is null`: schema defaults are not
 applied to missing groups.
 
-`IO01` keeps Ignition's default **one-based** addressing
+The devices keep Ignition's default **one-based** addressing
 (`advanced.zeroBasedAddressing: false`): `C1` is coil 0 on the wire and `HRUS1`
 is holding register 0. That matches the `ignition_modbus_address` column of the
 registry. 32-bit values (`IRUI12`) read high word first with
@@ -169,26 +180,52 @@ uses it for optimistic locking.
 Namespaces of Ignition's OPC UA server: `ns=1` devices (`[device]address`),
 `ns=2` exposed tag providers (`[provider]path/to/tag`).
 
-### Tags
+### Tags: UDTs and instances
 
-`scripts/generate_tags.py` builds the plant's tags from `docs/opcua-registry.csv`.
-It writes `gateway-config/tags/default.json` and `sim.json`, then imports them
-(collision policy Overwrite). Tag JSON is the same format as a Designer export
-or `scripts/ign tags-export`:
+`scripts/generate_tags.py` builds the plant's tags from `docs/opcua-registry.csv`
+(one cell type) and `docs/cells.csv` (the instances). It writes
+`gateway-config/tags/default.json` and `sim.json`, then imports them through
+`POST /tags/import` (collision policy Overwrite). Tag JSON is the same format as
+a Designer export or `scripts/ign tags-export`. UDT definitions go in the
+`_types_` folder; parameter-bound properties are objects
+`{"bindType": "parameter", "binding": "…{Param}…"}`:
 
 ```json
-{"tags": [{"name": "ANN", "tagType": "Folder", "tags": [ … {"name": "EnergyTotal", "tagType": "AtomicTag",
-   "valueSource": "opc", "opcServer": "Ignition OPC UA Server", "opcItemPath": "ns=1;s=[IO01]IRUI12",
-   "dataType": "Float8", "tagGroup": "Modbus", "engUnit": "kWh", "readOnly": true,
-   "scaleMode": "Linear", "rawLow": 0, "rawHigh": 1000, "scaledLow": 0, "scaledHigh": 1.0,
-   "documentation": "Energy counter since controller start …"} … ]}]}
+{"tags": [
+  {"name": "_types_", "tagType": "Folder", "tags": [
+    {"name": "PIC200_Cell", "tagType": "UdtType",
+     "parameters": {"CellId": {"dataType": "String", "value": "C01"},
+                    "OpcServer": {"dataType": "String", "value": "C01"},
+                    "IoDevice": {"dataType": "String", "value": "C01_IO01"}},
+     "tags": [ … {"name": "StateCurrent", "tagType": "AtomicTag", "valueSource": "opc", "dataType": "Int4",
+        "opcServer": {"bindType": "parameter", "binding": "{OpcServer}"},
+        "opcItemPath": {"bindType": "parameter", "binding": "nsu=urn:ignition-lab:cell;s={CellId}.Status.StateCurrent"},
+        "tagGroup": "Fast", "readOnly": true, "historyEnabled": true, "historyProvider": "Historian",
+        "eventScripts": [{"eventid": "valueChanged",
+                          "script": "\tmes.cell.log_state(str(tagPath).rsplit(\"/\", 2)[0], currentValue)"}]} … ]}]},
+  {"name": "ANN", "tagType": "Folder", "tags": [{"name": "FIN", "tagType": "Folder", "tags": [
+    {"name": "C03", "tagType": "UdtInstance", "typeId": "PIC200_Cell",
+     "parameters": {"CellId": {"dataType": "String", "value": "C03"}, "OpcServer": {…}, "IoDevice": {…}}} ]}]}]}
 ```
 
-- OPC UA tags use `"opcServer": "C01"` (the connection name) and the `nsu=` item path.
+- Modbus members: `"opcServer": "Ignition OPC UA Server"`, item path
+  `ns=1;s=[{IoDevice}]IRUI12`, `scaleMode` Linear where the registry scales.
 - Data types: UInt16 → `Int4`, UInt32 → `Int8` (Ignition has no unsigned
   types), Double → `Float8`, Byte → `Int2`.
-- Removing a row from the CSV does not delete the tag in Ignition. Delete it
-  in the Designer, or remove its folder under `tag-definition/` and run a config scan.
+- History: `historyEnabled`, `historyProvider`, and for analog values
+  `historicalDeadbandStyle: Analog` + `historicalDeadband`.
+- Tag event scripts: `eventScripts` with the body of
+  `valueChanged(tag, tagPath, previousValue, currentValue, initialChange, missedEvents)`,
+  tab-indented. They run in gateway scope and reach project library scripts
+  only through the **gateway scripting project** (`gatewayScriptingProject` in
+  `ignition/system-properties`, set by `system-properties.patch.json`).
+- Expression member ticking every second: `"valueSource": "expr", "expression": "now(1000)"`.
+- On disk (8.3), definitions land in
+  `core/ignition/tag-type-definition/<provider>/udts.json` and instances in
+  `core/ignition/tag-definition/<provider>/<folder>/udts.json`.
+- There is **no REST route to delete tags**. Removing a member from the CSV
+  does not delete it in Ignition: delete it in the Designer, or edit/remove the
+  files under `tag-type-definition/` / `tag-definition/` and run `scripts/ign scan config`.
 - Manual import: `scripts/ign tags-import file.json default --policy Overwrite|MergeOverwrite|Ignore|Abort`.
 
 **Tag providers** are REST resources (`ignition/tag-provider`). The generator
@@ -198,16 +235,28 @@ route. They are plain resources under
 (`{"config": {"mode": "Direct", "rate": 250, …}}`). The generator writes them,
 then runs `scan config`.
 
+### SQL Historian
+
+`gateway-config/historian-provider-historian.json`: resource type
+`com.inductiveautomation.historian/historian-provider`, profile `SqlHistorian`,
+`settings.database` = the DB connection `historian`, monthly partitions,
+pruning after 6 months. The connection sets `connectionProps:
+currentSchema=historian`, so the historian creates its `sqlth_*` tables and
+`sqlt_data_<drv>_<yyyy>_<mm>` partitions in schema `historian`, apart from the
+MES tables. Other 8.3 historian types (same resource): `CoreHistorian` (built-in
+QuestDB-based store, the 8.3 default recommendation), `InternalHistorian`,
+`RemoteHistorian`, `HistorySplitter`, `CsvHistorian`, `WideDbHistorian`.
+
 ### Reading values from outside (verification)
 
 There is no REST route for tag values. Read them through the OPC UA server.
 `scripts/opc` does this from the workspace container:
 
 ```bash
-scripts/opc read 'ns=1;s=[IO01]IRUS14' 'ns=2;s=[default]/ANN/FIN/C01/Status/StateCurrentName'
-scripts/opc browse 'ns=2;s=[default]/ANN/FIN/C01/RB01' --depth 2
-scripts/opc watch 'ns=2;s=[default]/ANN/FIN/C01/Order/Active/GoodCount' --period 0.5
-OPCUA_URL=opc.tcp://plc:4840/ignition-lab/ scripts/opc browse   # the controller itself (inside workspace)
+scripts/opc read 'ns=1;s=[C03_IO01]IRUS14' 'ns=2;s=[default]/ANN/FIN/C03/Status/StateCurrentName'
+scripts/opc browse 'ns=2;s=[default]/ANN/FIN/C03/RB01' --depth 2
+scripts/opc watch 'ns=2;s=[default]/ANN/FIN/C03/Order/Active/GoodCount' --period 0.5
+OPCUA_URL=opc.tcp://plc-c03:4840/ignition-lab/ scripts/opc read 'ns=2;s=C03.Status.StateCurrent'   # the controller itself
 ```
 
 Exposed tag node ids, as browsed, are `ns=2;s=[provider]/path/to/tag`.
@@ -216,8 +265,8 @@ Exposed tag node ids, as browsed, are `ns=2;s=[provider]/path/to/tag`.
 ```python
 from asyncua import Client
 async with Client("opc.tcp://gateway:62541") as c:
-    await c.get_node("ns=1;s=[IO01]IRUI12").read_value()                       # raw device value (Wh)
-    await c.get_node("ns=2;s=[default]/ANN/FIN/C01/UT01/Status/EnergyTotal").read_value()  # tag, kWh
+    await c.get_node("ns=1;s=[C03_IO01]IRUI12").read_value()                   # raw device value (Wh)
+    await c.get_node("ns=2;s=[default]/ANN/FIN/C03/UT01/Status/EnergyTotal").read_value()  # tag, kWh
 ```
 
 Writing through Ignition's server needs an authenticated user. The lab tests
@@ -230,8 +279,47 @@ c = Client("opc.tcp://gateway:62541"); c.set_user("opcuauser"); c.set_password("
 
 ## Projects (Perspective, scripts)
 
-Projects live in `ignition/data/projects/<project>/`. Each resource
-(Perspective view, script module, named query…) is a folder with
-`resource.json` plus content files: `view.json` for views, `code.py` for
-scripts. After editing files, run `scripts/ign scan projects`. Project scripts
-run on Jython 2.7: Python 2 syntax, Java classes importable, no CPython packages.
+Projects live in `ignition/data/projects/<project>/`. Create one with
+`POST /projects` (`{"name", "title", "description", "defaultDb", "tagProvider"}`;
+`scripts/ign post /projects -` reads the body from stdin). Each resource is a
+folder with `resource.json` plus content files. After editing files, run
+`scripts/ign scan projects`; a script library change restarts the project's
+gateway scripts within a second. Verified on 8.3.10 in project `plant`:
+
+| Resource | Path under the project | Content | Writable as code |
+|---|---|---|---|
+| Script library module `mes.cell` | `ignition/script-python/mes/cell/code.py` | Jython 2.7 source; `resource.json` lists `code.py` | yes |
+| Named query `Cell/LastParts` | `ignition/named-query/Cell/LastParts/query.sql` | SQL with `:param`; `resource.json` attributes hold `database`, `type: Query`, `parameters` (`sqlType` 7 = String) | yes |
+| Perspective view `Cell/Detail` | `com.inductiveautomation.perspective/views/Cell/Detail/view.json` | component tree, `params`, `custom`, `propConfig` (bindings) | yes |
+| Perspective pages and docks | `com.inductiveautomation.perspective/page-config/config.json` | `pages` (`/cell/:cell` → view param `cell`), `sharedDocks` | yes |
+| Project properties | `ignition/global-props/data.bin` | gzip'ed binary serialisation | no: set them through `POST /projects` or the Designer |
+| Gateway event scripts (timer, startup, tag change) | `ignition/event-scripts/data.bin` (8.1 layout; not tried on 8.3) | binary, like `global-props` | not attempted: this lab uses tag event scripts in the UDT instead (docs/system/mes.md) |
+
+Binding JSON used in the views (see docs/system/hmi.md):
+
+```json
+"propConfig": {
+  "custom.state": {"binding": {"type": "tag", "config": {"mode": "indirect",
+      "tagPath": "[default]ANN/FIN/{cell}/Status/StateCurrent", "references": {"cell": "{view.params.cell}"},
+      "fallbackDelay": 2.5}}},
+  "props.text": {"binding": {"type": "expr", "config": {"expression": "{view.custom.stateName}"}}},
+  "props.data": {"binding": {"type": "query", "config": {"queryPath": "Cell/LastParts", "returnFormat": "json",
+      "parameters": {"cell": "{view.params.cell}"}, "polling": {"enabled": true, "rate": "3"}}}}
+}
+```
+
+Tag bindings that write back (toggles, numeric fields) add `"bidirectional": true`.
+Project scripts and tag event scripts run on Jython 2.7: Python 2 syntax, Java
+classes importable, no CPython packages.
+
+## What still works when the trial expires
+
+Verified 2026-11-21 with the standard edition in demo-expired state: OPC UA
+client connections, tag event scripts, project library scripts and database
+access keep running. The Modbus driver (`Bad_TrialExpired`), the SQL Historian
+("Demo_Expired"), Perspective sessions and Ignition's own OPC UA server stop.
+Configuration (REST API, file scans, tag import) works in both states. The lab
+now runs Maker Edition, so this applies only if it goes back to the standard
+edition. The edition (`IGNITION_EDITION`) is read only at commissioning, and
+there is no REST route to change it: switching means a fresh data dir
+(operations.md, "Switching edition").

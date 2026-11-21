@@ -7,11 +7,13 @@
   scripts/opc watch NODEID [NODEID…] [--period 1]
 
 Endpoint: $OPCUA_URL, default opc.tcp://gateway:62541 (Ignition's server).
+A cell controller directly: OPCUA_URL=opc.tcp://plc-c03:4840/ignition-lab/
 Examples:
-  scripts/opc read 'ns=1;s=[plc_modbus]IRUS0' 'ns=2;s=[default]_probe/TankLevel'
+  scripts/opc read 'ns=1;s=[C01_IO01]DI4' 'ns=2;s=[default]ANN/FIN/C01/Status/StateCurrentName'
   scripts/opc browse 'ns=2;s=Tag Providers' --depth 3
-Anonymous sessions can read but not write on Ignition's server. Writes are
-meant for simulator servers that allow them.
+Anonymous sessions can read but not write on Ignition's server. To write a tag
+through it, give a user (lab: Ignition's default OPC UA user):
+  OPCUA_USER=opcuauser OPCUA_PASSWORD=password scripts/opc write 'ns=2;s=[default]ANN/FIN/C03/MES/AutoRun' false
 """
 
 from __future__ import annotations
@@ -53,7 +55,11 @@ async def main() -> None:
     ap.add_argument("--type", default=None)
     ap.add_argument("--period", type=float, default=1.0)
     a = ap.parse_args()
-    async with Client(URL) as c:
+    client = Client(URL)
+    if os.environ.get("OPCUA_USER"):
+        client.set_user(os.environ["OPCUA_USER"])
+        client.set_password(os.environ.get("OPCUA_PASSWORD", ""))
+    async with client as c:
         if a.cmd == "browse":
             await browse(c, a.args[0] if a.args else None, a.depth)
         elif a.cmd == "read":

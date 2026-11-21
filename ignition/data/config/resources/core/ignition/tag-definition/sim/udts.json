@@ -1,0 +1,57 @@
+[
+  {
+    "name": "C01",
+    "parameters": {
+      "OpcServer": {
+        "dataType": "String",
+        "value": "C01"
+      }
+    },
+    "tagType": "UdtInstance",
+    "typeId": "PIC200_Sim"
+  },
+  {
+    "name": "C02",
+    "parameters": {
+      "OpcServer": {
+        "dataType": "String",
+        "value": "C02"
+      }
+    },
+    "tagType": "UdtInstance",
+    "typeId": "PIC200_Sim"
+  },
+  {
+    "name": "C03",
+    "parameters": {
+      "OpcServer": {
+        "dataType": "String",
+        "value": "C03"
+      }
+    },
+    "tagType": "UdtInstance",
+    "typeId": "PIC200_Sim"
+  },
+  {
+    "name": "C04",
+    "parameters": {
+      "OpcServer": {
+        "dataType": "String",
+        "value": "C04"
+      }
+    },
+    "tagType": "UdtInstance",
+    "typeId": "PIC200_Sim"
+  },
+  {
+    "name": "C05",
+    "parameters": {
+      "OpcServer": {
+        "dataType": "String",
+        "value": "C05"
+      }
+    },
+    "tagType": "UdtInstance",
+    "typeId": "PIC200_Sim"
+  }
+]

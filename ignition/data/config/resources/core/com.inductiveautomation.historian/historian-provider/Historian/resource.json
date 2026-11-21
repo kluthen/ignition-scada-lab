@@ -1,0 +1,19 @@
+{
+  "scope": "A",
+  "description": "Tag history of the finishing area to PostgreSQL (DB connection \u0027historian\u0027, schema historian).",
+  "version": 1,
+  "restricted": false,
+  "overridable": true,
+  "files": [
+    "config.json"
+  ],
+  "attributes": {
+    "lastModification": {
+      "actor": "api-token:claude-lab:172.24.0.1",
+      "timestamp": "2026-11-21T14:22:01Z"
+    },
+    "uuid": "a394537e-c67a-4f72-8ab4-bae53950efbc",
+    "lastModificationSignature": "31b72d768e903edb2ac5c95419eaafc607aaad7d3bfba7af3252c81190d17911",
+    "enabled": true
+  }
+}

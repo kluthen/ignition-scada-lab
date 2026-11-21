@@ -5,6 +5,9 @@ PLC simulation (`plc/`) can be coded from it without guessing. Every signal name
 here exists with the same name in [`opcua-registry.csv`](opcua-registry.csv);
 the registry is the reference for types, ranges and addresses.
 
+The finishing area runs five identical cells C01..C05 ([`plant-layout.md`](plant-layout.md));
+this document describes one, with the names of C01.
+
 Phase 1 is deterministic and has no faults. Fault behaviour is reserved in
 [`fault-catalogue.md`](fault-catalogue.md); its signals already exist in the registry.
 
@@ -74,7 +77,7 @@ ISA-95 equipment hierarchy:
 
 | Side | What | Why |
 |---|---|---|
-| OPC UA (one server, endpoint `opc.tcp://plc:4840/ignition-lab/`) | C01 cell controller, QS01 results, RB01 robot, Sim interface | Structured, self-describing data with strings and timestamps (order ids, part ids, result records), browsable hierarchy that mirrors the equipment, and the place where companion specifications (Machinery, Robotics, PackML) apply. In a real cell, the PLC (e.g. an S7-1500) and the robot controller would each expose an OPC UA server. |
+| OPC UA (one server per cell, endpoint `opc.tcp://plc-c01:4840/ignition-lab/` for C01) | C01 cell controller, QS01 results, RB01 robot, Sim interface | Structured, self-describing data with strings and timestamps (order ids, part ids, result records), browsable hierarchy that mirrors the equipment, and the place where companion specifications (Machinery, Robotics, PackML) apply. In a real cell, the PLC (e.g. an S7-1500) and the robot controller would each expose an OPC UA server. |
 | Modbus TCP (device IO01, existing server on port 502) | Conveyor drives and photo-eyes, reject bin, safety status, air pressure, energy meter | Plain bits and 16-bit words from field devices that only speak Modbus (VFDs, I/O couplers, energy meters). Keeps the brownfield reality the user will meet at customers, and exercises Ignition's Modbus driver (addressing, scaling, 32-bit word order). |
 
 Both sides are served by the same Python process, so the cell logic reads the Modbus
@@ -112,9 +115,11 @@ Upstream releases one part onto CV01 at the start of a scan when **all** of thes
    This rule makes the order finish with exactly TargetQuantity good parts and empty conveyors.
 
 Each released part gets the next serial number *n* and `PartId` = `P` + *n* on 9 digits.
-At controller start, *n* is initialised to the number of seconds elapsed since
-2026-01-01T00:00:00Z. Since the cell finishes fewer than one part per second, part ids
-stay unique across restarts without any persistent storage.
+At controller start, *n* is initialised to *k* × 100 000 000 plus the number of seconds
+elapsed since 2026-01-01T00:00:00Z, where *k* is the cell number (C03 → 3,
+[plant-layout.md](plant-layout.md)). Since a cell finishes fewer than one part per second,
+part ids stay unique across restarts and across the five cells without any persistent
+storage (until 2029-03, when the seconds reach 10⁸).
 Each release increments `C01.Admin.ProdConsumedCount`.
 
 ### 4.2 CV01 infeed conveyor

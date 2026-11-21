@@ -1,0 +1,19 @@
+{
+  "scope": "A",
+  "description": "Cell C05 remote I/O coupler IO01 (Modbus TCP, unit 1, BAY5): conveyors, reject bin, safety, utilities.",
+  "version": 1,
+  "restricted": false,
+  "overridable": true,
+  "files": [
+    "config.json"
+  ],
+  "attributes": {
+    "lastModification": {
+      "actor": "api-token:claude-lab:172.24.0.1",
+      "timestamp": "2026-11-21T14:22:01Z"
+    },
+    "uuid": "2c74a558-1620-41c1-a1e8-030262956b57",
+    "lastModificationSignature": "f893760a51abebe525e5fb635b611b5b94d8db538e6cfc2759fa69c3de897d1a",
+    "enabled": true
+  }
+}

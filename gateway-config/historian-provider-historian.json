@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Historian",
+    "enabled": true,
+    "description": "Tag history of the finishing area to PostgreSQL (DB connection 'historian', schema historian).",
+    "config": {
+      "profile": { "type": "SqlHistorian" },
+      "settings": {
+        "database": "historian",
+        "partition": { "enabled": true, "size": 1, "sizeUnits": "MONTH", "partitionSeedQueryLimit": 2,
+                       "optimized": false, "optimizedWindowSeconds": 60 },
+        "pruning": { "enabled": true, "age": 6, "ageUnits": "MONTH" },
+        "trackSce": true,
+        "staleMultiplier": 2
+      }
+    }
+  }
+]

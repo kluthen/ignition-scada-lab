@@ -6,4 +6,6 @@ if [ -f /.dockerenv ] && [ -d /workspace ]; then
   exec python "$here/opcua_tool.py" "$@"
 fi
 cd "$here/.." && docker compose --profile dev up -d workspace >/dev/null 2>&1
-exec docker compose exec -T workspace python /workspace/scripts/opcua_tool.py "$@"
+exec docker compose exec -T ${OPCUA_URL:+-e OPCUA_URL="$OPCUA_URL"} \
+  ${OPCUA_USER:+-e OPCUA_USER="$OPCUA_USER" -e OPCUA_PASSWORD="$OPCUA_PASSWORD"} \
+  workspace python /workspace/scripts/opcua_tool.py "$@"

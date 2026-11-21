@@ -29,6 +29,11 @@ class Signal:
     modbus_scale: float
     phase: int
     description: str
+    node_name: str = ""      # string NodeId identifier; "" = the signal name (instance.py renames the cell's nodes)
+
+    @property
+    def node_id(self) -> str:
+        return self.node_name or self.name
 
     @property
     def is_variable(self) -> bool:

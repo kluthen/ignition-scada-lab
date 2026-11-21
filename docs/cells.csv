@@ -1,0 +1,6 @@
+cell,bay,controller_host,opcua_host_port,modbus_host_port,io_device,serial_number,year_of_construction,month_of_construction,robot_serial,camera_serial,feed_interval,reject_every_n,auto_empty_reject_bin,qualified_part_types,notes
+C01,BAY1,plc-c01,4841,5021,C01_IO01,PIC200-26-0001,2026,3,SRS400-26-0417,VC200-26-1187,2.5,25,false,1 2,Reference cell. First of the batch; small and medium housings.
+C02,BAY2,plc-c02,4842,5022,C02_IO01,PIC200-26-0002,2026,3,SRS400-26-0418,VC200-26-1188,2.5,40,false,1 2,Twin of C01; better gauge repeatability (fewer rejects).
+C03,BAY3,plc-c03,4843,5023,C03_IO01,PIC200-26-0003,2026,5,SRS400-26-0452,VC200-26-1203,3.0,20,false,3,Dedicated to large housings HSG-C45; slower upstream deburring station.
+C04,BAY4,plc-c04,4844,5024,C04_IO01,PIC200-26-0004,2026,5,SRS400-26-0453,VC200-26-1204,2.5,15,false,1 2 3,Flexible cell qualified for all part types; worn gauge fixture (highest reject rate).
+C05,BAY5,plc-c05,4845,5025,C05_IO01,PIC200-26-0005,2026,9,SRS400-26-0511,VC200-26-1290,2.0,50,true,1,Newest cell; reject chute empties the bin automatically; fastest upstream (robot-limited).

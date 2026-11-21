@@ -1,0 +1,97 @@
+[
+  {
+    "name": "C01",
+    "parameters": {
+      "CellId": {
+        "dataType": "String",
+        "value": "C01"
+      },
+      "IoDevice": {
+        "dataType": "String",
+        "value": "C01_IO01"
+      },
+      "OpcServer": {
+        "dataType": "String",
+        "value": "C01"
+      }
+    },
+    "tagType": "UdtInstance",
+    "typeId": "PIC200_Cell"
+  },
+  {
+    "name": "C02",
+    "parameters": {
+      "CellId": {
+        "dataType": "String",
+        "value": "C02"
+      },
+      "IoDevice": {
+        "dataType": "String",
+        "value": "C02_IO01"
+      },
+      "OpcServer": {
+        "dataType": "String",
+        "value": "C02"
+      }
+    },
+    "tagType": "UdtInstance",
+    "typeId": "PIC200_Cell"
+  },
+  {
+    "name": "C03",
+    "parameters": {
+      "CellId": {
+        "dataType": "String",
+        "value": "C03"
+      },
+      "IoDevice": {
+        "dataType": "String",
+        "value": "C03_IO01"
+      },
+      "OpcServer": {
+        "dataType": "String",
+        "value": "C03"
+      }
+    },
+    "tagType": "UdtInstance",
+    "typeId": "PIC200_Cell"
+  },
+  {
+    "name": "C04",
+    "parameters": {
+      "CellId": {
+        "dataType": "String",
+        "value": "C04"
+      },
+      "IoDevice": {
+        "dataType": "String",
+        "value": "C04_IO01"
+      },
+      "OpcServer": {
+        "dataType": "String",
+        "value": "C04"
+      }
+    },
+    "tagType": "UdtInstance",
+    "typeId": "PIC200_Cell"
+  },
+  {
+    "name": "C05",
+    "parameters": {
+      "CellId": {
+        "dataType": "String",
+        "value": "C05"
+      },
+      "IoDevice": {
+        "dataType": "String",
+        "value": "C05_IO01"
+      },
+      "OpcServer": {
+        "dataType": "String",
+        "value": "C05"
+      }
+    },
+    "tagType": "UdtInstance",
+    "typeId": "PIC200_Cell"
+  }
+]

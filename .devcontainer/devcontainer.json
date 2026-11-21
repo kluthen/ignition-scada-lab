@@ -2,14 +2,13 @@
   "name": "Ignition lab",
   "dockerComposeFile": ["../compose.yaml"],
   "service": "workspace",
-  "runServices": ["gateway-init", "gateway", "db", "plc", "workspace"],
+  "runServices": ["gateway-init", "gateway", "db", "plc-c01", "plc-c02", "plc-c03", "plc-c04", "plc-c05", "workspace"],
   "workspaceFolder": "/workspace",
   "shutdownAction": "stopCompose",
   "remoteUser": "dev",
-  "forwardPorts": ["gateway:8088", "plc:502", "db:5432"],
+  "forwardPorts": ["gateway:8088", "db:5432"],
   "portsAttributes": {
-    "gateway:8088": { "label": "Ignition Gateway" },
-    "plc:502": { "label": "PLC Modbus TCP" },
+    "gateway:8088": { "label": "Ignition Gateway and Perspective" },
     "db:5432": { "label": "PostgreSQL" }
   },
   "customizations": {

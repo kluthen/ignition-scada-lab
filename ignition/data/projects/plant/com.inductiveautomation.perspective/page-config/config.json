@@ -1,0 +1,34 @@
+{
+  "pages": {
+    "/": {
+      "title": "FIN overview",
+      "viewPath": "Area/Overview"
+    },
+    "/cell/:cell": {
+      "title": "Cell",
+      "viewPath": "Cell/Detail"
+    },
+    "/instructor": {
+      "title": "Instructor",
+      "viewPath": "Sim/Instructor"
+    }
+  },
+  "sharedDocks": {
+    "top": [
+      {
+        "viewPath": "Shared/Header",
+        "size": 50,
+        "id": "header",
+        "display": "visible",
+        "resizable": false,
+        "show": "visible",
+        "content": "push",
+        "autoBreakpoint": 480,
+        "iconUrl": "",
+        "viewParams": {},
+        "anchor": "fixed",
+        "handle": "hide"
+      }
+    ]
+  }
+}

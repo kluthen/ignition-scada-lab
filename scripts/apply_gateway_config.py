@@ -1,19 +1,25 @@
 #!/usr/bin/env python3
 """Apply the reproducible gateway configuration in gateway-config/ (idempotent).
 
-  opc-connection-*.json  -> ignition/opc-connection
-  device-*.json          -> com.inductiveautomation.opcua/device
-  opcua-server-config.json -> com.inductiveautomation.opcua/server-config (singleton PUT)
+  opc-connection.template.json -> ignition/opc-connection, one per cell of docs/cells.csv ("C01".."C05")
+  device.template.json         -> com.inductiveautomation.opcua/device, one per cell ("C01_IO01"..)
+  opc-connection-*.json, device-*.json -> applied as they are (other, non-cell resources)
+  historian-provider-*.json    -> com.inductiveautomation.historian/historian-provider
+  opcua-server-config.json     -> com.inductiveautomation.opcua/server-config (singleton PUT)
+  system-properties.patch.json -> ignition/system-properties (singleton, keys merged into the current config)
 
-Existing resources are updated (PUT with their current signature), missing ones
-created. OPC connections get the client keystore alias password, Ignition's
-default "password", encrypted by this gateway, so no ciphertext sits in git.
+Templates use the placeholders {cell}, {bay}, {host} (controller_host) and
+{io_device} from cells.csv. Existing resources are updated (PUT with their
+current signature), missing ones created, RETIRED ones deleted. OPC
+connections get the client keystore alias password, Ignition's default
+"password", encrypted by this gateway, so no ciphertext sits in git.
 
 Usage: scripts/apply_gateway_config.py [--dry-run]
 """
 
 from __future__ import annotations
 
+import csv
 import json
 import pathlib
 import sys
@@ -22,7 +28,42 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import ign  # noqa: E402
 
 CONFIG = ign.ROOT / "gateway-config"
+CELLS = ign.ROOT / "docs/cells.csv"
 KEYSTORE_ALIAS_PASSWORD = "password"     # Ignition default for the "client" keystore alias
+RETIRED = {"com.inductiveautomation.opcua/device": ["IO01"]}   # single-cell lab (before the 5-cell layout)
+
+
+def from_template(name: str) -> list[dict]:
+    template = (CONFIG / name).read_text()
+    items = []
+    with open(CELLS, newline="", encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            text = template
+            for key, value in (("cell", row["cell"]), ("bay", row["bay"]), ("host", row["controller_host"]),
+                               ("io_device", row["io_device"])):
+                text = text.replace("{" + key + "}", value)
+            items.extend(json.loads(text))
+    return items
+
+
+def load(template: str, pattern: str) -> list[dict]:
+    items = from_template(template)
+    for f in sorted(CONFIG.glob(pattern)):
+        items.extend(json.loads(f.read_text()))
+    return items
+
+
+def retire(rtype: str, dry: bool) -> None:
+    existing = {i["name"] for i in ign.call("GET", f"/resources/names/{rtype}")["items"]}
+    for name in RETIRED.get(rtype, []):
+        if name not in existing:
+            continue
+        if dry:
+            print(f"would DELETE {rtype}: {name}")
+            continue
+        sig = ign.call("GET", f"/resources/find/{rtype}/{name}")["signature"]
+        ign.call("DELETE", f"/resources/{rtype}/{name}/{sig}")
+        print(f"DELETE {rtype}: {name} (retired)")
 
 
 def encrypt(text: str) -> dict:
@@ -49,15 +90,28 @@ def upsert(rtype: str, items: list[dict], dry: bool) -> None:
 
 def main() -> None:
     dry = "--dry-run" in sys.argv
-    conns = []
-    for f in sorted(CONFIG.glob("opc-connection-*.json")):
-        for item in json.loads(f.read_text()):
-            item["config"]["settings"].setdefault("security", {})["keyStoreAliasPassword"] = \
-                None if dry else encrypt(KEYSTORE_ALIAS_PASSWORD)
-            conns.append(item)
+    conns = load("opc-connection.template.json", "opc-connection-*.json")
+    for item in conns:
+        item["config"]["settings"].setdefault("security", {})["keyStoreAliasPassword"] = \
+            None if dry else encrypt(KEYSTORE_ALIAS_PASSWORD)
     upsert("ignition/opc-connection", conns, dry)
-    devices = [item for f in sorted(CONFIG.glob("device-*.json")) for item in json.loads(f.read_text())]
-    upsert("com.inductiveautomation.opcua/device", devices, dry)
+    retire("com.inductiveautomation.opcua/device", dry)
+    upsert("com.inductiveautomation.opcua/device", load("device.template.json", "device-*.json"), dry)
+    historians = [item for f in sorted(CONFIG.glob("historian-provider-*.json")) for item in json.loads(f.read_text())]
+    upsert("com.inductiveautomation.historian/historian-provider", historians, dry)
+    f = CONFIG / "system-properties.patch.json"
+    if f.exists():
+        patch = json.loads(f.read_text())
+        current = ign.call("GET", "/resources/singleton/ignition/system-properties")
+        config = dict(current["config"], **patch)
+        if config == current["config"]:
+            print("system-properties: unchanged")
+        elif dry:
+            print(f"would PATCH ignition/system-properties: {patch}")
+        else:
+            r = ign.call("PUT", "/resources/ignition/system-properties",
+                         [{"collection": "core", "enabled": True, "config": config, "signature": current["signature"]}])
+            print("PUT system-properties ->", "ok" if r.get("success") else r)
     f = CONFIG / "opcua-server-config.json"
     if f.exists():
         body = json.loads(f.read_text())

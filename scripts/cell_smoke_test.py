@@ -7,8 +7,10 @@
   4. Start -> Execute, acknowledge every traceability record like the MES would
   5. Expect Complete within 60 s, GoodCount = 10, acknowledged records = new ProdProcessedCount
 
-Run in the workspace container:  docker compose exec workspace python scripts/cell_smoke_test.py
-Endpoint: $PLC_OPCUA_URL, default opc.tcp://plc:4840/ignition-lab/
+Run in the workspace container:  docker compose exec workspace python scripts/cell_smoke_test.py [CELL]
+CELL is C01 (default) to C05. Endpoint: $PLC_OPCUA_URL, default opc.tcp://plc-<cell>:4840/ignition-lab/
+The test drives the cell itself: pause the MES dispatcher of that cell first
+([default]ANN/FIN/<cell>/MES/AutoRun = false, docs/system/operations.md).
 """
 
 from __future__ import annotations
@@ -20,7 +22,8 @@ import time
 
 from asyncua import Client, ua
 
-URL = os.environ.get("PLC_OPCUA_URL", "opc.tcp://plc:4840/ignition-lab/")
+CELL_ID = sys.argv[1].upper() if len(sys.argv) > 1 else "C01"
+URL = os.environ.get("PLC_OPCUA_URL", f"opc.tcp://plc-{CELL_ID.lower()}:4840/ignition-lab/")
 CELL = "urn:ignition-lab:cell"
 ROBOT = "urn:ignition-lab:robot"
 STATES = {2: "Stopped", 4: "Idle", 6: "Execute", 9: "Aborted", 17: "Complete"}
@@ -31,6 +34,8 @@ class Cell:
         self.c, self.ns = client, ns
 
     def node(self, name: str):
+        if name.startswith("C01."):              # registry template name -> this cell's NodeId
+            name = CELL_ID + name[3:]
         return self.c.get_node(ua.NodeId(name, self.ns))
 
     async def get(self, name: str):
