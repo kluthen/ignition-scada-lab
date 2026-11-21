@@ -1,0 +1,180 @@
+[
+  {
+    "dataType": "Boolean",
+    "documentation": "While true air pressure ramps down to 4.8 bar in 30 s; when false it recovers to 6.2 bar in 10 s.",
+    "name": "AirPressureLow",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Faults.AirPressureLow",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "While true QS01 never returns a result.",
+    "name": "CameraNoResult",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Faults.CameraNoResult",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "Pulse: reset every Sim.Faults and Sim.Panel node to its initial value.",
+    "name": "ClearAll",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Faults.ClearAll",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "While true parts cannot leave CV02 at the exit.",
+    "name": "DownstreamBlocked",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Faults.DownstreamBlocked",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Int4",
+    "documentation": "The next N inspections cannot read the DataMatrix. Decrements per inspection.",
+    "engHigh": 100.0,
+    "engLow": 0.0,
+    "engUnit": "count",
+    "name": "IdUnreadableCount",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Faults.IdUnreadableCount",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "One-shot: CV01 drive trips (fault code 1 overcurrent). Self-clears when triggered.",
+    "name": "InfeedDriveTrip",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Faults.InfeedDriveTrip",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "While true parts on CV01 stop moving although the belt runs.",
+    "name": "InfeedJam",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Faults.InfeedJam",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Int4",
+    "documentation": "Write N: the Modbus server closes all connections and refuses new ones for N s. Counts down to 0.",
+    "engHigh": 600.0,
+    "engLow": 0.0,
+    "engUnit": "s",
+    "name": "ModbusOutage",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Faults.ModbusOutage",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Int4",
+    "documentation": "Write N: 1 s later the OPC UA server stops; it restarts after N s and this node reads 0 again.",
+    "engHigh": 600.0,
+    "engLow": 0.0,
+    "engUnit": "s",
+    "name": "OpcUaOutage",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Faults.OpcUaOutage",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "One-shot: CV02 drive trips (fault code 1 overcurrent). Self-clears when triggered.",
+    "name": "OutfeedDriveTrip",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Faults.OutfeedDriveTrip",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "While true CV01.Sensors.PartAtPick reads true.",
+    "name": "PartSensorStuckOn",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Faults.PartSensorStuckOn",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Int4",
+    "documentation": "The next N grip attempts fail to build vacuum. Decrements per failed attempt.",
+    "engHigh": 100.0,
+    "engLow": 0.0,
+    "engUnit": "count",
+    "name": "PickFailCount",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Faults.PickFailCount",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Float8",
+    "documentation": "Drift added to Sim.Faults.QualityOffset for every inspected part.",
+    "engHigh": 0.5,
+    "engLow": -0.5,
+    "engUnit": "mm/100 parts",
+    "name": "QualityDriftRate",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Faults.QualityDriftRate",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Float8",
+    "documentation": "Current bias added to every measurement. Write 0 to remove the drift.",
+    "engHigh": 5.0,
+    "engLow": -5.0,
+    "engUnit": "mm",
+    "name": "QualityOffset",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Faults.QualityOffset",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "While true RB01.Status.Heartbeat stops incrementing.",
+    "name": "RobotHeartbeatFreeze",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Faults.RobotHeartbeatFreeze",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "One-shot: vacuum is lost halfway through the next MoveToPlace. Self-clears when triggered.",
+    "name": "VacuumLossNext",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Faults.VacuumLossNext",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

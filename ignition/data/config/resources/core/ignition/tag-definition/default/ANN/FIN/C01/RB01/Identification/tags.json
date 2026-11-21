@@ -1,0 +1,68 @@
+[
+  {
+    "dataType": "String",
+    "documentation": "Manufacturer of the robot.",
+    "name": "Manufacturer",
+    "opcItemPath": "nsu\u003durn:ignition-lab:robot;s\u003dRB01.Identification.Manufacturer",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "String",
+    "documentation": "Model of the robot.",
+    "name": "Model",
+    "opcItemPath": "nsu\u003durn:ignition-lab:robot;s\u003dRB01.Identification.Model",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "String",
+    "documentation": "ProductCode of the robot.",
+    "name": "ProductCode",
+    "opcItemPath": "nsu\u003durn:ignition-lab:robot;s\u003dRB01.Identification.ProductCode",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "String",
+    "documentation": "SerialNumber of the robot.",
+    "name": "SerialNumber",
+    "opcItemPath": "nsu\u003durn:ignition-lab:robot;s\u003dRB01.Identification.SerialNumber",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "String",
+    "documentation": "SoftwareRevision of the robot.",
+    "name": "SoftwareRevision",
+    "opcItemPath": "nsu\u003durn:ignition-lab:robot;s\u003dRB01.Identification.SoftwareRevision",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Int4",
+    "documentation": "YearOfConstruction of the robot.",
+    "name": "YearOfConstruction",
+    "opcItemPath": "nsu\u003durn:ignition-lab:robot;s\u003dRB01.Identification.YearOfConstruction",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

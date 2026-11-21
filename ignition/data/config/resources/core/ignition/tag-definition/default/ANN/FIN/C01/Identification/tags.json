@@ -1,0 +1,145 @@
+[
+  {
+    "dataType": "String",
+    "documentation": "Customer asset id (ISA-95 site-area-cell).",
+    "name": "AssetId",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Identification.AssetId",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "String",
+    "documentation": "Customer-facing name.",
+    "name": "ComponentName",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Identification.ComponentName",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "String",
+    "documentation": "Hardware revision.",
+    "name": "HardwareRevision",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Identification.HardwareRevision",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "String",
+    "documentation": "Site/area/bay.",
+    "name": "Location",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Identification.Location",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "String",
+    "documentation": "Cell builder (integrator).",
+    "name": "Manufacturer",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Identification.Manufacturer",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "String",
+    "documentation": "URI of the manufacturer.",
+    "name": "ManufacturerUri",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Identification.ManufacturerUri",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "String",
+    "documentation": "Model name.",
+    "name": "Model",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Identification.Model",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Int2",
+    "documentation": "Month of construction (1-12).",
+    "name": "MonthOfConstruction",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Identification.MonthOfConstruction",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "String",
+    "documentation": "Manufacturer product code.",
+    "name": "ProductCode",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Identification.ProductCode",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "String",
+    "documentation": "Globally unique instance URI.",
+    "name": "ProductInstanceUri",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Identification.ProductInstanceUri",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "String",
+    "documentation": "Serial number of the cell.",
+    "name": "SerialNumber",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Identification.SerialNumber",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "String",
+    "documentation": "Cell controller program revision (bump when the simulation logic changes).",
+    "name": "SoftwareRevision",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Identification.SoftwareRevision",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Int4",
+    "documentation": "Year of construction.",
+    "name": "YearOfConstruction",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Identification.YearOfConstruction",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

@@ -1,0 +1,48 @@
+[
+  {
+    "dataType": "Boolean",
+    "documentation": "True \u003d the bin empties itself when it reaches RJ01.Parameters.NearFullLevel (no holds).",
+    "name": "AutoEmptyRejectBin",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Process.AutoEmptyRejectBin",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Float8",
+    "documentation": "Minimum time between two parts released by upstream onto CV01.",
+    "engHigh": 60.0,
+    "engLow": 1.0,
+    "engUnit": "s",
+    "name": "FeedInterval",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Process.FeedInterval",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Int4",
+    "documentation": "Every Nth part serial is out of tolerance (0 \u003d no rejects).",
+    "engHigh": 1000.0,
+    "engLow": 0.0,
+    "engUnit": "count",
+    "name": "RejectEveryN",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Process.RejectEveryN",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "False \u003d upstream stops releasing parts (starvation).",
+    "name": "UpstreamFeedEnable",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Process.UpstreamFeedEnable",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

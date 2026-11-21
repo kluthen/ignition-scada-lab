@@ -44,8 +44,8 @@ scripts/ign info                                   # gateway info + licence stat
 scripts/ign routes 'device|database'               # search the 588 routes of the saved OpenAPI spec
 scripts/ign schema resources/ignition/database-connection --depth 12   # body schema
 scripts/ign names com.inductiveautomation.opcua/device
-scripts/ign find  com.inductiveautomation.opcua/device plc_modbus
-scripts/ign post  resources/com.inductiveautomation.opcua/device gateway-config/device-plc-modbus.json
+scripts/ign find  com.inductiveautomation.opcua/device IO01
+scripts/ign post  resources/com.inductiveautomation.opcua/device gateway-config/device-io01.json
 scripts/ign scan  both
 scripts/ign tags-export default Cell > /tmp/cell-tags.json
 scripts/ign tags-import tags.json default --policy MergeOverwrite
@@ -107,21 +107,49 @@ then POST to `resources/ignition/database-connection`:
 Driver names come from `scripts/ign names ignition/database-driver`, translators
 from `ignition/database-translator`.
 
+### Applying gateway-config/ in one go
+
+`scripts/apply_gateway_config.py` creates or updates, with PUT and the current
+signature, every OPC connection (`opc-connection-*.json`) and device
+(`device-*.json`) in `gateway-config/`, then the OPC UA server singleton. It is
+idempotent; `--dry-run` shows what it would do.
+
+### OPC UA client connection (to the cell controller)
+
+`gateway-config/opc-connection-c01.json`: type `com.inductiveautomation.OpcUaServerType`,
+endpoint `opc.tcp://plc:4840/ignition-lab/`, security `None`/`None`,
+`authenticationType: ANONYMOUS`, `hostOverride: plc`. The asyncua server
+advertises `0.0.0.0` in its endpoints, and the override replaces it.
+
+**Pitfall**: even with security None, the connection needs
+`security.keyStoreAliasPassword`. Without it the connection faults with
+*"Unable to retrieve KeyPair for alias 'client'. Incorrect password?"*. The
+value is Ignition's default `password` as an embedded secret, so the apply
+script encrypts it through `/encryption/encrypt` at apply time and no
+ciphertext sits in git.
+
+Item paths: Ignition 8.3.10 accepts the namespace-URI form
+`nsu=urn:ignition-lab:cell;s=C01.Status.Heartbeat` (verified, same value as
+`ns=2;s=…`). Prefer it: it survives a change of namespace order on the server.
+
 ### Modbus TCP device
 
-`gateway-config/device-plc-modbus.json`. **Pitfall**: give every settings group
+`gateway-config/device-io01.json`. **Pitfall**: give every settings group
 (`connectivity`, `requestOptimization`, `writeRequests`, `readRequests`,
 `advanced`, `stringHandling`). Leaving one out gives HTTP 500
 `NullPointerException … requestOptimization is null`: schema defaults are not
 applied to missing groups.
 
-`advanced.zeroBasedAddressing: true` makes Ignition addresses equal the Modbus
-PDU addresses (`HR0` = first holding register), as documented in the
-registers maps.
+`IO01` keeps Ignition's default **one-based** addressing
+(`advanced.zeroBasedAddressing: false`): `C1` is coil 0 on the wire and `HRUS1`
+is holding register 0. That matches the `ignition_modbus_address` column of the
+registry. 32-bit values (`IRUI12`) read high word first with
+`reverseWordOrder: false`, the default. This is verified on
+`UT01.Status.EnergyTotal`.
 
-Ignition Modbus item syntax, under `ns=1;s=[<device>]`. Verified here: `C0`,
-`DI0`, `HR1`, `IR4`, `IRUS0`. The other type suffixes come from the Ignition
-Modbus driver documentation:
+Ignition Modbus item syntax, under `ns=1;s=[<device>]`. Verified here: `C1`,
+`DI4`, `HRUS1`, `IRUS14`, `IRUI12`. The other type suffixes come from the
+Ignition Modbus driver documentation:
 
 | Table | Address examples |
 |---|---|
@@ -143,17 +171,32 @@ Namespaces of Ignition's OPC UA server: `ns=1` devices (`[device]address`),
 
 ### Tags
 
-Tag JSON, as produced by Designer export or `scripts/ign tags-export`:
+`scripts/generate_tags.py` builds the plant's tags from `docs/opcua-registry.csv`.
+It writes `gateway-config/tags/default.json` and `sim.json`, then imports them
+(collision policy Overwrite). Tag JSON is the same format as a Designer export
+or `scripts/ign tags-export`:
 
 ```json
-{"tags": [{"name": "Cell", "tagType": "Folder", "tags": [
-  {"name": "TankLevel", "tagType": "AtomicTag", "valueSource": "opc",
-   "opcServer": "Ignition OPC UA Server", "opcItemPath": "ns=1;s=[plc_modbus]IRUS0",
-   "dataType": "Float4", "engUnit": "%",
-   "scaleMode": "Linear", "rawLow": 0, "rawHigh": 1000, "scaledLow": 0, "scaledHigh": 100}]}]}
+{"tags": [{"name": "ANN", "tagType": "Folder", "tags": [ … {"name": "EnergyTotal", "tagType": "AtomicTag",
+   "valueSource": "opc", "opcServer": "Ignition OPC UA Server", "opcItemPath": "ns=1;s=[IO01]IRUI12",
+   "dataType": "Float8", "tagGroup": "Modbus", "engUnit": "kWh", "readOnly": true,
+   "scaleMode": "Linear", "rawLow": 0, "rawHigh": 1000, "scaledLow": 0, "scaledHigh": 1.0,
+   "documentation": "Energy counter since controller start …"} … ]}]}
 ```
 
-Import with `scripts/ign tags-import file.json default --policy Overwrite|MergeOverwrite|Ignore|Abort`.
+- OPC UA tags use `"opcServer": "C01"` (the connection name) and the `nsu=` item path.
+- Data types: UInt16 → `Int4`, UInt32 → `Int8` (Ignition has no unsigned
+  types), Double → `Float8`, Byte → `Int2`.
+- Removing a row from the CSV does not delete the tag in Ignition. Delete it
+  in the Designer, or remove its folder under `tag-definition/` and run a config scan.
+- Manual import: `scripts/ign tags-import file.json default --policy Overwrite|MergeOverwrite|Ignore|Abort`.
+
+**Tag providers** are REST resources (`ignition/tag-provider`). The generator
+creates `sim` with the same config as `default`. **Tag groups** have no REST
+route. They are plain resources under
+`core/ignition/tag-group/<provider>/<group>/config.json`
+(`{"config": {"mode": "Direct", "rate": 250, …}}`). The generator writes them,
+then runs `scan config`.
 
 ### Reading values from outside (verification)
 
@@ -161,9 +204,10 @@ There is no REST route for tag values. Read them through the OPC UA server.
 `scripts/opc` does this from the workspace container:
 
 ```bash
-scripts/opc read 'ns=1;s=[plc_modbus]IRUS0' 'ns=2;s=[default]/_probe/TankLevel'
-scripts/opc browse 'ns=2;s=Tag Providers' --depth 3
-scripts/opc watch 'ns=2;s=[default]/_probe/TankLevel' --period 0.5
+scripts/opc read 'ns=1;s=[IO01]IRUS14' 'ns=2;s=[default]/ANN/FIN/C01/Status/StateCurrentName'
+scripts/opc browse 'ns=2;s=[default]/ANN/FIN/C01/RB01' --depth 2
+scripts/opc watch 'ns=2;s=[default]/ANN/FIN/C01/Order/Active/GoodCount' --period 0.5
+OPCUA_URL=opc.tcp://plc:4840/ignition-lab/ scripts/opc browse   # the controller itself (inside workspace)
 ```
 
 Exposed tag node ids, as browsed, are `ns=2;s=[provider]/path/to/tag`.
@@ -172,8 +216,16 @@ Exposed tag node ids, as browsed, are `ns=2;s=[provider]/path/to/tag`.
 ```python
 from asyncua import Client
 async with Client("opc.tcp://gateway:62541") as c:
-    await c.get_node("ns=1;s=[plc_modbus]IRUS0").read_value()    # raw device value
-    await c.get_node("ns=2;s=[default]/Cell/TankLevel").read_value()  # tag value, scaled
+    await c.get_node("ns=1;s=[IO01]IRUI12").read_value()                       # raw device value (Wh)
+    await c.get_node("ns=2;s=[default]/ANN/FIN/C01/UT01/Status/EnergyTotal").read_value()  # tag, kWh
+```
+
+Writing through Ignition's server needs an authenticated user. The lab tests
+use Ignition's default OPC UA user `opcuauser` / `password`. Tags marked
+`readOnly` refuse writes with `BadUserAccessDenied`:
+
+```python
+c = Client("opc.tcp://gateway:62541"); c.set_user("opcuauser"); c.set_password("password")
 ```
 
 ## Projects (Perspective, scripts)

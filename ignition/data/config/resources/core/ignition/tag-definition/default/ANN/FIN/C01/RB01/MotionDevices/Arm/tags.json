@@ -1,0 +1,13 @@
+[
+  {
+    "dataType": "Int4",
+    "documentation": "Robot kinematics category.",
+    "name": "MotionDeviceCategory",
+    "opcItemPath": "nsu\u003durn:ignition-lab:robot;s\u003dRB01.MotionDevices.Arm.MotionDeviceCategory",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

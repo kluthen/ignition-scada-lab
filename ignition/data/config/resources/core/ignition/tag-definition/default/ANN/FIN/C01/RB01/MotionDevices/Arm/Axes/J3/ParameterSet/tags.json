@@ -1,0 +1,16 @@
+[
+  {
+    "dataType": "Float8",
+    "documentation": "Quill stroke, 0 \u003d top, positive downwards. Linear interpolation between taught points (scenario.md).",
+    "engHigh": 150.0,
+    "engLow": 0.0,
+    "engUnit": "mm",
+    "name": "ActualPosition",
+    "opcItemPath": "nsu\u003durn:ignition-lab:robot;s\u003dRB01.MotionDevices.Arm.Axes.J3.ParameterSet.ActualPosition",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

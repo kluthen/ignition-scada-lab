@@ -1,0 +1,12 @@
+[
+  {
+    "dataType": "Boolean",
+    "documentation": "Pulse: operator confirms the reject bin was emptied; RJ01.Status.Count is set to 0. PLC writes it back to false.",
+    "name": "BinEmptied",
+    "opcItemPath": "ns\u003d1;s\u003d[IO01]C5",
+    "opcServer": "Ignition OPC UA Server",
+    "tagGroup": "Modbus",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

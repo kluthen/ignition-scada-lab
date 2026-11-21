@@ -45,14 +45,22 @@ system as a whole is an explicit requirement of the user.
 - Verify values through the OPC UA server with `scripts/opc read|browse|watch`
   (runs asyncua in the workspace container). The REST API has no tag-value route.
 
-## PLC simulator
+## Simulated cell controller (`plc/`)
 
-- `plc/` (stdlib Python 3.13): `modbus_server.py` (Modbus TCP, FC 1–6, 15, 16),
-  `io_image.py` (the four tables), `programs/<name>.py` (class `Program` with
-  `scan(dt)`), `main.py` (scan loop). Select the program with `PLC_PROGRAM`.
-- Signals must match `docs/opcua-registry.csv`, the single source of truth for
-  the plant's signals.
-- After editing: `docker compose restart plc && docker compose logs --tail 20 plc`.
+- One process: an asyncua OPC UA server on :4840 (address space generated from
+  `docs/opcua-registry.csv`) plus a stdlib Modbus TCP server on :502 (device
+  IO01), with `programs/cell.py` scanned every 100 ms. Layout is in
+  docs/system/architecture.md.
+- `docs/opcua-registry.csv` is the **single source of truth**: the program
+  addresses signals by name (`tags["C01.Status.StateCurrent"]`), so unknown
+  names raise. A new signal goes into the CSV first, then the code, then
+  `scripts/generate_tags.py`. Keep scenario.md, opcua-registry.md and
+  fault-catalogue.md consistent with the CSV. The tables in opcua-registry.md
+  are maintained by hand.
+- Behaviour is specified in docs/scenario.md, with section numbers cited in
+  code comments. Phase 2 (faults) is reserved in docs/fault-catalogue.md.
+- After editing: `docker compose restart plc`, then
+  `docker compose exec workspace python scripts/cell_smoke_test.py`. It must PASS.
 
 ## Git
 

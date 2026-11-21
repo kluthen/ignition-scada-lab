@@ -1,0 +1,37 @@
+[
+  {
+    "dataType": "Boolean",
+    "documentation": "True while the e-stop chain is open.",
+    "name": "EmergencyStop",
+    "opcItemPath": "nsu\u003durn:ignition-lab:robot;s\u003dRB01.SafetyStates.SS01.ParameterSet.EmergencyStop",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Int4",
+    "documentation": "Robot operational mode (AUTOMATIC_EXTERNAL: program driven by the cell controller).",
+    "engHigh": 4.0,
+    "engLow": 0.0,
+    "name": "OperationalMode",
+    "opcItemPath": "nsu\u003durn:ignition-lab:robot;s\u003dRB01.SafetyStates.SS01.ParameterSet.OperationalMode",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "True while a protective stop is active (guard door open in automatic).",
+    "name": "ProtectiveStop",
+    "opcItemPath": "nsu\u003durn:ignition-lab:robot;s\u003dRB01.SafetyStates.SS01.ParameterSet.ProtectiveStop",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "dataType": "Float8",
+    "documentation": "Elbow rotation. Linear interpolation between taught points (scenario.md).",
+    "engHigh": 145.0,
+    "engLow": -145.0,
+    "engUnit": "deg",
+    "name": "ActualPosition",
+    "opcItemPath": "nsu\u003durn:ignition-lab:robot;s\u003dRB01.MotionDevices.Arm.Axes.J2.ParameterSet.ActualPosition",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

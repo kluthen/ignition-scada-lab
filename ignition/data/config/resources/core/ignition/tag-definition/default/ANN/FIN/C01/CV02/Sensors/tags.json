@@ -1,0 +1,24 @@
+[
+  {
+    "dataType": "Boolean",
+    "documentation": "Photo-eye at the CV02 place zone: a part rear edge is within the first 150 mm.",
+    "name": "EntryOccupied",
+    "opcItemPath": "ns\u003d1;s\u003d[IO01]DI7",
+    "opcServer": "Ignition OPC UA Server",
+    "readOnly": true,
+    "tagGroup": "Modbus",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "Photo-eye at the CV02 exit: a part front is within the last 100 mm.",
+    "name": "ExitPE",
+    "opcItemPath": "ns\u003d1;s\u003d[IO01]DI8",
+    "opcServer": "Ignition OPC UA Server",
+    "readOnly": true,
+    "tagGroup": "Modbus",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

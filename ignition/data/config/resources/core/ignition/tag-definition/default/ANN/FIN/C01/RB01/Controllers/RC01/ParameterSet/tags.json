@@ -1,0 +1,13 @@
+[
+  {
+    "dataType": "DateTime",
+    "documentation": "UTC time the robot controller started.",
+    "name": "StartUpTime",
+    "opcItemPath": "nsu\u003durn:ignition-lab:robot;s\u003dRB01.Controllers.RC01.ParameterSet.StartUpTime",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

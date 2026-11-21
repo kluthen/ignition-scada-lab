@@ -1,0 +1,28 @@
+[
+  {
+    "name": "C01",
+    "enabled": true,
+    "description": "Cell 01 controller (simulated PLC, asyncua). Lab: security None, anonymous.",
+    "config": {
+      "profile": { "type": "com.inductiveautomation.OpcUaServerType", "readOnly": false },
+      "settings": {
+        "endpoint": {
+          "discoveryUrl": "opc.tcp://plc:4840/ignition-lab/",
+          "endpointUrl": "opc.tcp://plc:4840/ignition-lab/",
+          "securityPolicy": "None", "securityMode": "None", "hostOverride": "plc"
+        },
+        "authentication": { "authenticationType": "ANONYMOUS" },
+        "keepAlive": { "failuresAllowed": 1, "interval": 15000, "timeout": 10000 },
+        "advanced": {
+          "connectTimeout": 5000, "acknowledgeTimeout": 5000, "requestTimeout": 60000, "sessionTimeout": 120000,
+          "maxPerOperation": 8192, "maxReferencesPerNode": 8192, "maxPendingPublishRequests": 2,
+          "maxNotificationsPerPublish": 65535, "maxMessageSize": 33554432, "maxArrayLength": 2147483647,
+          "maxStringLength": 2147483647, "browseOrigin": "OBJECTS_FOLDER",
+          "deprecatedDataTypeDictionarySupport": false, "timestampSource": "OPC_PREFER_SOURCE"
+        },
+        "security": { "certificateValidationEnabled": false, "keyStoreAlias": "client" },
+        "failover": { "enabled": false, "threshold": 3, "discoveryUrl": "", "endpointUrl": "", "hostOverride": "" }
+      }
+    }
+  }
+]

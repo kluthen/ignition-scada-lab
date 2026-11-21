@@ -2,7 +2,6 @@
   {
     "collection": "core",
     "enabled": true,
-    "signature": "ba4538f672bb250ebba2ee03bb917ab75d928b15bdf050910dc86a7d06995cb8",
     "config": {
       "endpoint": {
         "bindPort": 62541,

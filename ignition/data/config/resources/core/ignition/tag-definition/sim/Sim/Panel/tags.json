@@ -1,0 +1,32 @@
+[
+  {
+    "dataType": "Boolean",
+    "documentation": "Mushroom e-stop pressed (latched while true).",
+    "name": "EStopPressed",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Panel.EStopPressed",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "Guard door open while true.",
+    "name": "GuardDoorOpen",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Panel.GuardDoorOpen",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "Blue safety reset button (pulse: the sim resets it to false after one scan).",
+    "name": "SafetyResetButton",
+    "opcItemPath": "nsu\u003durn:ignition-lab:sim;s\u003dSim.Panel.SafetyResetButton",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

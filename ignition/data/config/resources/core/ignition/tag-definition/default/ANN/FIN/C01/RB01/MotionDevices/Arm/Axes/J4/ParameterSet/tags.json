@@ -1,0 +1,16 @@
+[
+  {
+    "dataType": "Float8",
+    "documentation": "Tool rotation. Linear interpolation between taught points (scenario.md).",
+    "engHigh": 360.0,
+    "engLow": -360.0,
+    "engUnit": "deg",
+    "name": "ActualPosition",
+    "opcItemPath": "nsu\u003durn:ignition-lab:robot;s\u003dRB01.MotionDevices.Arm.Axes.J4.ParameterSet.ActualPosition",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "dataType": "Boolean",
+    "documentation": "E-stop chain closed (fail-safe: true \u003d healthy).",
+    "name": "EStopOk",
+    "opcItemPath": "ns\u003d1;s\u003d[IO01]DI11",
+    "opcServer": "Ignition OPC UA Server",
+    "readOnly": true,
+    "tagGroup": "Modbus",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "Guard door closed.",
+    "name": "GuardDoorClosed",
+    "opcItemPath": "ns\u003d1;s\u003d[IO01]DI12",
+    "opcServer": "Ignition OPC UA Server",
+    "readOnly": true,
+    "tagGroup": "Modbus",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "Safety relay output: e-stop OK, door closed and safety reset done.",
+    "name": "SafetyOk",
+    "opcItemPath": "ns\u003d1;s\u003d[IO01]DI13",
+    "opcServer": "Ignition OPC UA Server",
+    "readOnly": true,
+    "tagGroup": "Modbus",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

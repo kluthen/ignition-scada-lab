@@ -1,0 +1,35 @@
+[
+  {
+    "dataType": "String",
+    "documentation": "Manufacturer of the camera.",
+    "name": "Manufacturer",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dQS01.Identification.Manufacturer",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "String",
+    "documentation": "Model of the camera.",
+    "name": "Model",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dQS01.Identification.Model",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "String",
+    "documentation": "SerialNumber of the camera.",
+    "name": "SerialNumber",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dQS01.Identification.SerialNumber",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Default",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

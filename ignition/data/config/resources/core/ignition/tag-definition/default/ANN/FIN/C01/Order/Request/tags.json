@@ -1,0 +1,60 @@
+[
+  {
+    "dataType": "Boolean",
+    "documentation": "Set true after writing the three fields above. The PLC evaluates on the rising edge, writes C01.Order.Request.LoadResult and resets this to false.",
+    "name": "LoadRequest",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Order.Request.LoadRequest",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Int4",
+    "documentation": "Result of the last load request.",
+    "engHigh": 5.0,
+    "engLow": 0.0,
+    "name": "LoadResult",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Order.Request.LoadResult",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "String",
+    "documentation": "Order id to load (1-32 printable ASCII characters).",
+    "name": "OrderId",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Order.Request.OrderId",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Int4",
+    "documentation": "Part type to produce (recipe number).",
+    "engHigh": 3.0,
+    "engLow": 0.0,
+    "name": "PartType",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Order.Request.PartType",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Int8",
+    "documentation": "Number of GOOD parts to produce.",
+    "engHigh": 100000.0,
+    "engLow": 0.0,
+    "engUnit": "count",
+    "name": "TargetQuantity",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Order.Request.TargetQuantity",
+    "opcServer": "C01",
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

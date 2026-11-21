@@ -1,0 +1,167 @@
+[
+  {
+    "dataType": "Boolean",
+    "documentation": "Compressed air below 5.5 bar (UT01.Status.AirPressureOk false). Alarm code 150.",
+    "name": "AirPressureLow",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Alarms.AirPressureLow",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "Emergency stop circuit open (SF01.Status.EStopOk false). Alarm code 101.",
+    "name": "EStopActive",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Alarms.EStopActive",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "Guard door opened while the robot was in automatic. Alarm code 103.",
+    "name": "GuardDoorOpen",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Alarms.GuardDoorOpen",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "CV01 drive tripped (CV01.Status.DriveFault). Alarm code 121.",
+    "name": "InfeedDriveFault",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Alarms.InfeedDriveFault",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "CV01 runs but no part reached the pick position within the jam timeout. Alarm code 120.",
+    "name": "InfeedJam",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Alarms.InfeedJam",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "CV02 drive tripped (CV02.Status.DriveFault). Alarm code 122.",
+    "name": "OutfeedDriveFault",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Alarms.OutfeedDriveFault",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "Three consecutive parts with an unreadable DataMatrix. Alarm code 131.",
+    "name": "PartIdUnreadable",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Alarms.PartIdUnreadable",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "CV01.Sensors.PartAtPick still on 1.0 s after a successful pick. Alarm code 140.",
+    "name": "PartSensorStuck",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Alarms.PartSensorStuck",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "Two consecutive pick attempts failed to build vacuum. Alarm code 111.",
+    "name": "PickFailed",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Alarms.PickFailed",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "QS01 returned no result within 2.0 s of the trigger. Alarm code 130.",
+    "name": "QualityNoResult",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Alarms.QualityNoResult",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "RJ01.Status.Full: the cell holds until the bin is emptied. Alarm code 20.",
+    "name": "RejectBinFull",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Alarms.RejectBinFull",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "Warning: RJ01.Status.NearFull. Alarm code 21.",
+    "name": "RejectBinNearFull",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Alarms.RejectBinNearFull",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "Warning: 5 or more non-good parts among the last 50 (no state change). Alarm code 170.",
+    "name": "RejectRateHigh",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Alarms.RejectRateHigh",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "RB01.Status.Heartbeat unchanged for more than 2.5 s. Alarm code 160.",
+    "name": "RobotCommFault",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Alarms.RobotCommFault",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "Vacuum lost while transferring a part (part dropped). Alarm code 110.",
+    "name": "VacuumLoss",
+    "opcItemPath": "nsu\u003durn:ignition-lab:cell;s\u003dC01.Alarms.VacuumLoss",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

@@ -74,18 +74,23 @@ services:
     restart: unless-stopped
 
   plc:
-    image: python:3.13-slim
+    build:
+      context: ./plc
+    image: ignition-lab-plc
     hostname: plc
     working_dir: /app
-    command: ["python", "-u", "main.py"]
     environment:
-      PLC_PROGRAM: tank
+      PLC_PROGRAM: cell
       PLC_SCAN_MS: "100"
       MODBUS_PORT: "502"
+      OPCUA_ENDPOINT: opc.tcp://0.0.0.0:4840/ignition-lab/
+      REGISTRY_CSV: /registry/opcua-registry.csv
     volumes:
       - ./plc:/app:ro
+      - ./docs/opcua-registry.csv:/registry/opcua-registry.csv:ro   # single source of truth
     ports:
-      - "127.0.0.1:5020:502"     # Modbus TCP, reachable from the host for testing
+      - "127.0.0.1:5020:502"     # Modbus TCP (device IO01), reachable from the host for testing
+      - "127.0.0.1:4840:4840"    # OPC UA server of the cell controller (security None, lab)
     restart: unless-stopped
 
   # Development shell used by the devcontainer (VS Code "Reopen in Container").

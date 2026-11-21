@@ -1,0 +1,38 @@
+[
+  {
+    "dataType": "Boolean",
+    "documentation": "Servos on and controlled (see robot state table in scenario.md).",
+    "name": "InControl",
+    "opcItemPath": "nsu\u003durn:ignition-lab:robot;s\u003dRB01.MotionDevices.Arm.ParameterSet.InControl",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Boolean",
+    "documentation": "True while the arm is executing a motion step.",
+    "name": "OnPath",
+    "opcItemPath": "nsu\u003durn:ignition-lab:robot;s\u003dRB01.MotionDevices.Arm.ParameterSet.OnPath",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  },
+  {
+    "dataType": "Float8",
+    "documentation": "Speed override applied to motion steps \u003d clamp(100 x C01.Status.MachSpeed / C01.Admin.MachDesignSpeed, 10, 100).",
+    "engHigh": 100.0,
+    "engLow": 10.0,
+    "engUnit": "%",
+    "name": "SpeedOverride",
+    "opcItemPath": "nsu\u003durn:ignition-lab:robot;s\u003dRB01.MotionDevices.Arm.ParameterSet.SpeedOverride",
+    "opcServer": "C01",
+    "readOnly": true,
+    "tagGroup": "Fast",
+    "tagType": "AtomicTag",
+    "valueSource": "opc"
+  }
+]

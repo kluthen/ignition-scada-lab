@@ -1,0 +1,2367 @@
+{
+  "tags": [
+    {
+      "name": "ANN",
+      "tagType": "Folder",
+      "tags": [
+        {
+          "name": "FIN",
+          "tagType": "Folder",
+          "tags": [
+            {
+              "name": "C01",
+              "tagType": "Folder",
+              "tags": [
+                {
+                  "name": "Identification",
+                  "tagType": "Folder",
+                  "tags": [
+                    {
+                      "name": "Manufacturer",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "String",
+                      "documentation": "Cell builder (integrator).",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Identification.Manufacturer",
+                      "tagGroup": "Default",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "ManufacturerUri",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "String",
+                      "documentation": "URI of the manufacturer.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Identification.ManufacturerUri",
+                      "tagGroup": "Default",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "Model",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "String",
+                      "documentation": "Model name.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Identification.Model",
+                      "tagGroup": "Default",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "ProductCode",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "String",
+                      "documentation": "Manufacturer product code.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Identification.ProductCode",
+                      "tagGroup": "Default",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "SerialNumber",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "String",
+                      "documentation": "Serial number of the cell.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Identification.SerialNumber",
+                      "tagGroup": "Default",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "ProductInstanceUri",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "String",
+                      "documentation": "Globally unique instance URI.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Identification.ProductInstanceUri",
+                      "tagGroup": "Default",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "HardwareRevision",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "String",
+                      "documentation": "Hardware revision.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Identification.HardwareRevision",
+                      "tagGroup": "Default",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "SoftwareRevision",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "String",
+                      "documentation": "Cell controller program revision (bump when the simulation logic changes).",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Identification.SoftwareRevision",
+                      "tagGroup": "Default",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "YearOfConstruction",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int4",
+                      "documentation": "Year of construction.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Identification.YearOfConstruction",
+                      "tagGroup": "Default",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "MonthOfConstruction",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int2",
+                      "documentation": "Month of construction (1-12).",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Identification.MonthOfConstruction",
+                      "tagGroup": "Default",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "AssetId",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "String",
+                      "documentation": "Customer asset id (ISA-95 site-area-cell).",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Identification.AssetId",
+                      "tagGroup": "Default",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "ComponentName",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "String",
+                      "documentation": "Customer-facing name.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Identification.ComponentName",
+                      "tagGroup": "Default",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "Location",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "String",
+                      "documentation": "Site/area/bay.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Identification.Location",
+                      "tagGroup": "Default",
+                      "readOnly": true
+                    }
+                  ]
+                },
+                {
+                  "name": "Status",
+                  "tagType": "Folder",
+                  "tags": [
+                    {
+                      "name": "StateCurrent",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int4",
+                      "documentation": "Current PackML state number.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Status.StateCurrent",
+                      "tagGroup": "Fast",
+                      "engLow": 0.0,
+                      "engHigh": 17.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "StateCurrentName",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "String",
+                      "documentation": "Name of the current PackML state (English, as in the PackMLState table).",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Status.StateCurrentName",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "UnitModeCurrent",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int4",
+                      "documentation": "Current unit mode.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Status.UnitModeCurrent",
+                      "tagGroup": "Fast",
+                      "engLow": 1.0,
+                      "engHigh": 3.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "UnitModeCurrentName",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "String",
+                      "documentation": "Name of the current unit mode.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Status.UnitModeCurrentName",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "MachSpeed",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Float8",
+                      "documentation": "Effective speed setpoint: C01.Command.MachSpeed clamped to [0.1, 1.0] x C01.Admin.MachDesignSpeed.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Status.MachSpeed",
+                      "tagGroup": "Fast",
+                      "engUnit": "parts/min",
+                      "engLow": 0.0,
+                      "engHigh": 25.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "CurMachSpeed",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Float8",
+                      "documentation": "Actual rate: 60 / mean interval of the last 5 robot placements; 0 outside Execute or if no placement for 15 s.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Status.CurMachSpeed",
+                      "tagGroup": "Fast",
+                      "engUnit": "parts/min",
+                      "engLow": 0.0,
+                      "engHigh": 30.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "EquipmentStarved",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "True when the robot has waited for a part > 3.0 s, CV01 is empty and the order still needs parts.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Status.EquipmentStarved",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "EquipmentBlocked",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "True when the robot has waited for a free place position on CV02 > 3.0 s.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Status.EquipmentBlocked",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "MachineryItemState",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int4",
+                      "documentation": "OPC 40001-1 item state derived from the PackML state (mapping in scenario.md).",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Status.MachineryItemState",
+                      "tagGroup": "Fast",
+                      "engLow": 0.0,
+                      "engHigh": 3.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "MachineryOperationMode",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int4",
+                      "documentation": "OPC 40001-1 operation mode derived from the unit mode.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Status.MachineryOperationMode",
+                      "tagGroup": "Fast",
+                      "engLow": 0.0,
+                      "engHigh": 3.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "Heartbeat",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int8",
+                      "documentation": "Increments by 1 every second (wraps at 2^32). Used by Ignition to detect a frozen controller.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Status.Heartbeat",
+                      "tagGroup": "Fast",
+                      "engUnit": "count",
+                      "engLow": 0.0,
+                      "engHigh": 4294967295.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "PacDateTime",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "DateTime",
+                      "documentation": "Controller clock (UTC), updated every second.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Status.PacDateTime",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    }
+                  ]
+                },
+                {
+                  "name": "Command",
+                  "tagType": "Folder",
+                  "tags": [
+                    {
+                      "name": "CntrlCmd",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int4",
+                      "documentation": "PackML state command. Write a non-zero value; the PLC executes or refuses it within one scan (100 ms), writes C01.Command.CmdResult, increments C01.Command.CmdCounter, then writes 0 back.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Command.CntrlCmd",
+                      "tagGroup": "Fast",
+                      "engLow": 0.0,
+                      "engHigh": 9.0
+                    },
+                    {
+                      "name": "UnitModeRequest",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int4",
+                      "documentation": "Unit mode request (1 Production, 2 Maintenance). Same handshake as CntrlCmd. Accepted only in Stopped, Idle, Complete or Aborted.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Command.UnitModeRequest",
+                      "tagGroup": "Fast",
+                      "engLow": 0.0,
+                      "engHigh": 3.0
+                    },
+                    {
+                      "name": "MachSpeed",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Float8",
+                      "documentation": "Requested speed. The PLC clamps it (see C01.Status.MachSpeed) and maps it to RB01 speed override.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Command.MachSpeed",
+                      "tagGroup": "Fast",
+                      "engUnit": "parts/min",
+                      "engLow": 0.0,
+                      "engHigh": 30.0
+                    },
+                    {
+                      "name": "CmdResult",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int4",
+                      "documentation": "Result of the last command (CntrlCmd or UnitModeRequest) processed.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Command.CmdResult",
+                      "tagGroup": "Fast",
+                      "engLow": 0.0,
+                      "engHigh": 4.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "CmdCounter",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int8",
+                      "documentation": "Incremented each time a command is processed (accepted or refused). Lets the HMI match a result to its write.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Command.CmdCounter",
+                      "tagGroup": "Fast",
+                      "engUnit": "count",
+                      "engLow": 0.0,
+                      "engHigh": 4294967295.0,
+                      "readOnly": true
+                    }
+                  ]
+                },
+                {
+                  "name": "Admin",
+                  "tagType": "Folder",
+                  "tags": [
+                    {
+                      "name": "ProdProcessedCount",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int8",
+                      "documentation": "Parts finished by the cell since controller start: one per C01.Traceability record (good, reject or scrapped). Restarts at 0 when the controller restarts.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Admin.ProdProcessedCount",
+                      "tagGroup": "Default",
+                      "engUnit": "count",
+                      "engLow": 0.0,
+                      "engHigh": 4294967295.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "ProdDefectiveCount",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int8",
+                      "documentation": "Records with Result Reject or Scrapped since controller start.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Admin.ProdDefectiveCount",
+                      "tagGroup": "Default",
+                      "engUnit": "count",
+                      "engLow": 0.0,
+                      "engHigh": 4294967295.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "ProdConsumedCount",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int8",
+                      "documentation": "Parts released by upstream onto CV01 since controller start.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Admin.ProdConsumedCount",
+                      "tagGroup": "Default",
+                      "engUnit": "count",
+                      "engLow": 0.0,
+                      "engHigh": 4294967295.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "StopReason",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int4",
+                      "documentation": "First-out cause of the last transition into Stopping, Holding, Suspending, Aborting or Completing. Kept until the next such transition; reset to 0 when Execute is re-entered.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Admin.StopReason",
+                      "tagGroup": "Default",
+                      "engLow": 0.0,
+                      "engHigh": 999.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "StopReasonText",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "String",
+                      "documentation": "English text of C01.Admin.StopReason.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Admin.StopReasonText",
+                      "tagGroup": "Default",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "StateCurrentTime",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Float8",
+                      "documentation": "Time spent in the current state.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Admin.StateCurrentTime",
+                      "tagGroup": "Default",
+                      "engUnit": "s",
+                      "engLow": 0.0,
+                      "engHigh": 1000000000.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "AccTimeSinceReset",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Float8",
+                      "documentation": "Time since controller start.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Admin.AccTimeSinceReset",
+                      "tagGroup": "Default",
+                      "engUnit": "s",
+                      "engLow": 0.0,
+                      "engHigh": 1000000000.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "MachDesignSpeed",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Float8",
+                      "documentation": "Design rate of the active part type = 60 / C01.Order.Active.IdealCycleTime; 25.0 when no order.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Admin.MachDesignSpeed",
+                      "tagGroup": "Default",
+                      "engUnit": "parts/min",
+                      "engLow": 0.0,
+                      "engHigh": 30.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "StartUpTime",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "DateTime",
+                      "documentation": "UTC time the controller (simulation) started. A change tells the MES that counters restarted.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Admin.StartUpTime",
+                      "tagGroup": "Default",
+                      "readOnly": true
+                    }
+                  ]
+                },
+                {
+                  "name": "Order",
+                  "tagType": "Folder",
+                  "tags": [
+                    {
+                      "name": "Request",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "OrderId",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "String",
+                          "documentation": "Order id to load (1-32 printable ASCII characters).",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Request.OrderId",
+                          "tagGroup": "Fast"
+                        },
+                        {
+                          "name": "PartType",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "Part type to produce (recipe number).",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Request.PartType",
+                          "tagGroup": "Fast",
+                          "engLow": 0.0,
+                          "engHigh": 3.0
+                        },
+                        {
+                          "name": "TargetQuantity",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int8",
+                          "documentation": "Number of GOOD parts to produce.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Request.TargetQuantity",
+                          "tagGroup": "Fast",
+                          "engUnit": "count",
+                          "engLow": 0.0,
+                          "engHigh": 100000.0
+                        },
+                        {
+                          "name": "LoadRequest",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "Set true after writing the three fields above. The PLC evaluates on the rising edge, writes C01.Order.Request.LoadResult and resets this to false.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Request.LoadRequest",
+                          "tagGroup": "Fast"
+                        },
+                        {
+                          "name": "LoadResult",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "Result of the last load request.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Request.LoadResult",
+                          "tagGroup": "Fast",
+                          "engLow": 0.0,
+                          "engHigh": 5.0,
+                          "readOnly": true
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Active",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "OrderId",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "String",
+                          "documentation": "Active order id (empty = no order).",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Active.OrderId",
+                          "tagGroup": "Fast",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "PartType",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "Active part type.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Active.PartType",
+                          "tagGroup": "Fast",
+                          "engLow": 0.0,
+                          "engHigh": 3.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "ProductCode",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "String",
+                          "documentation": "Product code of the active part type (from the cell recipe table).",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Active.ProductCode",
+                          "tagGroup": "Fast",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "TargetQuantity",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int8",
+                          "documentation": "Target good quantity.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Active.TargetQuantity",
+                          "tagGroup": "Fast",
+                          "engUnit": "count",
+                          "engLow": 0.0,
+                          "engHigh": 100000.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "GoodCount",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int8",
+                          "documentation": "Good parts of the active order.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Active.GoodCount",
+                          "tagGroup": "Fast",
+                          "engUnit": "count",
+                          "engLow": 0.0,
+                          "engHigh": 100000.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "RejectCount",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int8",
+                          "documentation": "Reject + scrapped parts of the active order.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Active.RejectCount",
+                          "tagGroup": "Fast",
+                          "engUnit": "count",
+                          "engLow": 0.0,
+                          "engHigh": 100000.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "RemainingQuantity",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int8",
+                          "documentation": "max(0, TargetQuantity - GoodCount).",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Active.RemainingQuantity",
+                          "tagGroup": "Fast",
+                          "engUnit": "count",
+                          "engLow": 0.0,
+                          "engHigh": 100000.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "OrderStatus",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "Status of the active order inside the cell.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Active.OrderStatus",
+                          "tagGroup": "Fast",
+                          "engLow": 0.0,
+                          "engHigh": 3.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "NominalDiameter",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Float8",
+                          "documentation": "Nominal bore diameter of the active part type.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Active.NominalDiameter",
+                          "tagGroup": "Fast",
+                          "engUnit": "mm",
+                          "engLow": 0.0,
+                          "engHigh": 100.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "LowerLimit",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Float8",
+                          "documentation": "Lower acceptance limit = nominal - tolerance.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Active.LowerLimit",
+                          "tagGroup": "Fast",
+                          "engUnit": "mm",
+                          "engLow": 0.0,
+                          "engHigh": 100.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "UpperLimit",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Float8",
+                          "documentation": "Upper acceptance limit = nominal + tolerance.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Active.UpperLimit",
+                          "tagGroup": "Fast",
+                          "engUnit": "mm",
+                          "engLow": 0.0,
+                          "engHigh": 100.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "IdealCycleTime",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Float8",
+                          "documentation": "Ideal cycle time of the active part type at 100 % speed (used for OEE performance).",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Active.IdealCycleTime",
+                          "tagGroup": "Fast",
+                          "engUnit": "s",
+                          "engLow": 0.0,
+                          "engHigh": 10.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "StartTime",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "DateTime",
+                          "documentation": "UTC time Execute was first entered for this order.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Active.StartTime",
+                          "tagGroup": "Fast",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "EndTime",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "DateTime",
+                          "documentation": "UTC time the order reached Complete.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Order.Active.EndTime",
+                          "tagGroup": "Fast",
+                          "readOnly": true
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Traceability",
+                  "tagType": "Folder",
+                  "tags": [
+                    {
+                      "name": "Sequence",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int8",
+                      "documentation": "Record number, +1 per record from 1 at controller start. 0 = no record presented yet.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Traceability.Sequence",
+                      "tagGroup": "Fast",
+                      "engUnit": "count",
+                      "engLow": 0.0,
+                      "engHigh": 4294967295.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "PartId",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "String",
+                      "documentation": "Part serial read from the part DataMatrix, format P + 9 digits (e.g. P027345601); NOREAD when unreadable (phase 2).",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Traceability.PartId",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "OrderId",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "String",
+                      "documentation": "Order the part was produced for.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Traceability.OrderId",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "PartType",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int4",
+                      "documentation": "Part type.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Traceability.PartType",
+                      "tagGroup": "Fast",
+                      "engLow": 0.0,
+                      "engHigh": 3.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "MeasuredDiameter",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Float8",
+                      "documentation": "Measured bore diameter (0.0 when not measured).",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Traceability.MeasuredDiameter",
+                      "tagGroup": "Fast",
+                      "engUnit": "mm",
+                      "engLow": 0.0,
+                      "engHigh": 100.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "Result",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int4",
+                      "documentation": "Part result.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Traceability.Result",
+                      "tagGroup": "Fast",
+                      "engLow": 0.0,
+                      "engHigh": 3.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "DefectCode",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int4",
+                      "documentation": "Defect code (0 when good).",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Traceability.DefectCode",
+                      "tagGroup": "Fast",
+                      "engLow": 0.0,
+                      "engHigh": 6.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "Timestamp",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "DateTime",
+                      "documentation": "UTC time the part was finished (placed, dropped or purged).",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Traceability.Timestamp",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "DataReady",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "True when the record fields above hold an unacknowledged record. Fields are written one scan before DataReady goes true.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Traceability.DataReady",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "AckSequence",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int8",
+                      "documentation": "MES writes the Sequence it has stored. When equal to Sequence the PLC drops DataReady and presents the next record one scan later.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Traceability.AckSequence",
+                      "tagGroup": "Fast",
+                      "engUnit": "count",
+                      "engLow": 0.0,
+                      "engHigh": 4294967295.0
+                    },
+                    {
+                      "name": "BufferCount",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int4",
+                      "documentation": "Records waiting, including the presented one.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Traceability.BufferCount",
+                      "tagGroup": "Fast",
+                      "engUnit": "count",
+                      "engLow": 0.0,
+                      "engHigh": 200.0,
+                      "readOnly": true
+                    },
+                    {
+                      "name": "LostCount",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Int8",
+                      "documentation": "Records discarded because the 200-record buffer was full (oldest dropped first).",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Traceability.LostCount",
+                      "tagGroup": "Fast",
+                      "engUnit": "count",
+                      "engLow": 0.0,
+                      "engHigh": 4294967295.0,
+                      "readOnly": true
+                    }
+                  ]
+                },
+                {
+                  "name": "Alarms",
+                  "tagType": "Folder",
+                  "tags": [
+                    {
+                      "name": "EStopActive",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "Emergency stop circuit open (SF01.Status.EStopOk false). Alarm code 101.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Alarms.EStopActive",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "GuardDoorOpen",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "Guard door opened while the robot was in automatic. Alarm code 103.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Alarms.GuardDoorOpen",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "VacuumLoss",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "Vacuum lost while transferring a part (part dropped). Alarm code 110.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Alarms.VacuumLoss",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "PickFailed",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "Two consecutive pick attempts failed to build vacuum. Alarm code 111.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Alarms.PickFailed",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "InfeedJam",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "CV01 runs but no part reached the pick position within the jam timeout. Alarm code 120.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Alarms.InfeedJam",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "InfeedDriveFault",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "CV01 drive tripped (CV01.Status.DriveFault). Alarm code 121.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Alarms.InfeedDriveFault",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "OutfeedDriveFault",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "CV02 drive tripped (CV02.Status.DriveFault). Alarm code 122.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Alarms.OutfeedDriveFault",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "QualityNoResult",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "QS01 returned no result within 2.0 s of the trigger. Alarm code 130.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Alarms.QualityNoResult",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "PartIdUnreadable",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "Three consecutive parts with an unreadable DataMatrix. Alarm code 131.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Alarms.PartIdUnreadable",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "PartSensorStuck",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "CV01.Sensors.PartAtPick still on 1.0 s after a successful pick. Alarm code 140.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Alarms.PartSensorStuck",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "AirPressureLow",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "Compressed air below 5.5 bar (UT01.Status.AirPressureOk false). Alarm code 150.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Alarms.AirPressureLow",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "RobotCommFault",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "RB01.Status.Heartbeat unchanged for more than 2.5 s. Alarm code 160.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Alarms.RobotCommFault",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "RejectRateHigh",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "Warning: 5 or more non-good parts among the last 50 (no state change). Alarm code 170.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Alarms.RejectRateHigh",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "RejectBinNearFull",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "Warning: RJ01.Status.NearFull. Alarm code 21.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Alarms.RejectBinNearFull",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    },
+                    {
+                      "name": "RejectBinFull",
+                      "tagType": "AtomicTag",
+                      "valueSource": "opc",
+                      "dataType": "Boolean",
+                      "documentation": "RJ01.Status.Full: the cell holds until the bin is emptied. Alarm code 20.",
+                      "opcServer": "C01",
+                      "opcItemPath": "nsu=urn:ignition-lab:cell;s=C01.Alarms.RejectBinFull",
+                      "tagGroup": "Fast",
+                      "readOnly": true
+                    }
+                  ]
+                },
+                {
+                  "name": "QS01",
+                  "tagType": "Folder",
+                  "tags": [
+                    {
+                      "name": "Identification",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "Manufacturer",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "String",
+                          "documentation": "Manufacturer of the camera.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=QS01.Identification.Manufacturer",
+                          "tagGroup": "Default",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "Model",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "String",
+                          "documentation": "Model of the camera.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=QS01.Identification.Model",
+                          "tagGroup": "Default",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "SerialNumber",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "String",
+                          "documentation": "SerialNumber of the camera.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=QS01.Identification.SerialNumber",
+                          "tagGroup": "Default",
+                          "readOnly": true
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Status",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "Ready",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "Camera healthy and not busy.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=QS01.Status.Ready",
+                          "tagGroup": "Fast",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "Busy",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "Inspection in progress (0.4 s per part).",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=QS01.Status.Busy",
+                          "tagGroup": "Fast",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "CameraOk",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "False while Sim.Faults.CameraNoResult is active.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=QS01.Status.CameraOk",
+                          "tagGroup": "Fast",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "InspectionCount",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int8",
+                          "documentation": "Inspections since controller start.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=QS01.Status.InspectionCount",
+                          "tagGroup": "Fast",
+                          "engUnit": "count",
+                          "engLow": 0.0,
+                          "engHigh": 4294967295.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "LastPartId",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "String",
+                          "documentation": "Part id read at the last inspection (empty if unreadable).",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=QS01.Status.LastPartId",
+                          "tagGroup": "Fast",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "LastMeasurement",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Float8",
+                          "documentation": "Last measured bore diameter.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=QS01.Status.LastMeasurement",
+                          "tagGroup": "Fast",
+                          "engUnit": "mm",
+                          "engLow": 0.0,
+                          "engHigh": 100.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "LastResult",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "Last inspection result.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:cell;s=QS01.Status.LastResult",
+                          "tagGroup": "Fast",
+                          "engLow": 0.0,
+                          "engHigh": 3.0,
+                          "readOnly": true
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "RB01",
+                  "tagType": "Folder",
+                  "tags": [
+                    {
+                      "name": "Identification",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "Manufacturer",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "String",
+                          "documentation": "Manufacturer of the robot.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Identification.Manufacturer",
+                          "tagGroup": "Default",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "Model",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "String",
+                          "documentation": "Model of the robot.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Identification.Model",
+                          "tagGroup": "Default",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "ProductCode",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "String",
+                          "documentation": "ProductCode of the robot.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Identification.ProductCode",
+                          "tagGroup": "Default",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "SerialNumber",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "String",
+                          "documentation": "SerialNumber of the robot.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Identification.SerialNumber",
+                          "tagGroup": "Default",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "SoftwareRevision",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "String",
+                          "documentation": "SoftwareRevision of the robot.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Identification.SoftwareRevision",
+                          "tagGroup": "Default",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "YearOfConstruction",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "YearOfConstruction of the robot.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Identification.YearOfConstruction",
+                          "tagGroup": "Default",
+                          "readOnly": true
+                        }
+                      ]
+                    },
+                    {
+                      "name": "MotionDevices",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "Arm",
+                          "tagType": "Folder",
+                          "tags": [
+                            {
+                              "name": "MotionDeviceCategory",
+                              "tagType": "AtomicTag",
+                              "valueSource": "opc",
+                              "dataType": "Int4",
+                              "documentation": "Robot kinematics category.",
+                              "opcServer": "C01",
+                              "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.MotionDevices.Arm.MotionDeviceCategory",
+                              "tagGroup": "Fast",
+                              "readOnly": true
+                            },
+                            {
+                              "name": "ParameterSet",
+                              "tagType": "Folder",
+                              "tags": [
+                                {
+                                  "name": "SpeedOverride",
+                                  "tagType": "AtomicTag",
+                                  "valueSource": "opc",
+                                  "dataType": "Float8",
+                                  "documentation": "Speed override applied to motion steps = clamp(100 x C01.Status.MachSpeed / C01.Admin.MachDesignSpeed, 10, 100).",
+                                  "opcServer": "C01",
+                                  "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.MotionDevices.Arm.ParameterSet.SpeedOverride",
+                                  "tagGroup": "Fast",
+                                  "engUnit": "%",
+                                  "engLow": 10.0,
+                                  "engHigh": 100.0,
+                                  "readOnly": true
+                                },
+                                {
+                                  "name": "OnPath",
+                                  "tagType": "AtomicTag",
+                                  "valueSource": "opc",
+                                  "dataType": "Boolean",
+                                  "documentation": "True while the arm is executing a motion step.",
+                                  "opcServer": "C01",
+                                  "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.MotionDevices.Arm.ParameterSet.OnPath",
+                                  "tagGroup": "Fast",
+                                  "readOnly": true
+                                },
+                                {
+                                  "name": "InControl",
+                                  "tagType": "AtomicTag",
+                                  "valueSource": "opc",
+                                  "dataType": "Boolean",
+                                  "documentation": "Servos on and controlled (see robot state table in scenario.md).",
+                                  "opcServer": "C01",
+                                  "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.MotionDevices.Arm.ParameterSet.InControl",
+                                  "tagGroup": "Fast",
+                                  "readOnly": true
+                                }
+                              ]
+                            },
+                            {
+                              "name": "Axes",
+                              "tagType": "Folder",
+                              "tags": [
+                                {
+                                  "name": "J1",
+                                  "tagType": "Folder",
+                                  "tags": [
+                                    {
+                                      "name": "ParameterSet",
+                                      "tagType": "Folder",
+                                      "tags": [
+                                        {
+                                          "name": "ActualPosition",
+                                          "tagType": "AtomicTag",
+                                          "valueSource": "opc",
+                                          "dataType": "Float8",
+                                          "documentation": "Shoulder rotation. Linear interpolation between taught points (scenario.md).",
+                                          "opcServer": "C01",
+                                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.MotionDevices.Arm.Axes.J1.ParameterSet.ActualPosition",
+                                          "tagGroup": "Fast",
+                                          "engUnit": "deg",
+                                          "engLow": -130.0,
+                                          "engHigh": 130.0,
+                                          "readOnly": true
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "J2",
+                                  "tagType": "Folder",
+                                  "tags": [
+                                    {
+                                      "name": "ParameterSet",
+                                      "tagType": "Folder",
+                                      "tags": [
+                                        {
+                                          "name": "ActualPosition",
+                                          "tagType": "AtomicTag",
+                                          "valueSource": "opc",
+                                          "dataType": "Float8",
+                                          "documentation": "Elbow rotation. Linear interpolation between taught points (scenario.md).",
+                                          "opcServer": "C01",
+                                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.MotionDevices.Arm.Axes.J2.ParameterSet.ActualPosition",
+                                          "tagGroup": "Fast",
+                                          "engUnit": "deg",
+                                          "engLow": -145.0,
+                                          "engHigh": 145.0,
+                                          "readOnly": true
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "J3",
+                                  "tagType": "Folder",
+                                  "tags": [
+                                    {
+                                      "name": "ParameterSet",
+                                      "tagType": "Folder",
+                                      "tags": [
+                                        {
+                                          "name": "ActualPosition",
+                                          "tagType": "AtomicTag",
+                                          "valueSource": "opc",
+                                          "dataType": "Float8",
+                                          "documentation": "Quill stroke, 0 = top, positive downwards. Linear interpolation between taught points (scenario.md).",
+                                          "opcServer": "C01",
+                                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.MotionDevices.Arm.Axes.J3.ParameterSet.ActualPosition",
+                                          "tagGroup": "Fast",
+                                          "engUnit": "mm",
+                                          "engLow": 0.0,
+                                          "engHigh": 150.0,
+                                          "readOnly": true
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "J4",
+                                  "tagType": "Folder",
+                                  "tags": [
+                                    {
+                                      "name": "ParameterSet",
+                                      "tagType": "Folder",
+                                      "tags": [
+                                        {
+                                          "name": "ActualPosition",
+                                          "tagType": "AtomicTag",
+                                          "valueSource": "opc",
+                                          "dataType": "Float8",
+                                          "documentation": "Tool rotation. Linear interpolation between taught points (scenario.md).",
+                                          "opcServer": "C01",
+                                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.MotionDevices.Arm.Axes.J4.ParameterSet.ActualPosition",
+                                          "tagGroup": "Fast",
+                                          "engUnit": "deg",
+                                          "engLow": -360.0,
+                                          "engHigh": 360.0,
+                                          "readOnly": true
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Controllers",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "RC01",
+                          "tagType": "Folder",
+                          "tags": [
+                            {
+                              "name": "ParameterSet",
+                              "tagType": "Folder",
+                              "tags": [
+                                {
+                                  "name": "StartUpTime",
+                                  "tagType": "AtomicTag",
+                                  "valueSource": "opc",
+                                  "dataType": "DateTime",
+                                  "documentation": "UTC time the robot controller started.",
+                                  "opcServer": "C01",
+                                  "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Controllers.RC01.ParameterSet.StartUpTime",
+                                  "tagGroup": "Fast",
+                                  "readOnly": true
+                                }
+                              ]
+                            },
+                            {
+                              "name": "TaskControls",
+                              "tagType": "Folder",
+                              "tags": [
+                                {
+                                  "name": "Main",
+                                  "tagType": "Folder",
+                                  "tags": [
+                                    {
+                                      "name": "ParameterSet",
+                                      "tagType": "Folder",
+                                      "tags": [
+                                        {
+                                          "name": "TaskProgramName",
+                                          "tagType": "AtomicTag",
+                                          "valueSource": "opc",
+                                          "dataType": "String",
+                                          "documentation": "Loaded robot program (per part type, see PartType table); empty when none.",
+                                          "opcServer": "C01",
+                                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Controllers.RC01.TaskControls.Main.ParameterSet.TaskProgramName",
+                                          "tagGroup": "Fast",
+                                          "readOnly": true
+                                        },
+                                        {
+                                          "name": "TaskProgramLoaded",
+                                          "tagType": "AtomicTag",
+                                          "valueSource": "opc",
+                                          "dataType": "Boolean",
+                                          "documentation": "True once an order has been loaded into the cell.",
+                                          "opcServer": "C01",
+                                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Controllers.RC01.TaskControls.Main.ParameterSet.TaskProgramLoaded",
+                                          "tagGroup": "Fast",
+                                          "readOnly": true
+                                        },
+                                        {
+                                          "name": "ExecutionMode",
+                                          "tagType": "AtomicTag",
+                                          "valueSource": "opc",
+                                          "dataType": "Int4",
+                                          "documentation": "Program execution mode (always CONTINUOUS in this cell).",
+                                          "opcServer": "C01",
+                                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Controllers.RC01.TaskControls.Main.ParameterSet.ExecutionMode",
+                                          "tagGroup": "Fast",
+                                          "engLow": 0.0,
+                                          "engHigh": 2.0,
+                                          "readOnly": true
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "SafetyStates",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "SS01",
+                          "tagType": "Folder",
+                          "tags": [
+                            {
+                              "name": "ParameterSet",
+                              "tagType": "Folder",
+                              "tags": [
+                                {
+                                  "name": "OperationalMode",
+                                  "tagType": "AtomicTag",
+                                  "valueSource": "opc",
+                                  "dataType": "Int4",
+                                  "documentation": "Robot operational mode (AUTOMATIC_EXTERNAL: program driven by the cell controller).",
+                                  "opcServer": "C01",
+                                  "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.SafetyStates.SS01.ParameterSet.OperationalMode",
+                                  "tagGroup": "Fast",
+                                  "engLow": 0.0,
+                                  "engHigh": 4.0,
+                                  "readOnly": true
+                                },
+                                {
+                                  "name": "EmergencyStop",
+                                  "tagType": "AtomicTag",
+                                  "valueSource": "opc",
+                                  "dataType": "Boolean",
+                                  "documentation": "True while the e-stop chain is open.",
+                                  "opcServer": "C01",
+                                  "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.SafetyStates.SS01.ParameterSet.EmergencyStop",
+                                  "tagGroup": "Fast",
+                                  "readOnly": true
+                                },
+                                {
+                                  "name": "ProtectiveStop",
+                                  "tagType": "AtomicTag",
+                                  "valueSource": "opc",
+                                  "dataType": "Boolean",
+                                  "documentation": "True while a protective stop is active (guard door open in automatic).",
+                                  "opcServer": "C01",
+                                  "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.SafetyStates.SS01.ParameterSet.ProtectiveStop",
+                                  "tagGroup": "Fast",
+                                  "readOnly": true
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Status",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "Heartbeat",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int8",
+                          "documentation": "Increments by 1 every second; watched by the cell (RobotCommFault).",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Status.Heartbeat",
+                          "tagGroup": "Fast",
+                          "engUnit": "count",
+                          "engLow": 0.0,
+                          "engHigh": 4294967295.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "Homed",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "True after homing in Resetting; false after Aborting.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Status.Homed",
+                          "tagGroup": "Fast",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "CycleStep",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "Current step of the pick-and-place cycle.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Status.CycleStep",
+                          "tagGroup": "Fast",
+                          "engLow": 0.0,
+                          "engHigh": 10.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "CycleStepName",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "String",
+                          "documentation": "Name of the current step.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Status.CycleStepName",
+                          "tagGroup": "Fast",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "AtHome",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "Arm at the WaitAbovePick taught point.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Status.AtHome",
+                          "tagGroup": "Fast",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "PartInGripper",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "A part is held by the gripper.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Status.PartInGripper",
+                          "tagGroup": "Fast",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "Destination",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "Where the held part goes.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Status.Destination",
+                          "tagGroup": "Fast",
+                          "engLow": 0.0,
+                          "engHigh": 2.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "VacuumOn",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "Vacuum valve commanded on.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Status.VacuumOn",
+                          "tagGroup": "Fast",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "VacuumOk",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "Vacuum switch: RB01.Status.VacuumLevel <= -60 kPa.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Status.VacuumOk",
+                          "tagGroup": "Fast",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "VacuumLevel",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Float8",
+                          "documentation": "Gripper vacuum (gauge, negative = vacuum).",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Status.VacuumLevel",
+                          "tagGroup": "Fast",
+                          "engUnit": "kPa",
+                          "engLow": -90.0,
+                          "engHigh": 0.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "CycleCount",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int8",
+                          "documentation": "Completed pick-and-place cycles since controller start.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Status.CycleCount",
+                          "tagGroup": "Fast",
+                          "engUnit": "count",
+                          "engLow": 0.0,
+                          "engHigh": 4294967295.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "LastCycleTime",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Float8",
+                          "documentation": "Duration of the last cycle, MoveToPick start to ReturnToWait end, waits included.",
+                          "opcServer": "C01",
+                          "opcItemPath": "nsu=urn:ignition-lab:robot;s=RB01.Status.LastCycleTime",
+                          "tagGroup": "Fast",
+                          "engUnit": "s",
+                          "engLow": 0.0,
+                          "engHigh": 600.0,
+                          "readOnly": true
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "CV01",
+                  "tagType": "Folder",
+                  "tags": [
+                    {
+                      "name": "Command",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "JogForward",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "Maintenance mode only (and state Stopped or Idle): CV01 runs at its setpoint while true.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]C1",
+                          "tagGroup": "Modbus"
+                        },
+                        {
+                          "name": "DriveReset",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "Pulse: reset a CV01 drive fault. The PLC writes it back to false after one scan.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]C3",
+                          "tagGroup": "Modbus"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Status",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "Running",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "CV01 belt running.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]DI1",
+                          "tagGroup": "Modbus",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "DriveFault",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "CV01 drive tripped (see CV01.Status.DriveFaultCode).",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]DI2",
+                          "tagGroup": "Modbus",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "ActualSpeed",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "Belt speed: setpoint when running, 0 when stopped (no ramp).",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]IRUS1",
+                          "tagGroup": "Modbus",
+                          "engUnit": "mm/s",
+                          "engLow": 0.0,
+                          "engHigh": 400.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "MotorCurrent",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Float8",
+                          "documentation": "Motor current: 1.20 A running, 2.60 A when jammed, 0 stopped.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]IRUS2",
+                          "tagGroup": "Modbus",
+                          "scaleMode": "Linear",
+                          "rawLow": 0,
+                          "rawHigh": 1000,
+                          "scaledLow": 0,
+                          "scaledHigh": 10.0,
+                          "engUnit": "A",
+                          "engLow": 0.0,
+                          "engHigh": 5.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "DriveFaultCode",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "Drive fault code.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]IRUS3",
+                          "tagGroup": "Modbus",
+                          "engLow": 0.0,
+                          "engHigh": 3.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "PartsOnConveyor",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "Parts on CV01 including the one at the pick position.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]IRUS4",
+                          "tagGroup": "Modbus",
+                          "engUnit": "count",
+                          "engLow": 0.0,
+                          "engHigh": 20.0,
+                          "readOnly": true
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Sensors",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "EntryOccupied",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "Photo-eye at CV01 entry: a part occupies the first 100 mm.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]DI3",
+                          "tagGroup": "Modbus",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "PartAtPick",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "Photo-eye at the CV01 end stop: a part is at the pick position.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]DI4",
+                          "tagGroup": "Modbus",
+                          "readOnly": true
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Parameters",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "SpeedSetpoint",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "CV01 belt speed setpoint. Out-of-range writes are clamped.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]HRUS1",
+                          "tagGroup": "Modbus",
+                          "engUnit": "mm/s",
+                          "engLow": 100.0,
+                          "engHigh": 400.0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "CV02",
+                  "tagType": "Folder",
+                  "tags": [
+                    {
+                      "name": "Command",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "JogForward",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "Maintenance mode only (and state Stopped or Idle): CV02 runs at its setpoint while true.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]C2",
+                          "tagGroup": "Modbus"
+                        },
+                        {
+                          "name": "DriveReset",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "Pulse: reset a CV02 drive fault. The PLC writes it back to false after one scan.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]C4",
+                          "tagGroup": "Modbus"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Status",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "Running",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "CV02 belt running.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]DI5",
+                          "tagGroup": "Modbus",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "DriveFault",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "CV02 drive tripped (see CV02.Status.DriveFaultCode).",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]DI6",
+                          "tagGroup": "Modbus",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "ActualSpeed",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "Belt speed: setpoint when running, 0 when stopped (no ramp).",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]IRUS5",
+                          "tagGroup": "Modbus",
+                          "engUnit": "mm/s",
+                          "engLow": 0.0,
+                          "engHigh": 400.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "MotorCurrent",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Float8",
+                          "documentation": "Motor current: 1.10 A running, 0 stopped.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]IRUS6",
+                          "tagGroup": "Modbus",
+                          "scaleMode": "Linear",
+                          "rawLow": 0,
+                          "rawHigh": 1000,
+                          "scaledLow": 0,
+                          "scaledHigh": 10.0,
+                          "engUnit": "A",
+                          "engLow": 0.0,
+                          "engHigh": 5.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "DriveFaultCode",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "Drive fault code.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]IRUS7",
+                          "tagGroup": "Modbus",
+                          "engLow": 0.0,
+                          "engHigh": 3.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "PartsOnConveyor",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "Parts on CV02.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]IRUS8",
+                          "tagGroup": "Modbus",
+                          "engUnit": "count",
+                          "engLow": 0.0,
+                          "engHigh": 15.0,
+                          "readOnly": true
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Sensors",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "EntryOccupied",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "Photo-eye at the CV02 place zone: a part rear edge is within the first 150 mm.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]DI7",
+                          "tagGroup": "Modbus",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "ExitPE",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "Photo-eye at the CV02 exit: a part front is within the last 100 mm.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]DI8",
+                          "tagGroup": "Modbus",
+                          "readOnly": true
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Parameters",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "SpeedSetpoint",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "CV02 belt speed setpoint. Out-of-range writes are clamped.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]HRUS2",
+                          "tagGroup": "Modbus",
+                          "engUnit": "mm/s",
+                          "engLow": 100.0,
+                          "engHigh": 400.0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "RJ01",
+                  "tagType": "Folder",
+                  "tags": [
+                    {
+                      "name": "Command",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "BinEmptied",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "Pulse: operator confirms the reject bin was emptied; RJ01.Status.Count is set to 0. PLC writes it back to false.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]C5",
+                          "tagGroup": "Modbus"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Status",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "NearFull",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "RJ01.Status.Count >= RJ01.Parameters.NearFullLevel.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]DI9",
+                          "tagGroup": "Modbus",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "Full",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "RJ01.Status.Count >= RJ01.Parameters.Capacity.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]DI10",
+                          "tagGroup": "Modbus",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "Count",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "Parts in the reject bin (may exceed Capacity by 1, see scenario.md).",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]IRUS9",
+                          "tagGroup": "Modbus",
+                          "engUnit": "parts",
+                          "engLow": 0.0,
+                          "engHigh": 101.0,
+                          "readOnly": true
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Parameters",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "Capacity",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "Reject bin capacity (Full threshold).",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]HRUS3",
+                          "tagGroup": "Modbus",
+                          "engUnit": "parts",
+                          "engLow": 10.0,
+                          "engHigh": 100.0
+                        },
+                        {
+                          "name": "NearFullLevel",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "NearFull threshold; clamped to Capacity - 1.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]HRUS4",
+                          "tagGroup": "Modbus",
+                          "engUnit": "parts",
+                          "engLow": 5.0,
+                          "engHigh": 99.0
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "SF01",
+                  "tagType": "Folder",
+                  "tags": [
+                    {
+                      "name": "Status",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "EStopOk",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "E-stop chain closed (fail-safe: true = healthy).",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]DI11",
+                          "tagGroup": "Modbus",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "GuardDoorClosed",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "Guard door closed.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]DI12",
+                          "tagGroup": "Modbus",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "SafetyOk",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "Safety relay output: e-stop OK, door closed and safety reset done.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]DI13",
+                          "tagGroup": "Modbus",
+                          "readOnly": true
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "UT01",
+                  "tagType": "Folder",
+                  "tags": [
+                    {
+                      "name": "Status",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "AirPressureOk",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Boolean",
+                          "documentation": "UT01.Status.AirPressure >= 5.5 bar.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]DI14",
+                          "tagGroup": "Modbus",
+                          "readOnly": true
+                        },
+                        {
+                          "name": "AirPressure",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Float8",
+                          "documentation": "Compressed air supply pressure (6.20 bar nominal).",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]IRUS10",
+                          "tagGroup": "Modbus",
+                          "scaleMode": "Linear",
+                          "rawLow": 0,
+                          "rawHigh": 1000,
+                          "scaledLow": 0,
+                          "scaledHigh": 10.0,
+                          "engUnit": "bar",
+                          "engLow": 0.0,
+                          "engHigh": 10.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "ActivePower",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Float8",
+                          "documentation": "Cell active power from the energy meter (model in scenario.md).",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]IRUS11",
+                          "tagGroup": "Modbus",
+                          "scaleMode": "Linear",
+                          "rawLow": 0,
+                          "rawHigh": 1000,
+                          "scaledLow": 0,
+                          "scaledHigh": 10.0,
+                          "engUnit": "kW",
+                          "engLow": 0.0,
+                          "engHigh": 10.0,
+                          "readOnly": true
+                        },
+                        {
+                          "name": "EnergyTotal",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Float8",
+                          "documentation": "Energy counter since controller start, UInt32 in Wh, high word first (Ignition default word order).",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]IRUI12",
+                          "tagGroup": "Modbus",
+                          "scaleMode": "Linear",
+                          "rawLow": 0,
+                          "rawHigh": 1000,
+                          "scaledLow": 0,
+                          "scaledHigh": 1.0,
+                          "engUnit": "kWh",
+                          "engLow": 0.0,
+                          "engHigh": 4294967.295,
+                          "readOnly": true
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "IO01",
+                  "tagType": "Folder",
+                  "tags": [
+                    {
+                      "name": "Status",
+                      "tagType": "Folder",
+                      "tags": [
+                        {
+                          "name": "Heartbeat",
+                          "tagType": "AtomicTag",
+                          "valueSource": "opc",
+                          "dataType": "Int4",
+                          "documentation": "I/O coupler heartbeat: +1 every 100 ms scan, wraps at 65535.",
+                          "opcServer": "Ignition OPC UA Server",
+                          "opcItemPath": "ns=1;s=[IO01]IRUS14",
+                          "tagGroup": "Modbus",
+                          "engUnit": "count",
+                          "engLow": 0.0,
+                          "engHigh": 65535.0,
+                          "readOnly": true
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
