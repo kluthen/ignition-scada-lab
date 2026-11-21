@@ -71,6 +71,34 @@
       {
         "type": "ia.input.button",
         "meta": {
+          "name": "Kpi"
+        },
+        "props": {
+          "text": "KPI",
+          "primary": false,
+          "style": {
+            "marginLeft": "8px"
+          }
+        },
+        "position": {
+          "basis": "120px",
+          "shrink": 0
+        },
+        "events": {
+          "dom": {
+            "onClick": {
+              "type": "script",
+              "scope": "G",
+              "config": {
+                "script": "\tsystem.perspective.navigate('/kpi')"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "ia.input.button",
+        "meta": {
           "name": "Instructor"
         },
         "props": {

@@ -55,7 +55,8 @@ it where your practice differs, it is meant to grow with the lab.
 | Mimic bound to an instance | mimic template opened on an object instance | a view with a parameter and **indirect tag bindings** (`[default]ANN/FIN/{cell}/…`); the page URL can carry the parameter (`/cell/:cell`) |
 | Animation | animations bound to variables | **Property bindings**: tag, indirect tag, expression, query, property, with **transforms** (map, script, format) |
 | Navigation | mimic calls / popups | **Page configuration** (URL routes → views), docks, popups, `system.perspective.navigate()` |
-| Trends | trend objects | **Power Chart** / **Time Series Chart** components reading tag history |
+| Trends | trend objects | **Power Chart** / **Time Series Chart** components reading tag history. Lab: a Time Series Chart on the cell page fed by `system.tag.queryTagHistory` (docs/system/kpi.md) |
+| Bar charts, production reports | report objects, exports | **XY Chart** fed by a named query; scheduled PDF reports with the **Reporting** module (design stored in a binary resource, Designer only). Lab: KPI page `/kpi`, daily PDF/XLSX/CSV export by a separate service (docs/system/kpi.md) |
 
 ## Scripting
 

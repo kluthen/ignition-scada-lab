@@ -41,3 +41,6 @@ ignition/data/config/resources/core/com.inductiveautomation.perspective/themes/
 __pycache__/
 *.pyc
 .venv/
+# Daily production exports (exporter service): runtime output, never versioned.
+exports/*
+!exports/.gitkeep

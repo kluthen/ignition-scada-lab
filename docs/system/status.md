@@ -1,6 +1,6 @@
 # Lab status
 
-Last updated: 2026-11-21 (five-cell plant).
+Last updated: 2026-11-21 (KPIs, graphs, daily export).
 
 ## Done
 
@@ -86,22 +86,49 @@ Last updated: 2026-11-21 (five-cell plant).
       Modbus, historian and HMI running. No part record lost across the
       switch (controller buffers, sequences without gaps).
 
+**Phase 3: KPIs, graphs, daily export (verified 2026-11-21, docs/system/kpi.md)**
+
+- [x] KPI functions in schema `mes` (`db/init/20-kpi.sql`): OEE with A / P / Q
+      per cell and area, hourly OEE trend, downtime per StopReason category
+      (URS reason table), rejects by defect, production per product, hourly
+      counts, orders per period; production day from `mes.site` (calendar
+      day, Europe/Paris, DST-safe). Checked: downtime per cell adds up to
+      planned minus run time.
+- [x] KPI page `/kpi`: period and cell selectors, tiles, OEE per hour,
+      production per hour, downtime Pareto, rejects by defect, two tables
+      (named queries `Kpi/*`). Cell page: 30-min tag-history trend (power,
+      speed, measured bore), today's OEE / A / P / Q and hourly production.
+      Checked by screenshots.
+- [x] Daily export service `exporter`: PDF report, XLSX, 7 CSVs (including
+      part records), `manifest.json` with SHA-256 per file, atomic folder in
+      `exports/daily/<date>/`, 10 min after the day ends, catch-up of missed
+      days. Scheduler checked with a temporary 15:00 day start (one complete
+      day exported unattended); partial export of 2026-11-21 checked by eye.
+      The first real complete day is 2026-11-21, due at 2026-11-22 00:10.
+
 ## Next (recommended order)
 
-1. **Trends and OEE**: Power Chart on the historised members; OEE per cell
-   from `mes.cell_state` and `mes.part_result` (availability, performance
-   from ideal cycle time, quality), first without the shift calendar.
-2. **Alarms** on `Alarms/*`, `RJ01`, `SF01` in the UDT (fault-catalogue.md
-   priorities), alarm journal in schema `alarms`, alarm table on the HMI.
+1. **Alarms** on `Alarms/*`, `RJ01`, `SF01` in the UDT (fault-catalogue.md
+   priorities), alarm journal in schema `alarms`, alarm table on the HMI;
+   alarm count in the daily report.
+2. **Shift calendar** (decision 7): OEE per shift, shift report 10 min after
+   each shift end (MES-RPT-01/02), maintenance mode out of planned time.
 3. **MES operator screens**: order list, release, dispatch by hand, close
-   short (MES-ORD-03/04/08, DSP-01/02), product check after load (DSP-03).
+   short (MES-ORD-03/04/08, DSP-01/02), product check after load (DSP-03),
+   downtime classification (MES-DT-04).
 4. **Phase 2 faults**: fault injection, one fault at a time
-   (fault-catalogue.md), driven from the instructor page.
-5. Conveyor UDT: not possible cleanly with the current Modbus map, because
+   (fault-catalogue.md), driven from the instructor page. Fault stops then
+   show in the downtime Pareto.
+5. Export shipping channel (e-mail or SFTP) once a receiver is defined;
+   Designer exercise: the same daily report with the Reporting module.
+6. Conveyor UDT: not possible cleanly with the current Modbus map, because
    CV01 and CV02 signals are interleaved (C1/C2, DI1-4/DI5-8...). A real
    project would map I/O per equipment block so that one UDT with a base
    address fits; a learning point to keep.
 
 ## Open decisions
 
-- MES shift calendar (docs/README.md decision 7) is to be settled with the OEE work.
+- MES shift calendar (docs/README.md decision 7). Until then the production
+  day is the calendar day (`mes.site.day_start` 00:00).
+- Daily export delivery: a finished folder in `exports/daily/`; e-mail or SFTP
+  needs a target from the user.

@@ -11,6 +11,10 @@
     "/instructor": {
       "title": "Instructor",
       "viewPath": "Sim/Instructor"
+    },
+    "/kpi": {
+      "title": "KPI",
+      "viewPath": "Kpi/Area"
     }
   },
   "sharedDocks": {

@@ -17,7 +17,8 @@ system as a whole is an explicit requirement of the user.
 
 - `compose.yaml` services: `gateway` (Ignition 8.3.10), `db` (PostgreSQL 19),
   `plc-c01`..`plc-c05` (one Python cell controller per cell), `gateway-init`
-  (seeds `ignition/data`), `workspace` (devcontainer, profile `dev`). Host ports
+  (seeds `ignition/data`), `exporter` (daily production export to
+  `exports/daily/`, git-ignored), `workspace` (devcontainer, profile `dev`). Host ports
   are on 127.0.0.1: 8088, 62541, 5432, 4841-4845 (OPC UA), 5021-5025 (Modbus).
 - The plant is five identical cells (docs/plant-layout.md). `docs/cells.csv` is
   the single source of truth for the instances, `docs/opcua-registry.csv` for
@@ -26,6 +27,10 @@ system as a whole is an explicit requirement of the user.
   and the script library `mes.cell` / `labsim.autopilot` (docs/system/mes.md),
   triggered by tag event scripts in the UDT `PIC200_Cell`. Views are now
   Designer-owned: edit `view.json` by hand only for small fixes.
+- KPIs (OEE, downtime, rejects, hourly production) are SQL functions in schema
+  `mes` (`db/init/20-kpi.sql`, docs/system/kpi.md). The KPI page and the daily
+  export both read them: change a definition there, never in a view or in the
+  exporter alone.
 - The lab autopilot drives every cell whose `[default]ANN/FIN/<cell>/MES/AutoRun`
   is true. Set it false before driving a cell yourself or running the smoke test.
 - The gateway runs Maker Edition (since 2026-11-21; `IGNITION_EDITION=maker`,

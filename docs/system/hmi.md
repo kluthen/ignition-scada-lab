@@ -20,7 +20,8 @@ Edition. Both are built in the Designer.
 | URL | View | Content |
 |---|---|---|
 | `/` | `Area/Overview` | floor layout: upstream band, one tile per cell (flex repeater over `mes.cell`), packing band; today's production per cell and the order queue (named queries, from PostgreSQL) |
-| `/cell/:cell` (e.g. `/cell/C03`) | `Cell/Detail` | cell mimic (CV01, QS01, RB01, RJ01, CV02, SF01/UT01 with live values), PackML state, command buttons enabled only in the states that accept them, last command result, autopilot toggle, active order with progress, last 25 parts, orders of the cell |
+| `/kpi` | `Kpi/Area` | KPI screen: period and cell selectors, tiles (OEE, A, P, Q, good, not good, downtime), OEE per hour, production per hour, downtime Pareto, rejects by defect, OEE per cell, production per cell and product ([kpi.md](kpi.md)) |
+| `/cell/:cell` (e.g. `/cell/C03`) | `Cell/Detail` | cell mimic (CV01, QS01, RB01, RJ01, CV02, SF01/UT01 with live values), PackML state, command buttons enabled only in the states that accept them, last command result, autopilot toggle, active order with progress; trends: last 30 min of power, machine speed and measured bore from the tag history, today's OEE / A / P / Q and production per hour; last 25 parts, orders of the cell |
 | `/instructor` | `Sim/Instructor` | per cell: feed interval, reject rate, upstream feed, auto-empty bin, autopilot (flex repeater of `Sim/CellRow`) |
 | top dock | `Shared/Header` | title, navigation, clock |
 
@@ -44,6 +45,17 @@ Edition. Both are built in the Designer.
 - **Commands** write `Command/CntrlCmd` (`system.tag.writeBlocking` in a button
   script); the controller answers with `CmdResult` / `CmdCounter`, shown under
   the buttons (MES-DSP-05).
+- **Charts.** XY Chart (`ia.chart.xy`) for hourly bars, the OEE trend and the
+  Paretos: a query binding with `returnFormat: json` fills
+  `props.dataSources.<name>`, and each series names its source and x / y
+  fields. Time Series Chart (`ia.chart.timeseries`) for tag history: an
+  expression binding `now(10000)` with a script transform that calls
+  `system.tag.queryTagHistory` returns a dataset into `props.series[0].data`.
+  Colours: categorical slot 1 blue `#2a78d6` for the main series, orange
+  `#eb6834` for "not good"; one axis per plot.
+- **KPI figures** come from the SQL functions in schema `mes`, through the
+  `Kpi/*` named queries. The daily PDF / XLSX export uses the same functions
+  ([kpi.md](kpi.md)).
 
 ## Named queries (project `plant`, database `mes`)
 
@@ -54,6 +66,7 @@ Edition. Both are built in the Designer.
 | `Area/OrderQueue` | none | overview: Running, Dispatched, Released orders |
 | `Cell/LastParts` | `cell` (String) | cell page |
 | `Cell/Orders` | `cell` (String) | cell page |
+| `Kpi/Oee`, `Kpi/OeeTrend`, `Kpi/Hourly`, `Kpi/Downtime`, `Kpi/Rejects`, `Kpi/Production` | `period` (String: `today`, `yesterday`, `last_hour`, `last_8h`, `last_24h`), `cell` (String, `''` = all cells) | KPI page, cell page ([kpi.md](kpi.md)) |
 
 Files: `ignition/data/projects/plant/ignition/named-query/<path>/query.sql`
 plus `resource.json` (database, parameters, caching).
@@ -82,8 +95,8 @@ with sync_playwright() as p:
 
 ## Next
 
-- Trends: a Power Chart or Time Series chart on the historised members
-  (speed, power, measurement, counters) once enough history exists.
+- Power Chart on the cell page (pens and range chosen by the user) next to,
+  or instead of, the fixed 30-min trend.
 - Alarm status table when alarms are configured.
 - MES operator screens (order list, release, dispatch by hand, close short).
 - Login and roles (operator, shift lead, instructor) before any of this leaves the lab.

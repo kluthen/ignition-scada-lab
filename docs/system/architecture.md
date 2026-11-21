@@ -29,6 +29,7 @@ host, orchestrated by `compose.yaml`, which is also the VS Code devcontainer.
  │  │  data dir bind-mounted from ./ignition/data                 │        │  alarms                  │ │
  │  └────────────────────────────────────────────────────────────┘        └─────────────────────────┘ │
  │  gateway-init: one-shot, seeds ./ignition/data      workspace: devcontainer shell (profile "dev")  │
+ │  exporter: daily production export, reads the mes.* KPI functions ─► ./exports/daily/<date>/       │
  └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -38,6 +39,7 @@ host, orchestrated by `compose.yaml`, which is also the VS Code devcontainer.
 | `gateway` | ignition:8.3.10 | Ignition Gateway, Maker Edition | `8088→8088` HTTP, `62541→62541` OPC UA |
 | `db` | postgres:19 | Database `mes` (schemas `mes`, `historian`, `alarms`) | `5432→5432` |
 | `plc-c01` .. `plc-c05` | built from `plc/Dockerfile` (python 3.13 + asyncua 2.1.0), image `ignition-lab-plc` | One simulated cell controller each: `plc/main.py` runs `programs/cell.py` every 100 ms and serves the same process image over OPC UA and Modbus TCP. `CELL_ID` selects the row of docs/cells.csv | `484n→4840` OPC UA, `502n→502` Modbus |
+| `exporter` | built from `exporter/Dockerfile` (python 3.13 + psycopg, openpyxl, reportlab), image `ignition-lab-exporter` | Daily production export: one folder per production day (PDF, XLSX, CSVs, manifest) in `./exports/daily/`, runs as your uid ([kpi.md](kpi.md)) | none |
 | `workspace` | built from `.devcontainer/` | Dev shell: Python 3.13, asyncua, pymodbus, psql (profile `dev`) | none |
 
 All published ports bind to 127.0.0.1, so nothing in the lab is reachable from the LAN.
@@ -84,8 +86,14 @@ reject bin, `Sim.Panel.*`, `Sim.Faults.*`) exist but have no effect yet.
    `historian` (`currentSchema=historian`): tables `sqlth_*` and monthly
    partitions `sqlt_data_1_<yyyy>_<mm>`.
 6. **HMI** ([hmi.md](hmi.md)): Perspective project `plant`, views parameterised
-   by cell, tag bindings to the UDT instances, named queries on `mes`.
-7. With "exposed tags" on, outside OPC UA clients see the tags as
+   by cell, tag bindings to the UDT instances, named queries on `mes`, tag
+   history on the cell page.
+7. **KPIs and daily export** ([kpi.md](kpi.md)): SQL functions in schema `mes`
+   (`oee`, `downtime`, `rejects`, `production`, `hourly`, `orders`) compute the
+   KPIs from the state log and the part records. The KPI page reads them
+   through named queries; the `exporter` service reads them over SQL and writes
+   each finished day to `./exports/daily/<date>/`.
+8. With "exposed tags" on, outside OPC UA clients see the tags as
    `ns=2;s=[default]/ANN/FIN/C03/...` on `:62541`.
 
 ## Versions
@@ -97,6 +105,7 @@ reject bin, `Sim.Panel.*`, `Sim.Faults.*`) exist but have no effect yet.
 | Python (plc, workspace) | 3.13 | `plc/Dockerfile`, `.devcontainer/Dockerfile` |
 | asyncua (plc server, workspace client) | 2.1.0 | `plc/Dockerfile`, `.devcontainer/Dockerfile` |
 | pymodbus (workspace only, test client) | 3.16.2 | `.devcontainer/Dockerfile` |
+| psycopg / openpyxl / reportlab (exporter) | 3.3.9 / 3.1.5 / 5.1.0 | `exporter/Dockerfile` |
 
 The Modbus server is hand-written, stdlib only. pymodbus 3.16 is half-way
 through its v4 API migration and deprecates its server datastore classes.
@@ -113,6 +122,7 @@ through its v4 API migration and deprecates its server datastore classes.
 | `opcuauser` / `password` | Ignition's default OPC UA user, unchanged | used by tests to write through Ignition's server | change or disable it |
 | Perspective project `plant` | no login, any session may write commands | screens for one person on localhost | identity provider, roles per action (operator, shift lead), audit |
 | Lab autopilot | operates the cells from gateway scripts | data generation | does not exist on a real plant |
+| Exporter database role | the database owner (`POSTGRES_USER`) | one role for everything | a read-only role for the export |
 
 Anonymous clients of Ignition's OPC UA server can browse and read, but not
 write. Write and call are granted to `AuthenticatedUser` only, which is
@@ -125,9 +135,11 @@ compose.yaml              the stack (also the devcontainer's compose file)
 .env / .env.example       versions, uid, passwords, API token (.env is git-ignored)
 .devcontainer/            devcontainer.json + workspace image
 plc/                      simulated cell controller (see above)
-db/init/                  SQL: schemas (00), MES tables (10); re-runnable with scripts/db_apply.py
+exporter/                 daily production export (daily_export.py, Dockerfile)
+exports/daily/            export output, one folder per production day (git-ignored)
+db/init/                  SQL: schemas (00), MES tables (10), KPI functions (20); re-runnable with scripts/db_apply.py
 ignition/data/            Ignition data dir (bind mount); config/resources/core and projects are versioned
-  projects/plant/         Perspective views, named queries, script library (mes, labsim)
+  projects/plant/         Perspective views (overview, cell, KPI, instructor), named queries, script library (mes, labsim)
 gateway-config/           reproducible gateway config: OPC connection and Modbus device templates (per cell),
                           historian provider, system-properties patch, OPC UA server,
                           tags/<provider>.json generated from the registry and cells.csv
@@ -136,5 +148,5 @@ scripts/                  ign (REST CLI), opc (OPC UA tool), bootstrap, apply, d
 docs/                     plant design: scenario, plant layout + cells.csv, OPC UA registry (CSV),
                           fault catalogue, MES requirements
 docs/system/              this documentation: architecture, operations, automation, MES, HMI,
-                          Panorama concept map, status
+                          KPIs and export, Panorama concept map, status
 ```

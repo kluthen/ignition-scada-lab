@@ -9,7 +9,7 @@ Requirement ids refer to [../mes-requirements.md](../mes-requirements.md).
 
 | Piece | Where | Role |
 |---|---|---|
-| Tables | `db/init/10-mes.sql` (schema `mes`), applied by `scripts/db_apply.py` | data model below |
+| Tables | `db/init/10-mes.sql` (schema `mes`), KPI functions `db/init/20-kpi.sql`, applied by `scripts/db_apply.py` | data model below |
 | Script library `mes.cell` | `ignition/data/projects/plant/ignition/script-python/mes/cell/code.py` (Jython 2.7) | MES functions of one cell |
 | Script library `labsim.autopilot` | `…/script-python/labsim/autopilot/code.py` | lab stand-in for the planner and the operator |
 | Triggers | members of the UDT `PIC200_Cell` (`scripts/generate_tags.py`) | tag event scripts call the library |
@@ -45,6 +45,9 @@ checks), so a tick and an event that handle the same record do no harm.
 | `cell_state` | PackML state log: cell, start time (PLC source timestamp), state, stop reason, active order | basis for downtime and OEE |
 | `event` | warnings and notable events (not written yet) | MES-DSP-03, MES-CNT-03 |
 | `hourly_production` (view) | good / not good per cell and hour | MES-CNT-04 (without the shift calendar) |
+| `site` | time zone and start of the production day (00:00) | day boundary of KPIs and export |
+| `packml_state`, `downtime_reason`, `defect` | state names, StopReason → downtime category and reason (URS table), defect names | MES-DT-03 (content only, no editing screen yet) |
+| KPI functions | `oee`, `oee_trend`, `downtime`, `rejects`, `production`, `hourly`, `orders` per period (`db/init/20-kpi.sql`, [kpi.md](kpi.md)) | MES-OEE-01..04, MES-DT-05, MES-CNT-04 |
 
 ## MES functions (`mes.cell`)
 
@@ -119,5 +122,7 @@ SELECT pname, to_timestamp(start_time / 1000) FROM historian.sqlth_partitions;
 
 - Operator and shift-lead screens: order list, release, close short (MES-ORD-03/04/08), dispatch by hand.
 - Product master check after load (MES-DSP-03), reconciliation events (MES-CNT-03), controller restart detection.
-- Shift calendar, OEE per shift and per cell, downtime reasons.
+- Shift calendar and OEE per shift (OEE per cell and day, downtime reasons from
+  StopReason, KPI screen and daily export are done: [kpi.md](kpi.md)).
+- Downtime classification by the operator (MES-DT-04), reason table editing.
 - Alarms and the alarm journal.

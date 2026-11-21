@@ -9,7 +9,7 @@ Two equivalent ways to run the stack.
 ```bash
 cd ~/work/ignition
 cp -n .env.example .env        # first time only, then edit uid/passwords
-docker compose up -d           # gateway-init, gateway, db, plc-c01 .. plc-c05
+docker compose up -d           # gateway-init, gateway, db, plc-c01 .. plc-c05, exporter
 docker compose ps
 docker compose down            # stop (data persists)
 ```
@@ -28,14 +28,17 @@ or when `curl -s http://127.0.0.1:8088/StatusPing` answers `{"state":"RUNNING"}`
 
 As soon as the gateway runs, the lab autopilot makes the five cells produce
 (see [mes.md](mes.md)): orders, part records and state changes accumulate in
-PostgreSQL, and tag history in the `historian` schema.
+PostgreSQL, and tag history in the `historian` schema. Ten minutes after
+midnight, the `exporter` writes the previous day's export to
+`exports/daily/<date>/` ([kpi.md](kpi.md)).
 
 ## Addresses and credentials
 
 | What | Where | Credentials |
 |---|---|---|
 | Gateway web UI | http://127.0.0.1:8088 | `GATEWAY_ADMIN_USERNAME` / `GATEWAY_ADMIN_PASSWORD` in `.env` |
-| HMI (Perspective, project `plant`) | http://127.0.0.1:8088/data/perspective/client/plant (overview), `…/cell/C03`, `…/instructor` | none (lab) |
+| HMI (Perspective, project `plant`) | http://127.0.0.1:8088/data/perspective/client/plant (overview), `…/kpi`, `…/cell/C03`, `…/instructor` | none (lab) |
+| Daily production exports | `exports/daily/<YYYY-MM-DD>/` on the host (PDF, XLSX, CSVs, `manifest.json`) | files, owned by your uid |
 | Designer | install the Designer Launcher from the gateway home page, add gateway `http://127.0.0.1:8088` | same admin user |
 | Gateway REST API | http://127.0.0.1:8088/data/api/v1/…, OpenAPI at `/openapi` | header `X-Ignition-API-Token: $IGNITION_API_TOKEN` (`.env`) |
 | Ignition OPC UA server | `opc.tcp://127.0.0.1:62541` (host) / `opc.tcp://gateway:62541` (containers) | anonymous read, security None allowed (lab only) |
@@ -53,6 +56,9 @@ scripts/ign get /trial                             # trial seconds left (standar
 docker compose exec db psql -U ignition -d mes     # SQL shell
 docker compose logs -f plc-c03                     # controller log: state changes, commands, order loads
 docker compose logs -f gateway | grep -E 'm.cell|autopilot'   # MES and autopilot activity
+docker compose logs exporter                       # "exported <day> (complete) to /exports/daily/<day>"
+ls exports/daily/                                  # one folder per exported production day
+docker compose run --rm exporter python daily_export.py run today   # partial export of today, now
 ```
 
 Useful SQL (more in [mes.md](mes.md#looking-at-the-data)):
@@ -152,6 +158,8 @@ replays it on an existing one.
   are encrypted with this gateway's own key, kept under the git-ignored
   `config/local`. They do not decrypt on another gateway: re-enter them there.
 - Data: `docker compose exec db pg_dump -U ignition mes > mes.sql`.
+- Daily exports: `exports/daily/` is plain files on the host, outside git and
+  outside the database volume. The service never deletes them.
 
 ## Gateway configuration after a fresh clone or reset
 
@@ -257,5 +265,8 @@ service in compose.yaml, then `scripts/db_apply.py`,
 | `scan error` lines in a `plc-c0n` log | the program raised; the controller keeps scanning, so read the traceback |
 | Smoke test fails or the cell does unexpected things | the autopilot is driving the same cell: set its `MES/AutoRun` false. |
 | Fresh gateway log: `database 'historian' does not exist`, `Server "C01" does not exist`, one `Error forwarding data` | normal until `create_db_connection.py` and `apply_gateway_config.py` have run; the historian and the MES recover by themselves (verified on a fresh clone) |
+| No export folder for yesterday after 00:10 | `docker compose ps exporter` (running?), `docker compose logs exporter` (traceback after "export failed"; the next poll in 5 min retries). Folders starting with a dot are unfinished exports, left by an interrupted run: delete them. Run the day by hand: `docker compose run --rm exporter python daily_export.py run YYYY-MM-DD` |
+| `exporter` cannot write to `/exports` | `exports/` was created by Docker as root (missing from the clone): `sudo chown -R $(id -u):$(id -g) exports` |
+| KPI page tiles show `-` | no state log or parts in the chosen period (e.g. Yesterday on the lab's first day) |
 | REST API answers 401 | missing or wrong `X-Ignition-API-Token`. |
 | REST API answers 403 | the token's security level is not in the gateway read/write permissions. See [gateway-automation.md](gateway-automation.md#api-token). |

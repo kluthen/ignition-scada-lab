@@ -111,6 +111,33 @@ services:
     environment: { CELL_ID: C05 }
     ports: ["127.0.0.1:4845:4840", "127.0.0.1:5025:502"]
 
+  # Daily production export (docs/system/kpi.md): one folder per production day
+  # in ./exports/daily/<date>/ (PDF report, XLSX, CSVs, manifest), from the
+  # mes.* KPI functions. Exports each finished day EXPORT_DELAY_MIN after its
+  # end, and fills gaps of the last EXPORT_CATCHUP_DAYS days on start.
+  exporter:
+    build:
+      context: ./exporter
+    image: ignition-lab-exporter
+    user: "${HOST_UID}:${HOST_GID}"   # exported files belong to you on the host
+    working_dir: /app
+    environment:
+      TZ: ${TZ:-UTC}
+      PGHOST: db
+      PGDATABASE: ${POSTGRES_DB:-mes}
+      PGUSER: ${POSTGRES_USER:-ignition}
+      PGPASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      EXPORT_DELAY_MIN: "10"
+      EXPORT_CATCHUP_DAYS: "7"
+      EXPORT_PARTS_CSV: "1"
+    volumes:
+      - ./exporter:/app:ro
+      - ./exports:/exports
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
   # Development shell used by the devcontainer (VS Code "Reopen in Container").
   workspace:
     build:

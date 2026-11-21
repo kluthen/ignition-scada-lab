@@ -294,6 +294,7 @@ gateway scripts within a second. Verified on 8.3.10 in project `plant`:
 | Perspective pages and docks | `com.inductiveautomation.perspective/page-config/config.json` | `pages` (`/cell/:cell` → view param `cell`), `sharedDocks` | yes |
 | Project properties | `ignition/global-props/data.bin` | gzip'ed binary serialisation | no: set them through `POST /projects` or the Designer |
 | Gateway event scripts (timer, startup, tag change) | `ignition/event-scripts/data.bin` (8.1 layout; not tried on 8.3) | binary, like `global-props` | not attempted: this lab uses tag event scripts in the UDT instead (docs/system/mes.md) |
+| Report (Reporting module) | `com.inductiveautomation.reporting/reports/<path>/data.bin` | binary: the `ReportResource` (page template, data sources, parameters, schedules) is saved with `putData` under the default key, read from the 8.3.10 module classes | no: Designer only. The daily export is built outside the gateway (docs/system/kpi.md) |
 
 Binding JSON used in the views (see docs/system/hmi.md):
 
