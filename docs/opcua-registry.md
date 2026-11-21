@@ -6,7 +6,7 @@ generated from the CSV. If the two ever differ, the CSV is right.
 
 The registry covers every signal exchanged between the simulated cell and Ignition:
 
-- 193 OPC UA nodes: 42 objects/folders and 151 variables, in three namespaces;
+- 210 OPC UA nodes: 46 objects/folders and 164 variables, in three namespaces;
 - 36 Modbus TCP points on device IO01.
 
 The plant itself is described in [`scenario.md`](scenario.md).
@@ -15,7 +15,7 @@ The plant itself is described in [`scenario.md`](scenario.md).
 
 | Item | Value |
 |---|---|
-| Endpoint (inside compose network) | `opc.tcp://plc-c0n:4840/ignition-lab/`, one server per cell (`plc-c01`..`plc-c05`) |
+| Endpoint (inside compose network) | `opc.tcp://plc-c0n:4840/ignition-lab/`, one server per cell (`plc-c01`..`plc-c06`) |
 | Endpoint (from the host) | `opc.tcp://127.0.0.1:484n/ignition-lab/` (C03 → 4843, see [cells.csv](cells.csv)) |
 | Application URI | `urn:ignition-lab:plc-sim:c0n` |
 | Security, phase 1 | SecurityPolicy None, MessageSecurityMode None, anonymous user |
@@ -23,7 +23,7 @@ The plant itself is described in [`scenario.md`](scenario.md).
 
 | Namespace URI | Expected index | Content |
 |---|---|---|
-| `urn:ignition-lab:cell` | 2 | `Machines` folder, cell `C01`, quality station `QS01` |
+| `urn:ignition-lab:cell` | 2 | `Machines` folder, cell `C01`, quality station `QS01`, andon station `AN01` |
 | `urn:ignition-lab:robot` | 3 | Robot `RB01` (organised under `Machines`) |
 | `urn:ignition-lab:sim` | 4 | `Sim`: simulation-only instructor interface |
 
@@ -31,7 +31,7 @@ The server registers the namespaces in this order, so asyncua gives them indexes
 Clients must not hard-code the index: use the namespace URI.
 
 This registry is the **type** of one PIC-200 cell, written for the instance C01.
-The five cells of the area ([plant-layout.md](plant-layout.md)) serve the same
+The six cells of the area ([plant-layout.md](plant-layout.md)) serve the same
 address space, with one substitution: the cell's own nodes (`C01` and `C01.*`)
 carry the cell id in their NodeId and BrowsePath (`C03.Status.StateCurrent`
 under `Machines/C03`). Equipment inside a cell (`QS01`, `RB01`, `CV01`…) and
@@ -65,6 +65,7 @@ Objects
 │   │   ├── Traceability          one part record at a time + MES acknowledge
 │   │   └── Alarms                Boolean alarm condition bits
 │   ├── QS01                      quality station (Identification, Status)
+│   ├── AN01                      andon station: stack light, operator calls (Status, Command)
 │   └── RB01                      robot (ns robot), OPC 40010-1 structure
 │       ├── Identification
 │       ├── MotionDevices/Arm     MotionDeviceCategory, ParameterSet, Axes/J1..J4
@@ -73,6 +74,7 @@ Objects
 │       └── Status                integrator extension: cycle step, gripper, counters
 └── Sim                           (ns sim) SIMULATION ONLY
     ├── Process                   feed interval, reject pattern, ...
+    ├── Andon                     simulated operator at the andon station
     ├── Panel                     simulated hard-wired buttons (phase 2)
     └── Faults                    fault injection (phase 2)
 ```
@@ -164,6 +166,8 @@ Alarm codes 21 (reject bin near full) and 170 (reject rate high) are warnings: t
 **DefectCode** (`C01.Traceability.DefectCode`): 0 None, 1 Undersize, 2 Oversize, 3 NoMeasurement, 4 IdUnreadable, 5 Dropped, 6 Purged.
 
 **InspectionResult** (`QS01.Status.LastResult`): 0 None, 1 OK, 2 NOK, 3 NoResult.
+
+**AndonCall** (`AN01.Status.CallType`, `Sim.Andon.CallButton`): 0 None, 1 Material, 2 Quality, 3 Maintenance.
 
 **MachineryItemState** (OPC 40001-1): 0 NotAvailable, 1 OutOfService, 2 NotExecuting, 3 Executing.
 
@@ -316,6 +320,29 @@ Columns as in the CSV. "Ph" = phase; "prop" = PropertyType. Ranges are in engine
 | `QS01.Status.LastMeasurement` | Double | R | PLC | mm | 0..100 | 0.0 | 1 | Last measured bore diameter. |
 | `QS01.Status.LastResult` | Int32 | R | PLC |  | 0..3 | 0 | 1 | Last inspection result. Enum: InspectionResult. |
 
+### Andon station AN01 (`urn:ignition-lab:cell`)
+
+Not bound in Ignition yet: the CSV column `ignition_tag_path` is empty, so
+`scripts/generate_tags.py` leaves these nodes out. They are bound by hand in
+the training week ([training/week-48.md](training/week-48.md)); suggested paths
+`[default]ANN/FIN/<cell>/AN01/...` and `[sim]<cell>/Andon/...`.
+
+| Signal (NodeId `s=`) | Class / type | Acc | Writer | Unit | Range | Initial | Ph | Description |
+|---|---|---|---|---|---|---|---|---|
+| `AN01` | Object |  |  |  |  |  | 1 | Andon station: four-lamp stack light with buzzer, and three operator call buttons (material, quality, maintenance) at the cell. No Ignition tags yet: bound by hand in the training week (docs/training/week-48.md). |
+| `AN01.Status` | Folder |  |  |  |  |  | 1 | Stack light outputs and the active operator call. |
+| `AN01.Status.LampRed` | Boolean | R | PLC |  |  | false | 1 | Red lamp: the cell needs intervention: Aborting, Aborted or Clearing, Holding or Held on a fault (StopReason 100 and above), or safety not OK. |
+| `AN01.Status.LampAmber` | Boolean | R | PLC |  |  | false | 1 | Amber lamp: the cell waits: Suspending, Suspended or Unsuspending (starved or blocked), or Holding, Held or Unholding without a fault (e.g. reject bin full). Off when the red lamp is on. |
+| `AN01.Status.LampGreen` | Boolean | R | PLC |  |  | false | 1 | Green lamp: the cell is producing (state Execute). |
+| `AN01.Status.LampBlue` | Boolean | R | PLC |  |  | false | 1 | Blue lamp: an operator call is active (steady; the HMI may blink it while AN01.Status.Buzzer is on). |
+| `AN01.Status.Buzzer` | Boolean | R | PLC |  |  | false | 1 | Buzzer: an operator call is active and not acknowledged yet. |
+| `AN01.Status.CallType` | Int32 | R | PLC |  | 0..3 | 0 | 1 | Type of the active call, 0 when none. Enum: AndonCall. |
+| `AN01.Status.CallAcknowledged` | Boolean | R | PLC |  |  | false | 1 | The active call has been acknowledged (AN01.Command.Acknowledge). False when no call is active. |
+| `AN01.Status.CallStartTime` | DateTime | R | PLC |  |  |  | 1 | Time the active call was raised (controller clock, UTC). OPC UA null DateTime (1601-01-01) when no call is active. |
+| `AN01.Status.CallCount` | UInt32 | R | PLC | count | 0..4294967295 | 0 | 1 | Calls raised since controller start. |
+| `AN01.Command` | Folder |  |  |  |  |  | 1 | Andon commands (HMI write). |
+| `AN01.Command.Acknowledge` | Boolean | RW | HMI |  |  | false | 1 | Write true to acknowledge the active call: the buzzer stops, the blue lamp stays on until the operator clears the call at the cell. The PLC writes false back within one scan, also when there is nothing to acknowledge. |
+
 ### Robot RB01 (`urn:ignition-lab:robot`)
 
 | Signal (NodeId `s=`) | Class / type | Acc | Writer | Unit | Range | Initial | Ph | Description |
@@ -409,6 +436,10 @@ Columns as in the CSV. "Ph" = phase; "prop" = PropertyType. Ranges are in engine
 | `Sim.Faults.ModbusOutage` | UInt16 | RW | SIM | s | 0..600 | 0 | 2 | Write N: the Modbus server closes all connections and refuses new ones for N s. Counts down to 0. |
 | `Sim.Faults.OpcUaOutage` | UInt16 | RW | SIM | s | 0..600 | 0 | 2 | Write N: 1 s later the OPC UA server stops; it restarts after N s and this node reads 0 again. |
 | `Sim.Faults.ClearAll` | Boolean | RW | SIM |  |  | false | 2 | Pulse: reset every Sim.Faults and Sim.Panel node to its initial value. |
+| `Sim.Andon` | Folder |  |  |  |  |  | 1 | Simulated operator at the andon station (AN01). |
+| `Sim.Andon.CallButton` | Int32 | RW | SIM |  | 0..3 | 0 | 1 | Press a call button at the cell: 1 Material, 2 Quality, 3 Maintenance. With no call active it raises that call; the button of the active call clears it (problem solved); anything else is ignored. The PLC writes 0 back after one scan. |
+| `Sim.Andon.ResolveTime` | Double | RW | SIM | s | 0..3600 | 90 | 1 | The simulated operator clears an acknowledged call this long after the acknowledge (0 = never: clear it with Sim.Andon.CallButton). |
+| `Sim.Andon.AutoCallInterval` | Double | RW | SIM | min | 0..1440 | 0 | 1 | Mean time between random calls raised by the simulated operator, type drawn among 1..3 (0 = off). A call is raised only when none is active. |
 
 ### Modbus TCP device IO01 (unit id 1)
 

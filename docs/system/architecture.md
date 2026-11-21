@@ -11,12 +11,12 @@ host, orchestrated by `compose.yaml`, which is also the VS Code devcontainer.
 ```
                                    host (127.0.0.1 only)
   browser: web UI, Perspective, Designer ─► :8088    OPC UA client ─► :62541    psql ─► :5432
-  UaExpert ─► :4841..4845 (cell controllers)          Modbus tool ─► :5021..5025
+  UaExpert ─► :4841..4846 (cell controllers)          Modbus tool ─► :5021..5026
                      │
  ┌───────────────────┼──────────────────────────────────────────────────────────────────────────────┐
  │ docker network    ▼                                                                               │
  │  ┌────────────────────────────────────────────────────────────┐        ┌─────────────────────────┐ │
- │  │ gateway (Ignition 8.3.10)                                   │        │ plc-c01 .. plc-c05      │ │
+ │  │ gateway (Ignition 8.3.10)                                   │        │ plc-c01 .. plc-c06      │ │
  │  │  OPC connections C01..C05 ── OPC UA client ──────────────────────────► OPC UA :4840 (asyncua)  │ │
  │  │  Modbus devices C01_IO01..C05_IO01 ── Modbus TCP ────────────────────► Modbus :502 (IO01)      │ │
  │  │  tags: UDT PIC200_Cell → [default]ANN/FIN/C01..C05                 │  scan 100 ms:            │ │
@@ -38,7 +38,7 @@ host, orchestrated by `compose.yaml`, which is also the VS Code devcontainer.
 | `gateway-init` | ignition:8.3.10 | Seeds `./ignition/data` from the image until the gateway is initialised, never overwriting existing (versioned) files; chowns to your uid. Exits. | none |
 | `gateway` | ignition:8.3.10 | Ignition Gateway, Maker Edition | `8088→8088` HTTP, `62541→62541` OPC UA |
 | `db` | postgres:19 | Database `mes` (schemas `mes`, `historian`, `alarms`) | `5432→5432` |
-| `plc-c01` .. `plc-c05` | built from `plc/Dockerfile` (python 3.13 + asyncua 2.1.0), image `ignition-lab-plc` | One simulated cell controller each: `plc/main.py` runs `programs/cell.py` every 100 ms and serves the same process image over OPC UA and Modbus TCP. `CELL_ID` selects the row of docs/cells.csv | `484n→4840` OPC UA, `502n→502` Modbus |
+| `plc-c01` .. `plc-c06` | built from `plc/Dockerfile` (python 3.13 + asyncua 2.1.0), image `ignition-lab-plc` | One simulated cell controller each: `plc/main.py` runs `programs/cell.py` every 100 ms and serves the same process image over OPC UA and Modbus TCP. `CELL_ID` selects the row of docs/cells.csv | `484n→4840` OPC UA, `502n→502` Modbus |
 | `exporter` | built from `exporter/Dockerfile` (python 3.13 + psycopg, openpyxl, reportlab), image `ignition-lab-exporter` | Daily production export: one folder per production day (PDF, XLSX, CSVs, manifest) in `./exports/daily/`, runs as your uid ([kpi.md](kpi.md)) | none |
 | `workspace` | built from `.devcontainer/` | Dev shell: Python 3.13, asyncua, pymodbus, psql (profile `dev`) | none |
 
@@ -50,14 +50,20 @@ All published ports bind to 127.0.0.1, so nothing in the lab is reachable from t
 |---|---|
 | `registry.py` | loads `docs/opcua-registry.csv` (mounted read-only at `/registry/`); the CSV is the single source of truth for the signals of one cell |
 | `instance.py` | applies the cell's row of `docs/cells.csv`: renames the cell's own nodes (`C01.*` → `C03.*` in NodeId and BrowsePath), sets identification and `Sim.Process.*` start values |
-| `tags.py` | one name space for all 229 signals: OPC UA signals in a dict, Modbus signals as scaled views on the I/O image (32-bit = 2 registers, high word first) |
-| `opcua_server.py` | builds the address space from the registry (193 nodes, namespaces `urn:ignition-lab:cell` = 2, `robot` = 3, `sim` = 4, string NodeIds), and syncs client writes / published values every scan. Application URI `urn:ignition-lab:plc-sim:c03` |
+| `tags.py` | one name space for all 246 signals: OPC UA signals in a dict, Modbus signals as scaled views on the I/O image (32-bit = 2 registers, high word first) |
+| `opcua_server.py` | builds the address space from the registry (210 nodes, namespaces `urn:ignition-lab:cell` = 2, `robot` = 3, `sim` = 4, string NodeIds), and syncs client writes / published values every scan. Application URI `urn:ignition-lab:plc-sim:c03` |
 | `modbus_server.py`, `io_image.py` | stdlib Modbus TCP server (FC 1–6, 15, 16) over the four tables of the cell's I/O coupler IO01 |
 | `programs/cell.py` | the cell logic of scenario.md: PackML state machine (17 states, CntrlCmd/CmdResult handshake), unit modes, upstream feed, CV01/CV02 kinematics, QS01 inspection, RB01 cycle with speed override, reject bin, order download and traceability handshakes, counters, energy. Addresses signals by their registry (template) names |
 | `main.py` | scan loop: pull OPC UA writes → `program.scan(dt)` → publish |
 
 Phase 1 is deterministic and fault-free. Phase-2 nodes (alarms other than the
 reject bin, `Sim.Panel.*`, `Sim.Faults.*`) exist but have no effect yet.
+
+`plc-c06` (cell C06, delivered 2026-11) and the andon station `AN01` of every
+cell (stack light and operator calls, scenario.md 4.10) run in the controllers
+but are not in Ignition yet: they are commissioned and bound by hand in the
+training week ([../training/week-48.md](../training/week-48.md)). The gateway,
+the MES and the HMI below still describe five cells.
 
 ## Data flow
 

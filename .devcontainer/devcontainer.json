@@ -2,7 +2,7 @@
   "name": "Ignition lab",
   "dockerComposeFile": ["../compose.yaml"],
   "service": "workspace",
-  "runServices": ["gateway-init", "gateway", "db", "plc-c01", "plc-c02", "plc-c03", "plc-c04", "plc-c05", "workspace"],
+  "runServices": ["gateway-init", "gateway", "db", "plc-c01", "plc-c02", "plc-c03", "plc-c04", "plc-c05", "plc-c06", "workspace"],
   "workspaceFolder": "/workspace",
   "shutdownAction": "stopCompose",
   "remoteUser": "dev",

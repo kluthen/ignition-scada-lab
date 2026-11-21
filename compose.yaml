@@ -73,7 +73,7 @@ services:
       retries: 20
     restart: unless-stopped
 
-  # Five identical PIC-200 cells (docs/plant-layout.md), one simulated controller
+  # Six identical PIC-200 cells (docs/plant-layout.md), one simulated controller
   # each. CELL_ID selects the row of docs/cells.csv. Host ports: OPC UA 484n,
   # Modbus 502n for cell Cn (security None, lab).
   plc-c01:
@@ -110,6 +110,11 @@ services:
     hostname: plc-c05
     environment: { CELL_ID: C05 }
     ports: ["127.0.0.1:4845:4840", "127.0.0.1:5025:502"]
+  plc-c06:                    # delivered 2026-11, commissioned in Ignition in the training week (docs/training/week-48.md)
+    <<: *plc
+    hostname: plc-c06
+    environment: { CELL_ID: C06 }
+    ports: ["127.0.0.1:4846:4840", "127.0.0.1:5026:502"]
 
   # Daily production export (docs/system/kpi.md): one folder per production day
   # in ./exports/daily/<date>/ (PDF report, XLSX, CSVs, manifest), from the

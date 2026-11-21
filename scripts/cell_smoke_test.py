@@ -6,6 +6,8 @@
   3. Load order TEST-<n> (PartType 1, 10 parts) -> LoadResult 1
   4. Start -> Execute, acknowledge every traceability record like the MES would
   5. Expect Complete within 60 s, GoodCount = 10, acknowledged records = new ProdProcessedCount
+  6. Andon AN01: green lamp in Execute only; a quality call from Sim.Andon.CallButton lights
+     blue with the buzzer, Acknowledge silences it, the same button clears it (scenario.md 4.10)
 
 Run in the workspace container:  docker compose exec workspace python scripts/cell_smoke_test.py [CELL]
 CELL is C01 (default) to C05. Endpoint: $PLC_OPCUA_URL, default opc.tcp://plc-<cell>:4840/ignition-lab/
@@ -26,6 +28,7 @@ CELL_ID = sys.argv[1].upper() if len(sys.argv) > 1 else "C01"
 URL = os.environ.get("PLC_OPCUA_URL", f"opc.tcp://plc-{CELL_ID.lower()}:4840/ignition-lab/")
 CELL = "urn:ignition-lab:cell"
 ROBOT = "urn:ignition-lab:robot"
+SIM = "urn:ignition-lab:sim"
 STATES = {2: "Stopped", 4: "Idle", 6: "Execute", 9: "Aborted", 17: "Complete"}
 
 
@@ -124,6 +127,9 @@ async def main() -> None:
 
         check(await cell.command(2) == 1, "Start accepted")
         await cell.wait_state(6, 3)
+        await asyncio.sleep(0.3)
+        check(await cell.get("AN01.Status.LampGreen") and not await cell.get("AN01.Status.LampAmber")
+              and not await cell.get("AN01.Status.LampRed"), "Execute: andon green lamp only")
         print("  ..    Execute; waiting for Complete")
         took = await cell.wait_state(17, 60, ack)
         print(f"  ..    Complete after {took:.1f} s in Execute/Completing")
@@ -144,9 +150,40 @@ async def main() -> None:
         check(sum(r[3] == 1 for r in mine) == 10 and sum(r[3] == 2 for r in mine) == rejects,
               f"records: 10 Good, {rejects} Reject")
 
+        await andon(cell, client)
+
         robot = client.get_node(ua.NodeId("RB01.Status.CycleCount", await client.get_namespace_index(ROBOT)))
         print(f"PASS  ({good} good, {rejects} reject, {took:.1f} s; robot cycles since start {await robot.read_value()}, "
               f"last cycle {await client.get_node(ua.NodeId('RB01.Status.LastCycleTime', robot.nodeid.NamespaceIndex)).read_value()} s)")
+
+
+async def andon(cell: Cell, client: Client) -> None:
+    sim_ns = await client.get_namespace_index(SIM)
+    button = client.get_node(ua.NodeId("Sim.Andon.CallButton", sim_ns))
+
+    async def press(n: int) -> None:
+        await button.write_value(ua.DataValue(ua.Variant(n, ua.VariantType.Int32)))
+        await asyncio.sleep(0.4)
+
+    check(not await cell.get("AN01.Status.LampGreen"), "Complete: andon green lamp off")
+    if active := await cell.get("AN01.Status.CallType"):
+        await press(active)                        # a random call left over: clear it first
+    count = await cell.get("AN01.Status.CallCount")
+    await press(2)
+    check(await cell.get("AN01.Status.CallType") == 2 and await cell.get("AN01.Status.LampBlue")
+          and await cell.get("AN01.Status.Buzzer"), "andon quality call: blue lamp and buzzer")
+    check(await cell.get("AN01.Status.CallCount") == count + 1, "CallCount + 1")
+    check(await button.read_value() == 0, "CallButton reset by the PLC")
+    await press(3)
+    check(await cell.get("AN01.Status.CallType") == 2, "another button during a call is ignored")
+    await cell.put("AN01.Command.Acknowledge", True, ua.VariantType.Boolean)
+    await asyncio.sleep(0.4)
+    check(await cell.get("AN01.Status.CallAcknowledged") and not await cell.get("AN01.Status.Buzzer")
+          and await cell.get("AN01.Status.LampBlue"), "Acknowledge: buzzer off, blue lamp stays")
+    check(not await cell.get("AN01.Command.Acknowledge"), "Acknowledge reset by the PLC")
+    await press(2)
+    check(await cell.get("AN01.Status.CallType") == 0 and not await cell.get("AN01.Status.LampBlue"),
+          "same button again: call cleared")
 
 
 if __name__ == "__main__":

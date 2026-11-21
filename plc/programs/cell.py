@@ -10,6 +10,7 @@ import collections
 import datetime as dt
 import logging
 import math
+import random
 
 from registry import NULL_DATETIME
 from tags import Tags
@@ -57,6 +58,9 @@ ACTING_TIMEOUTS = {CLEARING: (1.0, STOPPED), STARTING: (1.0, EXECUTE), ABORTING:
 CONVEYORS_ON = {STARTING, SUSPENDED, EXECUTE, STOPPING, HOLDING, UNHOLDING, SUSPENDING, UNSUSPENDING,
                 COMPLETING}
 FEED_STATES = {EXECUTE, SUSPENDING, SUSPENDED, UNSUSPENDING}
+SUSPEND_FAMILY = {SUSPENDING, SUSPENDED, UNSUSPENDING}
+HOLD_FAMILY = {HOLDING, HELD, UNHOLDING}
+ANDON_CALLS = {1: "Material", 2: "Quality", 3: "Maintenance"}     # AndonCall (section 4.10)
 ROBOT_FINISHING = {EXECUTE, HOLDING, STOPPING, SUSPENDING, COMPLETING}   # may finish steps 3..9
 
 
@@ -101,6 +105,9 @@ class Program:
         self.energy_wh = 0.0
         self.sec_acc = 0.0
         self.order_seen_execute = False
+        self.andon_rng = random.Random(cell_number)      # random calls, reproducible per cell
+        self.andon_next: float | None = None              # uptime of the next random call
+        self.andon_ack_t: float | None = None             # uptime of the acknowledge
         for name in ("C01.Admin.StartUpTime", "C01.Status.PacDateTime",
                      "RB01.Controllers.RC01.ParameterSet.StartUpTime"):
             tags[name] = self.startup
@@ -128,6 +135,7 @@ class Program:
         self._acting_transitions()
         self._internal_transitions(dt_s)
         self._outputs(dt_s, running)
+        self._andon()
         self._traceability_present()
         t["IO01.Status.Heartbeat"] = (t["IO01.Status.Heartbeat"] + 1) & 0xFFFF
 
@@ -644,6 +652,64 @@ class Program:
         t["UT01.Status.EnergyTotal"] = int(self.energy_wh) / 1000.0
         t["UT01.Status.AirPressure"] = 6.20
         t["UT01.Status.AirPressureOk"] = t["UT01.Status.AirPressure"] >= 5.5
+
+    # --- andon station AN01 (4.10) ---------------------------------------------
+    def _andon(self) -> None:
+        t, s = self.t, self.state
+        # simulated operator: call buttons, random calls, clearing after the acknowledge
+        button = t["Sim.Andon.CallButton"]
+        if button:
+            t["Sim.Andon.CallButton"] = 0
+            if button in ANDON_CALLS and not t["AN01.Status.CallType"]:
+                self._andon_raise(button)
+            elif button == t["AN01.Status.CallType"]:
+                self._andon_clear("cleared at the cell")
+        interval = t["Sim.Andon.AutoCallInterval"]
+        if interval <= 0:
+            self.andon_next = None
+        elif self.andon_next is None:
+            self.andon_next = self.uptime + self.andon_rng.expovariate(1.0 / (interval * 60.0))
+        elif self.uptime >= self.andon_next:
+            self.andon_next = None
+            if not t["AN01.Status.CallType"]:
+                self._andon_raise(self.andon_rng.randint(1, 3))
+        resolve = t["Sim.Andon.ResolveTime"]
+        if self.andon_ack_t is not None and resolve > 0 and self.uptime - self.andon_ack_t >= resolve:
+            self._andon_clear("cleared by the simulated operator")
+        # acknowledge from the HMI
+        if t["AN01.Command.Acknowledge"]:
+            t["AN01.Command.Acknowledge"] = False
+            if t["AN01.Status.CallType"] and not t["AN01.Status.CallAcknowledged"]:
+                t["AN01.Status.CallAcknowledged"] = True
+                self.andon_ack_t = self.uptime
+                log.info("andon call %s acknowledged", ANDON_CALLS[t["AN01.Status.CallType"]])
+        # stack light and buzzer
+        reason = t["C01.Admin.StopReason"]
+        red = (s in (ABORTING, ABORTED, CLEARING) or (s in (HOLDING, HELD) and reason >= 100)
+               or not t["SF01.Status.SafetyOk"])
+        t["AN01.Status.LampRed"] = red
+        t["AN01.Status.LampAmber"] = not red and (s in SUSPEND_FAMILY or s in HOLD_FAMILY)
+        t["AN01.Status.LampGreen"] = s == EXECUTE
+        call = t["AN01.Status.CallType"] != 0
+        t["AN01.Status.LampBlue"] = call
+        t["AN01.Status.Buzzer"] = call and not t["AN01.Status.CallAcknowledged"]
+
+    def _andon_raise(self, call_type: int) -> None:
+        t = self.t
+        t["AN01.Status.CallType"] = call_type
+        t["AN01.Status.CallAcknowledged"] = False
+        t["AN01.Status.CallStartTime"] = self.now.replace(microsecond=0)
+        t.inc("AN01.Status.CallCount")
+        self.andon_ack_t = None
+        log.info("andon call %s raised", ANDON_CALLS[call_type])
+
+    def _andon_clear(self, how: str) -> None:
+        t = self.t
+        log.info("andon call %s %s", ANDON_CALLS.get(t["AN01.Status.CallType"], "?"), how)
+        t["AN01.Status.CallType"] = 0
+        t["AN01.Status.CallAcknowledged"] = False
+        t["AN01.Status.CallStartTime"] = NULL_DATETIME
+        self.andon_ack_t = None
 
     def _wait_time(self) -> float:
         """Time the robot has spent in its current wait step."""

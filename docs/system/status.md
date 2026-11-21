@@ -1,6 +1,6 @@
 # Lab status
 
-Last updated: 2026-11-21 (KPIs, graphs, daily export).
+Last updated: 2026-11-21 (training week prepared: C06 controller, andon station AN01).
 
 ## Done
 
@@ -106,8 +106,25 @@ Last updated: 2026-11-21 (KPIs, graphs, daily export).
       day exported unattended); partial export of 2026-11-21 checked by eye.
       The first real complete day is 2026-11-21, due at 2026-11-22 00:10.
 
+**Training week 48 prepared (2026-11-21, [../training/week-48.md](../training/week-48.md))**
+
+- [x] Cell C06: row in docs/cells.csv, service `plc-c06` (ports 4846 / 5026)
+      running. Not in Ignition: commissioned by hand on day 3.
+- [x] Andon station AN01 in every controller (scenario.md 4.10): stack
+      light, buzzer, operator calls, acknowledge; `Sim.Andon.*` for the
+      simulated operator (calls, auto-clear, random calls). 17 new nodes,
+      `ignition_tag_path` empty so the generator skips them; bound by hand on
+      days 4 and 5.
+- [x] Smoke test extended with the andon; PASS on C06 and C02. Random calls
+      and the auto-clear checked on C06.
+
 ## Next (recommended order)
 
+0. **Training week 2026-11-23..27** (the user makes the Ignition changes):
+   day 1 UI changes, day 2 Orders page, day 3 C06 commissioning, days 4-5
+   AN01 tags and screens. After it: fill `ignition_tag_path` for AN01,
+   reconcile the hand-made C06 config with the scripts, update hmi.md,
+   plant-layout.md, architecture.md.
 1. **Alarms** on `Alarms/*`, `RJ01`, `SF01` in the UDT (fault-catalogue.md
    priorities), alarm journal in schema `alarms`, alarm table on the HMI;
    alarm count in the daily report.

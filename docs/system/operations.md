@@ -9,7 +9,7 @@ Two equivalent ways to run the stack.
 ```bash
 cd ~/work/ignition
 cp -n .env.example .env        # first time only, then edit uid/passwords
-docker compose up -d           # gateway-init, gateway, db, plc-c01 .. plc-c05, exporter
+docker compose up -d           # gateway-init, gateway, db, plc-c01 .. plc-c06, exporter
 docker compose ps
 docker compose down            # stop (data persists)
 ```
@@ -26,7 +26,8 @@ gateway commissions itself from `.env` (EULA, admin user, edition) and loads
 its modules. It is ready when `docker compose ps` shows `gateway` as `healthy`,
 or when `curl -s http://127.0.0.1:8088/StatusPing` answers `{"state":"RUNNING"}`.
 
-As soon as the gateway runs, the lab autopilot makes the five cells produce
+As soon as the gateway runs, the lab autopilot makes the cells known to
+Ignition produce (C01..C05; C06 once commissioned, training week day 3)
 (see [mes.md](mes.md)): orders, part records and state changes accumulate in
 PostgreSQL, and tag history in the `historian` schema. Ten minutes after
 midnight, the `exporter` writes the previous day's export to
@@ -172,7 +173,7 @@ recreated from `.env`:
 scripts/bootstrap_token.py && docker compose restart gateway   # REST API token
 scripts/create_db_connection.py      # DB connections "mes" and "historian"
 scripts/db_apply.py                  # MES tables; mes.cell from docs/cells.csv
-scripts/apply_gateway_config.py      # OPC connections C01..C05, devices C0n_IO01, historian,
+scripts/apply_gateway_config.py      # OPC connections C0n, devices C0n_IO01 (rows of cells.csv), historian,
                                      # gateway scripting project, OPC UA server settings
 scripts/generate_tags.py             # (re)generate the UDTs and instances from the CSVs
 ```
@@ -235,18 +236,19 @@ controller restart: counters restart at 0 and `Admin/StartUpTime` changes.
 ## Editing the simulated controller
 
 `plc/`, `docs/opcua-registry.csv` and `docs/cells.csv` are mounted read-only
-into the five `plc-c0n` containers (same image `ignition-lab-plc`). After
+into the six `plc-c0n` containers (same image `ignition-lab-plc`). After
 editing:
 
 ```bash
-docker compose restart plc-c01 plc-c02 plc-c03 plc-c04 plc-c05
+docker compose restart plc-c01 plc-c02 plc-c03 plc-c04 plc-c05 plc-c06
 docker compose logs --tail 20 plc-c03
 # smoke test on a cell whose autopilot is off:
 docker compose exec workspace python scripts/cell_smoke_test.py C03
 ```
 
 After changing the registry CSV, also run `scripts/generate_tags.py` so the
-UDT follows. A new cell is a new row in docs/cells.csv, a new `plc-c0n`
+UDT follows (rows with an empty `ignition_tag_path`, such as the andon station
+AN01 until the training week, are skipped). A new cell is a new row in docs/cells.csv, a new `plc-c0n`
 service in compose.yaml, then `scripts/db_apply.py`,
 `scripts/apply_gateway_config.py` and `scripts/generate_tags.py`
 (see [../plant-layout.md](../plant-layout.md)). Rebuild the image

@@ -5,7 +5,7 @@ PLC simulation (`plc/`) can be coded from it without guessing. Every signal name
 here exists with the same name in [`opcua-registry.csv`](opcua-registry.csv);
 the registry is the reference for types, ranges and addresses.
 
-The finishing area runs five identical cells C01..C05 ([`plant-layout.md`](plant-layout.md));
+The finishing area runs six identical cells C01..C06 ([`plant-layout.md`](plant-layout.md));
 this document describes one, with the names of C01.
 
 Phase 1 is deterministic and has no faults. Fault behaviour is reserved in
@@ -27,7 +27,7 @@ ISA-95 equipment hierarchy:
 | Site | ANN | Annecy plant |
 | Area | FIN | Finishing |
 | Work cell | C01 | Cell 01, housing inspection and sorting |
-| Equipment | CV01, QS01, RB01, CV02, RJ01, SF01, UT01, IO01 | see section 2 |
+| Equipment | CV01, QS01, RB01, CV02, RJ01, SF01, UT01, AN01, IO01 | see section 2 |
 
 ## 2. Equipment list
 
@@ -42,6 +42,7 @@ ISA-95 equipment hierarchy:
                                     /                  \         |
                         RJ01 reject bin      [CV02 outfeed conveyor 1500 mm]
    SF01 e-stop + guard door around the robot      UT01 air + energy meter
+   AN01 andon station: stack light + operator call buttons, on the cell controller
    IO01 remote I/O coupler (Modbus TCP) wires CV01, CV02, RJ01, SF01, UT01
 ```
 
@@ -55,6 +56,7 @@ ISA-95 equipment hierarchy:
 | RJ01 | Reject bin with level counting | Collects rejects, capacity 50 parts | Modbus TCP, device IO01 |
 | SF01 | Safety circuit (e-stop, guard door, safety relay) | Status only; safety is hard-wired | Modbus TCP, device IO01 |
 | UT01 | Utilities: compressed air (vacuum ejector supply), cell energy meter | Supply monitoring, energy | Modbus TCP, device IO01 |
+| AN01 | Andon station: four-lamp stack light (red, amber, green, blue) with buzzer, three call buttons (material, quality, maintenance) | Shows the cell state at a distance; the operator calls for help, the supervisor acknowledges from the HMI (section 4.10) | OPC UA, `urn:ignition-lab:cell` (wired to the cell controller) |
 | IO01 | Remote I/O coupler | Modbus TCP adapter for the field devices above | Modbus TCP, unit id 1 |
 
 ### 2.1 Naming convention
@@ -118,7 +120,7 @@ Each released part gets the next serial number *n* and `PartId` = `P` + *n* on 9
 At controller start, *n* is initialised to *k* × 100 000 000 plus the number of seconds
 elapsed since 2026-01-01T00:00:00Z, where *k* is the cell number (C03 → 3,
 [plant-layout.md](plant-layout.md)). Since a cell finishes fewer than one part per second,
-part ids stay unique across restarts and across the five cells without any persistent
+part ids stay unique across restarts and across the cells without any persistent
 storage (until 2029-03, when the seconds reach 10⁸).
 Each release increments `C01.Admin.ProdConsumedCount`.
 
@@ -269,6 +271,37 @@ At 24 parts/min the 200-record buffer covers about 8 minutes of MES or network o
 `SF01.Status.EStopOk`, `SF01.Status.GuardDoorClosed` and `SF01.Status.SafetyOk` are true in phase 1.
 Their behaviour (driven by `Sim.Panel.*`) is phase 2, see the fault catalogue. Safety functions are
 hard-wired in a real cell. SCADA only reads them, and no SCADA write can reset safety.
+
+### 4.10 AN01 andon station
+
+The stack light follows the cell state every scan:
+
+| Lamp | On when |
+|---|---|
+| `AN01.Status.LampRed` | Aborting, Aborted or Clearing; Holding or Held with a fault (`C01.Admin.StopReason` >= 100); or `SF01.Status.SafetyOk` false |
+| `AN01.Status.LampAmber` | Suspending, Suspended or Unsuspending (starved, blocked); Holding, Held or Unholding without a fault (reject bin full). Never together with red |
+| `AN01.Status.LampGreen` | Execute |
+| `AN01.Status.LampBlue` | an operator call is active |
+
+All lamps off: Stopped, Resetting, Idle, Starting, Completing, Complete (no order running).
+
+Operator calls (enum AndonCall: 1 Material, 2 Quality, 3 Maintenance):
+
+1. The operator presses a call button at the cell (simulated: `Sim.Andon.CallButton` = 1..3).
+   With no call active, the cell sets `AN01.Status.CallType`, `CallStartTime` (UTC, whole
+   seconds), increments `CallCount`, and turns on the blue lamp and `AN01.Status.Buzzer`.
+   One call at a time: another button during a call is ignored.
+2. The supervisor acknowledges from the HMI: `AN01.Command.Acknowledge` = true. The cell sets
+   `CallAcknowledged`, stops the buzzer, keeps the blue lamp on, and writes `Acknowledge` back to
+   false (also when there is nothing to acknowledge).
+3. The operator clears the call at the cell by pressing the same button again (problem solved).
+   The simulated operator also clears an acknowledged call `Sim.Andon.ResolveTime` seconds after
+   the acknowledge (default 90 s; 0 = never). An unacknowledged call is never cleared by the
+   simulation: the HMI has to show it.
+
+`Sim.Andon.AutoCallInterval` (minutes, default 0 = off) makes the simulated operator raise random
+calls, exponential intervals with that mean, type drawn among 1..3, seeded per cell (reproducible).
+A call does not stop the cell: it is information for the supervisor and the MES.
 
 ## 5. Cell state model (PackML)
 

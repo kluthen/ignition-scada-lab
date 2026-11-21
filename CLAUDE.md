@@ -16,13 +16,20 @@ system as a whole is an explicit requirement of the user.
 ## Stack
 
 - `compose.yaml` services: `gateway` (Ignition 8.3.10), `db` (PostgreSQL 19),
-  `plc-c01`..`plc-c05` (one Python cell controller per cell), `gateway-init`
+  `plc-c01`..`plc-c06` (one Python cell controller per cell), `gateway-init`
   (seeds `ignition/data`), `exporter` (daily production export to
   `exports/daily/`, git-ignored), `workspace` (devcontainer, profile `dev`). Host ports
-  are on 127.0.0.1: 8088, 62541, 5432, 4841-4845 (OPC UA), 5021-5025 (Modbus).
-- The plant is five identical cells (docs/plant-layout.md). `docs/cells.csv` is
+  are on 127.0.0.1: 8088, 62541, 5432, 4841-4846 (OPC UA), 5021-5026 (Modbus).
+- The plant is six identical cells (docs/plant-layout.md). `docs/cells.csv` is
   the single source of truth for the instances, `docs/opcua-registry.csv` for
   the signals of one cell (the type, written for C01).
+- **Training week (docs/training/week-48.md): the user makes the Ignition
+  changes, Claude prepares the simulator and reviews.** Cell C06 and the andon
+  station AN01 exist in the controllers only. Do not create them in Ignition, and
+  do not run `scripts/db_apply.py`, `apply_gateway_config.py` or
+  `generate_tags.py` before the user has finished day 3 (they would commission
+  C06 from cells.csv). The AN01 rows have an empty `ignition_tag_path` on
+  purpose, so the generator skips them.
 - Ignition project `plant`: Perspective HMI (docs/system/hmi.md), named queries,
   and the script library `mes.cell` / `labsim.autopilot` (docs/system/mes.md),
   triggered by tag event scripts in the UDT `PIC200_Cell`. Views are now
@@ -79,7 +86,7 @@ system as a whole is an explicit requirement of the user.
   are maintained by hand.
 - Behaviour is specified in docs/scenario.md, with section numbers cited in
   code comments. Phase 2 (faults) is reserved in docs/fault-catalogue.md.
-- After editing: `docker compose restart plc-c01 plc-c02 plc-c03 plc-c04 plc-c05`,
+- After editing: `docker compose restart plc-c01 plc-c02 plc-c03 plc-c04 plc-c05 plc-c06`,
   switch off one cell's autopilot (`MES/AutoRun`), then
   `docker compose exec workspace python scripts/cell_smoke_test.py C0n`. It must PASS.
   Switch the autopilot back on.

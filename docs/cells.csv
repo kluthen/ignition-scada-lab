@@ -4,3 +4,4 @@ C02,BAY2,plc-c02,4842,5022,C02_IO01,PIC200-26-0002,2026,3,SRS400-26-0418,VC200-2
 C03,BAY3,plc-c03,4843,5023,C03_IO01,PIC200-26-0003,2026,5,SRS400-26-0452,VC200-26-1203,3.0,20,false,3,Dedicated to large housings HSG-C45; slower upstream deburring station.
 C04,BAY4,plc-c04,4844,5024,C04_IO01,PIC200-26-0004,2026,5,SRS400-26-0453,VC200-26-1204,2.5,15,false,1 2 3,Flexible cell qualified for all part types; worn gauge fixture (highest reject rate).
 C05,BAY5,plc-c05,4845,5025,C05_IO01,PIC200-26-0005,2026,9,SRS400-26-0511,VC200-26-1290,2.0,50,true,1,Newest cell; reject chute empties the bin automatically; fastest upstream (robot-limited).
+C06,BAY6,plc-c06,4846,5026,C06_IO01,PIC200-26-0006,2026,11,SRS400-26-0588,VC200-26-1342,2.5,30,false,2 3,Newest cell (delivered 2026-11); medium and large housings. Commissioned in Ignition by hand in the training week (docs/training/week-48.md).

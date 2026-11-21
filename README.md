@@ -8,7 +8,7 @@
 > trademark of Inductive Automation.
 
 A self-contained Docker lab for learning Ignition on a small simulated plant:
-a finishing area of five identical robot cells, each driven by its own
+a finishing area of six identical robot cells, each driven by its own
 simulated PLC, supervised by Ignition, and feeding a small MES on PostgreSQL.
 A lab autopilot keeps the cells producing, so orders, part records, state logs
 and tag history accumulate on their own. Everything is configured as code
@@ -21,7 +21,7 @@ it workable with an AI coding assistant (Claude Code).
 |---|---|
 | Ignition Gateway 8.3.10 | official `inductiveautomation/ignition` image, Maker Edition (or the standard edition in trial mode) |
 | PostgreSQL 19 | database `mes`: MES tables (schema `mes`), tag history (schema `historian`), alarm journal later |
-| Simulated cell controllers (×5) | one container per cell (`plc-c01`..`plc-c05`), a Python process with a 100 ms scan running a robot cell (PackML state machine, conveyors, camera, SCARA robot, reject bin, order and traceability handshakes). Each serves an OPC UA server generated from the signal registry (asyncua) and a stdlib Modbus TCP I/O coupler (`plc/`) |
+| Simulated cell controllers (×6) | one container per cell (`plc-c01`..`plc-c06`), a Python process with a 100 ms scan running a robot cell (PackML state machine, conveyors, camera, SCARA robot, reject bin, order and traceability handshakes). Each serves an OPC UA server generated from the signal registry (asyncua) and a stdlib Modbus TCP I/O coupler (`plc/`) |
 | Plant design | scenario, plant layout and cell instance table, OPC UA / Modbus signal registry (CSV, single source of truth), fault catalogue, MES customer requirements (`docs/`) |
 | Ignition config as code | 5 OPC UA connections and 5 Modbus devices from templates, a cell UDT and its 5 instances generated from the registry, tag groups, a `sim` tag provider, SQL Historian (`gateway-config/`, `scripts/`) |
 | Ignition project `plant` | Perspective HMI (area overview, KPI page, cell page with mimic, commands and trends, instructor page), named queries, the MES script library (traceability, state log, orders) and the lab autopilot (`ignition/data/projects/plant/`) |
@@ -35,8 +35,8 @@ All ports bind to `127.0.0.1`:
 |---|---|
 | 8088 | gateway |
 | 62541 | Ignition OPC UA server |
-| 4841..4845 | cell controllers C01..C05, OPC UA |
-| 5021..5025 | cell controllers C01..C05, Modbus TCP |
+| 4841..4846 | cell controllers C01..C06, OPC UA |
+| 5021..5026 | cell controllers C01..C06, Modbus TCP |
 | 5432 | PostgreSQL |
 
 ## Quick start
@@ -51,7 +51,7 @@ scripts/bootstrap_token.py         # creates the REST API token, stores it in .e
 docker compose restart gateway
 scripts/create_db_connection.py    # gateway DB connections "mes" and "historian" (password from .env)
 scripts/db_apply.py                # MES tables, cell master data from docs/cells.csv
-scripts/apply_gateway_config.py    # OPC connections C01..C05, Modbus devices, historian, OPC UA server settings
+scripts/apply_gateway_config.py    # OPC connections and Modbus devices (one per row of docs/cells.csv), historian, OPC UA server settings
 scripts/ign info                   # should print the gateway info
 ```
 
@@ -88,10 +88,11 @@ the gateway web UI, and until then Modbus, the historian and Perspective stop
 | [docs/system/kpi.md](docs/system/kpi.md) | KPI definitions (OEE, downtime, production day), SQL functions, KPI screen and graphs, daily production export (folder layout, manifest, schedule, shipping) |
 | [docs/system/panorama-e2-to-ignition.md](docs/system/panorama-e2-to-ignition.md) | concept map for engineers coming from Codra Panorama E2 |
 | [docs/system/status.md](docs/system/status.md) | progress, next steps, open decisions |
+| [docs/training/week-48.md](docs/training/week-48.md) | hands-on training week: Designer UI changes, a new view, commissioning a sixth cell by hand, binding a new device (andon station) |
 | [docs/README.md](docs/README.md) | plant design index: [plant layout](docs/plant-layout.md) ([cells.csv](docs/cells.csv)), [scenario](docs/scenario.md), [OPC UA registry](docs/opcua-registry.md) ([CSV](docs/opcua-registry.csv)), [fault catalogue](docs/fault-catalogue.md), [MES requirements](docs/mes-requirements.md) |
 | [CLAUDE.md](CLAUDE.md) | working rules for Claude Code in this repo |
 
-The plant (Brevent Hydraulics, finishing area, cells C01..C05) and the customer are fictional.
+The plant (Brevent Hydraulics, finishing area, cells C01..C06) and the customer are fictional.
 
 ## What is versioned
 
