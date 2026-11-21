@@ -1,0 +1,18 @@
+{
+  "scope": "A",
+  "version": 1,
+  "restricted": false,
+  "overridable": true,
+  "files": [
+    "config.json"
+  ],
+  "attributes": {
+    "lastModification": {
+      "actor": "api-token:claude-lab:172.24.0.1",
+      "timestamp": "2026-11-21T08:14:46Z"
+    },
+    "uuid": "dcefed5c-0fc0-42f3-b423-6444576cab14",
+    "lastModificationSignature": "a4cf9cce159b2757c364fd110fc23df86122d2c6442caca1a223030c7e16cee0",
+    "enabled": true
+  }
+}

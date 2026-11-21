@@ -1,0 +1,37 @@
+# Local secrets
+.env
+
+# Ignition gateway data: keep only what describes the solution
+# (projects + gateway config resources). Runtime state, caches, internal DBs,
+# logs, certificates and per-gateway "local" config stay out.
+ignition/data/*
+!ignition/data/config/
+!ignition/data/projects/
+ignition/data/config/local/
+ignition/data/config/ignition/
+ignition/data/config/resources/local/
+ignition/data/config/resources/.resources/
+ignition/data/config/resources/migration-log-*.md
+ignition/data/projects/.resources/
+# Secret-bearing resources: password hashes, token hash, gateway-encrypted
+# passwords. Recreate them with scripts/bootstrap_token.py and
+# scripts/create_db_connection.py (secrets come from .env).
+ignition/data/config/resources/core/ignition/user-source/*/users.json
+ignition/data/config/resources/core/ignition/api-token/
+ignition/data/config/resources/core/ignition/database-connection/
+ignition/data/config/resources/core/ignition/opc-connection/
+# Per-gateway bootstrap state: the OPC UA module creates its loopback connection
+# and user source once and records it here. Versioning it would stop a fresh
+# gateway (clone) from creating them.
+ignition/data/config/resources/core/com.inductiveautomation.opcua/one-time/
+ignition/data/config/resources/core/ignition/user-source/opcua-module/
+# Built-in Inductive Automation assets re-created by the gateway (not ours to redistribute)
+ignition/data/config/resources/core/ignition/images/
+ignition/data/config/resources/core/com.inductiveautomation.perspective/themes/
+# resource.json files carry a timestamp/actor that changes on every save;
+# keep them for now (Ignition needs them on checkout) but expect noise.
+
+# Python
+__pycache__/
+*.pyc
+.venv/

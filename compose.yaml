@@ -1,0 +1,104 @@
+name: ignition-lab
+
+services:
+  # One-shot: the image keeps its default data dir inside the container, and a
+  # bind mount hides it. Seed ./ignition/data from the image until the gateway
+  # has been initialised (ignition.conf present). -n: never overwrite files
+  # already there, so config versioned in git (a fresh clone) wins.
+  gateway-init:
+    image: inductiveautomation/ignition:${IGNITION_VERSION:-8.3.10}
+    user: "0:0"
+    entrypoint: ["bash", "-c"]
+    command:
+      - |
+        if [ ! -f /seed/ignition.conf ]; then
+          echo "seeding ./ignition/data from image (keeping existing files)"
+          cp -an /usr/local/bin/ignition/data/. /seed/
+        else
+          echo "./ignition/data already initialised, nothing to do"
+        fi
+        chown -R ${HOST_UID}:${HOST_GID} /seed
+    volumes:
+      - ./ignition/data:/seed
+    restart: "no"
+
+  gateway:
+    image: inductiveautomation/ignition:${IGNITION_VERSION:-8.3.10}
+    hostname: gateway
+    # Start as root so the entrypoint can chown the install to HOST_UID and
+    # step down (gosu): files in ./ignition/data then belong to you on the host.
+    user: "0:0"
+    command: ["-n", "ignition-lab", "-m", "2048"]
+    environment:
+      ACCEPT_IGNITION_EULA: "Y"
+      IGNITION_UID: ${HOST_UID:?set HOST_UID in .env}
+      IGNITION_GID: ${HOST_GID:?set HOST_GID in .env}
+      TZ: ${TZ:-UTC}
+      IGNITION_EDITION: ${IGNITION_EDITION:-standard}
+      GATEWAY_ADMIN_USERNAME: ${GATEWAY_ADMIN_USERNAME:-admin}
+      GATEWAY_ADMIN_PASSWORD: ${GATEWAY_ADMIN_PASSWORD:?set GATEWAY_ADMIN_PASSWORD in .env}
+      IGNITION_LICENSE_KEY: ${IGNITION_LICENSE_KEY:-}
+      IGNITION_ACTIVATION_TOKEN: ${IGNITION_ACTIVATION_TOKEN:-}
+      DISABLE_QUICKSTART: "true"
+    volumes:
+      - ./ignition/data:/usr/local/bin/ignition/data
+    ports:
+      - "127.0.0.1:8088:8088"    # Gateway web UI, Designer launcher, Perspective
+      - "127.0.0.1:62541:62541"  # Ignition OPC UA server (lab: anonymous read, security None allowed)
+    stop_grace_period: 60s
+    restart: unless-stopped
+    depends_on:
+      gateway-init:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:${POSTGRES_VERSION:-19}
+    hostname: db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-mes}
+      POSTGRES_USER: ${POSTGRES_USER:-ignition}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      TZ: ${TZ:-UTC}
+    volumes:
+      - pgdata:/var/lib/postgresql     # PG 18+ layout: data under /var/lib/postgresql/<major>/docker
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  plc:
+    image: python:3.13-slim
+    hostname: plc
+    working_dir: /app
+    command: ["python", "-u", "main.py"]
+    environment:
+      PLC_PROGRAM: tank
+      PLC_SCAN_MS: "100"
+      MODBUS_PORT: "502"
+    volumes:
+      - ./plc:/app:ro
+    ports:
+      - "127.0.0.1:5020:502"     # Modbus TCP, reachable from the host for testing
+    restart: unless-stopped
+
+  # Development shell used by the devcontainer (VS Code "Reopen in Container").
+  workspace:
+    build:
+      context: .devcontainer
+      args:
+        USER_UID: ${HOST_UID}
+        USER_GID: ${HOST_GID}
+    command: ["sleep", "infinity"]
+    volumes:
+      - .:/workspace
+    profiles: ["dev"]
+
+volumes:
+  pgdata:

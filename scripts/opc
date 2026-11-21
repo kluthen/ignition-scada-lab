@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Run scripts/opcua_tool.py inside the workspace container (it has asyncua and
+# sits on the compose network). Inside the devcontainer it runs directly.
+here="$(dirname "$(readlink -f "$0")")"
+if [ -f /.dockerenv ] && [ -d /workspace ]; then
+  exec python "$here/opcua_tool.py" "$@"
+fi
+cd "$here/.." && docker compose --profile dev up -d workspace >/dev/null 2>&1
+exec docker compose exec -T workspace python /workspace/scripts/opcua_tool.py "$@"

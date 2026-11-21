@@ -1,0 +1,39 @@
+[
+  {
+    "collection": "core",
+    "enabled": true,
+    "signature": "ba4538f672bb250ebba2ee03bb917ab75d928b15bdf050910dc86a7d06995cb8",
+    "config": {
+      "endpoint": {
+        "bindPort": 62541,
+        "bindAddresses": [
+          "0.0.0.0"
+        ],
+        "endpointAddresses": [
+          "gateway",
+          "localhost"
+        ],
+        "securityPolicies": [
+          "None",
+          "Basic256Sha256"
+        ],
+        "messageSecurityModes": [
+          "None",
+          "SignAndEncrypt"
+        ]
+      },
+      "authentication": {
+        "anonymousAccessAllowed": true,
+        "authenticationProfile": "opcua-module"
+      },
+      "redundancy": {
+        "readOnlyWhenInactive": false
+      },
+      "advanced": {
+        "exposedTagsEnabled": true,
+        "maxSessionCount": 100,
+        "gdsPushEnabled": false
+      }
+    }
+  }
+]
