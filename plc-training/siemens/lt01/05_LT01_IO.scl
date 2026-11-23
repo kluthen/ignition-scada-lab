@@ -1,0 +1,40 @@
+// LT01 leak test station: I/O mapping.
+// The only blocks that touch the I/O addresses (PLC tag table "LT01", see
+// docs/lt01-leak-test.md section 3). The rest of the program works on
+// "LT01_IO".Inputs / .Outputs, so a rewiring or the simulation changes
+// nothing else.
+// Needs the PLC tags first: create tag table "LT01" (or import
+// LT01_tags.xlsx) BEFORE generating blocks from this file.
+
+FUNCTION "LT01_IoRead" : Void
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+
+BEGIN
+	IF "LT01_Sim".Enable THEN
+	    // Simulation: the plant model (OB30) provides the field signals
+	    "LT01_IO".Inputs := "LT01_Sim".Field;
+	ELSE
+	    "LT01_IO".Inputs.PB_Start := "PB_Start";
+	    "LT01_IO".Inputs.PB_Stop := "PB_Stop";
+	    "LT01_IO".Inputs.PB_Reset := "PB_Reset";
+	    "LT01_IO".Inputs.EStopOK := "EStopOK";
+	    "LT01_IO".Inputs.SW_Auto := "SW_Auto";
+	    "LT01_IO".Inputs.B_PartPresent := "B_PartPresent";
+	    "LT01_IO".Inputs.B_ClampClosed := "B_ClampClosed";
+	    "LT01_IO".Inputs.B_ClampOpen := "B_ClampOpen";
+	    "LT01_IO".Inputs.B_AirOK := "B_AirOK";
+	    "LT01_IO".Inputs.PT01_Raw := "PT01_Raw";
+	END_IF;
+END_FUNCTION
+
+FUNCTION "LT01_IoWrite" : Void
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+
+BEGIN
+	// Written in simulation too: watch them in the PLCSIM SIM table.
+	"Y_ClampClose" := "LT01_IO".Outputs.Y_ClampClose;
+	"Y_Fill" := "LT01_IO".Outputs.Y_Fill;
+	"Y_Vent" := "LT01_IO".Outputs.Y_Vent;
+END_FUNCTION

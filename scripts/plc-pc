@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Exchange files and run PowerShell on the Windows PC used as the PLC
+# engineering station (docs/system/plc-engineering.md). Settings from .env:
+# PLC_PC_SSH (ssh alias), PLC_PC_DIR (training folder on the PC).
+#   scripts/plc-pc push          copy plc-training/ (sources, scripts) to the PC
+#   scripts/plc-pc pull          copy the PC's siemens/work/ and schneider/work/ back into plc-training/
+#   scripts/plc-pc ps < file.ps1 run a PowerShell script on the PC (stdin)
+#   scripts/plc-pc ps -c 'cmd'   run one PowerShell command
+set -euo pipefail
+cd "$(dirname "$0")/.."
+set -a; . ./.env; set +a
+: "${PLC_PC_SSH:?set PLC_PC_SSH in .env}" "${PLC_PC_DIR:=C:/PLC-Training}"
+ssh_ps() { ssh -o BatchMode=yes "$PLC_PC_SSH" 'powershell -NoProfile -Command -'; }
+case "${1:-}" in
+  push)
+    printf 'New-Item -ItemType Directory -Force -Path "%s" | Out-Null\n' "$PLC_PC_DIR" | ssh_ps
+    printf 'New-Item -ItemType Directory -Force -Path "%s/windows" | Out-Null\n' "$PLC_PC_DIR" | ssh_ps
+    scp -q -r plc-training/README.md plc-training/siemens plc-training/schneider "$PLC_PC_SSH:$PLC_PC_DIR/"
+    scp -q plc-training/windows/*.ps1 "$PLC_PC_SSH:$PLC_PC_DIR/windows/"
+    echo "pushed plc-training/ to $PLC_PC_SSH:$PLC_PC_DIR" ;;
+  pull)
+    for d in siemens/work schneider/work; do
+      mkdir -p "plc-training/$d"
+      scp -q -r "$PLC_PC_SSH:$PLC_PC_DIR/$d/." "plc-training/$d/" 2>/dev/null && echo "pulled $d" || echo "nothing in $d"
+    done ;;
+  ps)
+    if [ "${2:-}" = "-c" ]; then printf '%s\n' "$3" | ssh_ps; else ssh_ps; fi ;;
+  *) sed -n 2,9p "$0"; exit 1 ;;
+esac

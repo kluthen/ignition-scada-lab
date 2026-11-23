@@ -1,0 +1,169 @@
+// LT01 leak test station: plant model (simulation only).
+// Called by OB30 "LT01_SimCyclic" every 100 ms. It plays the part of the
+// machine and the operator: it reads the valve commands the program writes
+// ("LT01_IO".Out) and computes the field signals the program reads
+// ("LT01_Sim".Field), which FC "LT01_IoRead" uses instead of the real inputs
+// while "LT01_Sim".Enable is TRUE. Spec: docs/lt01-leak-test.md section 8.
+// The program under test never reads this block: replace the machine by a real
+// one and nothing else changes.
+
+FUNCTION_BLOCK "LT01_ProcessSim"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT
+      Enable : Bool;                  // run the model
+      Cmd : "LT01_typeOut";           // valve commands written by the program
+      CycleSec : Real := 0.1;         // call interval of the calling OB, s
+   END_VAR
+
+   VAR_IN_OUT
+      Panel : "LT01_typeSimPanel";    // simulated push buttons and selector
+      Process : "LT01_typeSimProcess";// model settings and injected faults
+      Field : "LT01_typeIn";          // simulated field signals (what the wires would carry)
+      Plant : "LT01_typeSimPlant";    // model state, for watching
+   END_VAR
+
+   VAR
+      partPresent : Bool;             // a part is in the nest
+      leakK : Real;                   // leak coefficient of the part in the nest, 1/s
+      clampPos : Real;                // 0.0 open .. 1.0 closed
+      pressure : Real;                // bar
+      wasClamped : Bool;              // the part in the nest has been clamped once (so it is tested)
+      waitSec : Real;                 // operator timer: time since the nest was emptied / unclamped
+      startHold : Real;               // remaining time the simulated start button stays pressed, s
+      resetHold : Real;               // idem reset button
+   END_VAR
+
+   VAR_TEMP
+      seal : Bool;                    // test volume closed by a clamped part
+      k : Real;
+      raw : Real;
+   END_VAR
+
+   VAR CONSTANT
+      P_SUPPLY : Real := 7.0;         // supply pressure, bar
+      K_FILL : Real := 1.5;           // fill rate coefficient, 1/s
+      K_VENT : Real := 4.0;           // vent rate coefficient, 1/s
+      K_OPEN : Real := 50.0;          // no seal (no part or clamp open): air escapes at once
+      K_TIGHT : Real := 0.0005;       // tight part: about 9 mbar over 3 s at 6 bar
+      K_SMALL : Real := 0.004;        // small leak: about 70 mbar over 3 s at 6 bar
+      K_GROSS : Real := 2.0;          // gross leak: settles near 3 bar, test pressure never reached
+      CLAMP_TRAVEL : Real := 0.6;     // clamp stroke time, s
+      UNLOAD_DELAY : Real := 1.5;     // operator removes a tested part this long after unclamping, s
+   END_VAR
+
+
+BEGIN
+	IF NOT #Enable THEN
+	    RETURN;
+	END_IF;
+
+	REGION Operator panel
+	    // Momentary buttons: a TRUE written by you is held for 0.5 s, then released.
+	    IF #Panel.Start THEN
+	        #startHold := 0.5;
+	        #Panel.Start := FALSE;
+	    END_IF;
+	    IF #Panel.Reset THEN
+	        #resetHold := 0.5;
+	        #Panel.Reset := FALSE;
+	    END_IF;
+	    #Field.PB_Start := #startHold > 0.0;
+	    #Field.PB_Reset := #resetHold > 0.0;
+	    #startHold := MAX(IN1 := #startHold - #CycleSec, IN2 := 0.0);
+	    #resetHold := MAX(IN1 := #resetHold - #CycleSec, IN2 := 0.0);
+	    #Field.PB_Stop := NOT #Panel.StopPressed;      // NC contact
+	    #Field.EStopOK := NOT #Panel.EStopPressed;     // safety relay feedback
+	    #Field.SW_Auto := #Panel.Auto;
+	    #Field.B_AirOK := NOT #Process.AirFail;
+	END_REGION
+
+	REGION Clamp cylinder
+	    IF NOT #Process.ClampStuck AND #Field.B_AirOK THEN
+	        IF #Cmd.Y_ClampClose THEN
+	            #clampPos := MIN(IN1 := #clampPos + #CycleSec / #CLAMP_TRAVEL, IN2 := 1.0);
+	        ELSE
+	            #clampPos := MAX(IN1 := #clampPos - #CycleSec / #CLAMP_TRAVEL, IN2 := 0.0);
+	        END_IF;
+	    END_IF;
+	    #Field.B_ClampClosed := #clampPos >= 0.98;
+	    #Field.B_ClampOpen := #clampPos <= 0.02;
+	    IF #Field.B_ClampClosed AND #partPresent THEN
+	        #wasClamped := TRUE;
+	    END_IF;
+	END_REGION
+
+	REGION Part handling (simulated operator)
+	    IF #partPresent THEN
+	        // A tested part is taken out once the clamp is open again.
+	        IF #wasClamped AND #Field.B_ClampOpen AND #Process.AutoUnload THEN
+	            #waitSec := #waitSec + #CycleSec;
+	            IF #waitSec >= #UNLOAD_DELAY THEN
+	                #partPresent := FALSE;
+	                #wasClamped := FALSE;
+	                #waitSec := 0.0;
+	            END_IF;
+	        END_IF;
+	    ELSE
+	        // Empty nest: the next part is placed after PartInterval (clamp must be open).
+	        #waitSec := #waitSec + #CycleSec;
+	        IF #waitSec >= DINT_TO_REAL(TIME_TO_DINT(#Process.PartInterval)) / 1000.0 AND #Field.B_ClampOpen THEN
+	            #partPresent := TRUE;
+	            #wasClamped := FALSE;
+	            #waitSec := 0.0;
+	            #Plant.PartNo := #Plant.PartNo + 1;
+	            // Leak class by a fixed pattern, so results are reproducible.
+	            #Plant.PartLeakClass := 1;
+	            IF #Process.LeakEvery > 0 THEN
+	                IF #Plant.PartNo MOD INT_TO_DINT(#Process.LeakEvery) = 0 THEN
+	                    #Plant.PartLeakClass := 2;
+	                END_IF;
+	            END_IF;
+	            IF #Process.GrossEvery > 0 THEN
+	                IF #Plant.PartNo MOD INT_TO_DINT(#Process.GrossEvery) = 0 THEN
+	                    #Plant.PartLeakClass := 3;
+	                END_IF;
+	            END_IF;
+	        END_IF;
+	    END_IF;
+	    IF NOT #partPresent THEN
+	        #Plant.PartLeakClass := 0;
+	    END_IF;
+	    #Field.B_PartPresent := #partPresent;
+	END_REGION
+
+	REGION Pneumatics: test volume pressure
+	    #seal := #partPresent AND #Field.B_ClampClosed;
+	    CASE #Plant.PartLeakClass OF
+	        2:
+	            #leakK := #K_SMALL;
+	        3:
+	            #leakK := #K_GROSS;
+	        ELSE
+	            #leakK := #K_TIGHT;
+	    END_CASE;
+	    IF NOT #seal THEN
+	        #leakK := #K_OPEN;
+	    END_IF;
+
+	    #k := 0.0;
+	    // filling: first-order rise towards the supply pressure
+	    IF #Cmd.Y_Fill AND #Field.B_AirOK THEN
+	        #pressure := #pressure + (#P_SUPPLY - #pressure) * #K_FILL * #CycleSec;
+	    END_IF;
+	    // leak and vent: first-order decay towards 0 bar
+	    #k := #leakK;
+	    IF #Cmd.Y_Vent THEN
+	        #k := #k + #K_VENT;
+	    END_IF;
+	    #pressure := #pressure - #pressure * MIN(IN1 := #k * #CycleSec, IN2 := 1.0);
+	    #pressure := LIMIT(MN := 0.0, IN := #pressure, MX := 10.0);
+
+	    // transmitter: 0..10 bar = 0..27648 (Siemens analog nominal range)
+	    #raw := #pressure / 10.0 * 27648.0;
+	    #Field.PT01_Raw := REAL_TO_INT(#raw);
+	END_REGION
+
+	#Plant.ClampPos := #clampPos;
+	#Plant.Pressure := #pressure;
+END_FUNCTION_BLOCK

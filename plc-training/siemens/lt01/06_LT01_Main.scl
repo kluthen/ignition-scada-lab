@@ -1,0 +1,32 @@
+// LT01 leak test station: program cycle OB.
+// Replaces the empty OB1 "Main" of a new project (answer Yes when TIA asks to
+// overwrite it). The plant model runs in OB30 "LT01_SimCyclic", which you
+// create by hand (Cyclic interrupt, 100 ms, SCL), with this single line:
+//
+//   "LT01_ProcessSim_DB"(Enable := "LT01_Sim".Enable, Cmd := "LT01_IO".Outputs, CycleSec := 0.1,
+//                        Panel := "LT01_Sim".Panel, Process := "LT01_Sim".Process,
+//                        Field := "LT01_Sim".Field, Plant := "LT01_Sim".Plant);
+
+ORGANIZATION_BLOCK "Main"
+TITLE = "Main Program Sweep (Cycle)"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT
+      Initial_Call : Bool;   // Initial call of this OB
+      Remanence : Bool;      // =True, if remanent data are available
+   END_VAR
+
+BEGIN
+	// 1. read the field (or the simulated field)
+	"LT01_IoRead"();
+
+	// 2. the station logic
+	"LT01_Seq_DB"(Inputs := "LT01_IO".Inputs,
+	              Recipe := "LT01_HMI".Recipe,
+	              Outputs => "LT01_IO".Outputs,
+	              Cmd := "LT01_HMI".Cmd,
+	              Status := "LT01_HMI".Status);
+
+	// 3. write the valves
+	"LT01_IoWrite"();
+END_ORGANIZATION_BLOCK

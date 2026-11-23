@@ -42,6 +42,13 @@ host, orchestrated by `compose.yaml`, which is also the VS Code devcontainer.
 | `exporter` | built from `exporter/Dockerfile` (python 3.13 + psycopg, openpyxl, reportlab), image `ignition-lab-exporter` | Daily production export: one folder per production day (PDF, XLSX, CSVs, manifest) in `./exports/daily/`, runs as your uid ([kpi.md](kpi.md)) | none |
 | `workspace` | built from `.devcontainer/` | Dev shell: Python 3.13, asyncua, pymodbus, psql (profile `dev`) | none |
 
+Outside Docker, a **Windows PC on the LAN** is the PLC engineering station
+(TIA Portal, PLCSIM Advanced, Machine Expert – Basic). The gateway reaches
+the PLC simulated there over the LAN or Tailscale through a Windows port
+proxy ([plc-engineering.md](plc-engineering.md)); its address is
+`PLC_PC_HOST` in `.env`. The leak test station LT01 controlled by that PLC is
+specified in [../lt01-leak-test.md](../lt01-leak-test.md).
+
 All published ports bind to 127.0.0.1, so nothing in the lab is reachable from the LAN.
 
 ## The simulated controller (`plc/`)
@@ -141,6 +148,8 @@ compose.yaml              the stack (also the devcontainer's compose file)
 .env / .env.example       versions, uid, passwords, API token (.env is git-ignored)
 .devcontainer/            devcontainer.json + workspace image
 plc/                      simulated cell controller (see above)
+plc-training/             PLC training material: LT01 SCL sources + tag table (siemens/lt01), your exports
+                          (*/work), Windows port proxy script; synced with the PLC PC by scripts/plc-pc
 exporter/                 daily production export (daily_export.py, Dockerfile)
 exports/daily/            export output, one folder per production day (git-ignored)
 db/init/                  SQL: schemas (00), MES tables (10), KPI functions (20); re-runnable with scripts/db_apply.py
@@ -150,9 +159,10 @@ gateway-config/           reproducible gateway config: OPC connection and Modbus
                           historian provider, system-properties patch, OPC UA server,
                           tags/<provider>.json generated from the registry and cells.csv
 scripts/                  ign (REST CLI), opc (OPC UA tool), bootstrap, apply, db_apply,
-                          generate_tags.py, cell_smoke_test.py
+                          generate_tags.py, cell_smoke_test.py, plc-pc (PLC PC sync / PowerShell)
 docs/                     plant design: scenario, plant layout + cells.csv, OPC UA registry (CSV),
-                          fault catalogue, MES requirements
+                          fault catalogue, MES requirements, LT01 leak test station
+docs/training/            training weeks 48 (Ignition) and 49 (PLC), PLC options research
 docs/system/              this documentation: architecture, operations, automation, MES, HMI,
                           KPIs and export, Panorama concept map, status
 ```

@@ -1,6 +1,6 @@
 # Lab status
 
-Last updated: 2026-11-21 (training week prepared: C06 controller, andon station AN01).
+Last updated: 2026-11-23 (PLC training week 50 prepared: research, LT01 station program, Windows PLC station).
 
 ## Done
 
@@ -118,8 +118,37 @@ Last updated: 2026-11-21 (training week prepared: C06 controller, andon station 
 - [x] Smoke test extended with the andon; PASS on C06 and C02. Random calls
       and the auto-clear checked on C06.
 
+**PLC training week 50 prepared (2026-11-23, [../training/week-50.md](../training/week-50.md))**
+
+- [x] Research with sources ([../training/plc-options.md](../training/plc-options.md)):
+      Siemens TIA Portal V21 + PLCSIM Advanced V8.0 trials (21 days, one-time),
+      Schneider Machine Expert – Basic V1.4 (free), Control Expert (30-day
+      trial), Machine Expert (42-day trial, no network in simulation), CODESYS
+      (free IDE, 2-hour demo runtime), OpenPLC v4, Windows on Linux, Ignition
+      drivers on Maker (legacy Siemens driver and OPC UA; no symbolic driver).
+- [x] Leak test station LT01 specified ([../lt01-leak-test.md](../lt01-leak-test.md)) and
+      programmed as TIA external sources (`plc-training/siemens/lt01/`):
+      UDTs, FB sequence, FB plant model, DBs (HMI DB non-optimized, DB10),
+      I/O FCs, OB1; tag table as xlsx. Logic checked with a Python mirror
+      (reference values in the spec, section 10). **Not compiled in TIA yet**
+      (no TIA on Linux): first compile on day 2.
+- [x] PLC engineering station ([plc-engineering.md](plc-engineering.md)): the
+      Windows 11 Pro PC on the LAN (16 GB) as main station, `C:\PLC-Training`
+      synced by `scripts/plc-pc`; gateway network → PC port proxy → listener
+      tested over LAN and Tailscale with `plcsim-portproxy.ps1` (firewall
+      limited to the lab host), then removed. A Windows VM on the lab host
+      (dockur/windows) was tried and removed completely (6 GB max, below
+      Siemens' minimum).
+- [ ] Your part before Monday 2026-12-07: Siemens ID, TIA Portal V21 trial and
+      PLCSIM Advanced V8.0 trial downloaded and installed on the PC; Machine
+      Expert – Basic by Thursday.
+
 ## Next (recommended order)
 
+0. **PLC training week 2026-12-07..12-11** (week-50.md): the user programs,
+   Claude reviews the exported sources (`scripts/plc-pc pull`), opens the port
+   proxy on day 4 and checks the OPC UA path, records the TIA compile fixes
+   back into `plc-training/siemens/lt01/`.
 0. **Training week 2026-11-23..27** (the user makes the Ignition changes):
    day 1 UI changes, day 2 Orders page, day 3 C06 commissioning, days 4-5
    AN01 tags and screens. After it: fill `ignition_tag_path` for AN01,

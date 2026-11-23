@@ -1,0 +1,206 @@
+// LT01 leak test station: control sequence, modes, faults, counters.
+// Called by OB1 "Main" every PLC cycle. Reads only its interface (no global
+// data inside), so one FB can drive several stations, each with its own
+// instance DB. Spec: docs/lt01-leak-test.md sections 4 to 7.
+//
+// Steps (Status.State)
+//    0 Stopped       10 WaitPart     20 Clamping     30 Filling
+//   40 Stabilising   50 Measuring    60 Venting      70 Unclamping
+//   80 Unload        90 Faulted
+// Faults (Status.Fault)
+//    1 emergency stop   2 air supply lost   10 clamp close timeout
+//   11 clamp open timeout   12 vent timeout
+
+FUNCTION_BLOCK "LT01_Seq"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT
+      Inputs : "LT01_typeIn";         // field signals (via FC "LT01_IoRead")
+      Recipe : "LT01_typeRecipe";     // test parameters
+   END_VAR
+
+   VAR_OUTPUT
+      Outputs : "LT01_typeOut";       // valve commands (to FC "LT01_IoWrite")
+   END_VAR
+
+   VAR_IN_OUT
+      Cmd : "LT01_typeCmd";           // HMI commands, cleared here once read
+      Status : "LT01_typeStatus";     // status for the HMI
+   END_VAR
+
+   VAR
+      rStart : R_TRIG;                // rising edge of start (button or HMI)
+      rReset : R_TRIG;                // rising edge of reset
+      tStep : TON_TIME;               // time in the current step (restarted at each step change)
+      tCycle : TON_TIME;              // cycle time stopwatch
+      prevState : Int;                // State of the previous call, to detect step changes
+      pStart : Real;                  // pressure at the start of the measurement, bar
+      result : Int;                   // result of the part in the nest
+   END_VAR
+
+   VAR_TEMP
+      startEdge : Bool;
+      resetEdge : Bool;
+      stopReq : Bool;
+      pressure : Real;
+      fault : Int;
+   END_VAR
+
+   VAR CONSTANT
+      T_CLAMP : Time := T#3S;         // clamp close / open supervision
+      T_VENT : Time := T#3S;          // venting supervision
+   END_VAR
+
+
+BEGIN
+	REGION Inputs and commands
+	    // Scale the transmitter: 0..27648 = 0..10 bar
+	    #pressure := INT_TO_REAL(#Inputs.PT01_Raw) * 10.0 / 27648.0;
+	    #Status.Pressure := #pressure;
+
+	    #rStart(CLK := #Inputs.PB_Start OR #Cmd.Start);
+	    #rReset(CLK := #Inputs.PB_Reset OR #Cmd.Reset);
+	    #startEdge := #rStart.Q;
+	    #resetEdge := #rReset.Q;
+	    #stopReq := NOT #Inputs.PB_Stop OR #Cmd.Stop OR NOT #Inputs.SW_Auto;   // NC stop button
+
+	    IF #Cmd.ResetCounters THEN
+	        #Status.CountTotal := 0;
+	        #Status.CountOk := 0;
+	        #Status.CountNok := 0;
+	    END_IF;
+	    // HMI commands are pulses: clear them once read
+	    #Cmd.Start := FALSE;
+	    #Cmd.Stop := FALSE;
+	    #Cmd.Reset := FALSE;
+	    #Cmd.ResetCounters := FALSE;
+	END_REGION
+
+	REGION Step timer
+	    // TON restarts when its input goes FALSE for one call: do that on every step change.
+	    #tStep(IN := #Status.State = #prevState, PT := T#1D);
+	    #prevState := #Status.State;
+	    #Status.StepTime := DINT_TO_REAL(TIME_TO_DINT(#tStep.ET)) / 1000.0;
+	    #tCycle(IN := #Status.State >= 20 AND #Status.State <= 80, PT := T#1D);
+	END_REGION
+
+	REGION Faults that stop the station at once
+	    #fault := 0;
+	    IF NOT #Inputs.EStopOK THEN
+	        #fault := 1;
+	    ELSIF NOT #Inputs.B_AirOK THEN
+	        #fault := 2;
+	    END_IF;
+	    IF #fault <> 0 AND #Status.State <> 90 THEN
+	        #Status.Fault := #fault;
+	        #Status.State := 90;
+	    END_IF;
+	END_REGION
+
+	REGION Sequence
+	    CASE #Status.State OF
+	        0:  // Stopped: waits for a start in automatic mode
+	            #Status.StopPending := FALSE;
+	            IF #startEdge AND #Inputs.SW_Auto AND #Inputs.PB_Stop THEN
+	                #Status.State := 10;
+	            END_IF;
+
+	        10: // WaitPart: part in the nest and clamp open
+	            IF #stopReq THEN
+	                #Status.State := 0;
+	            ELSIF #Inputs.B_PartPresent AND #Inputs.B_ClampOpen THEN
+	                #result := 0;
+	                #Status.State := 20;
+	            END_IF;
+
+	        20: // Clamping
+	            IF #Inputs.B_ClampClosed THEN
+	                #Status.State := 30;
+	            ELSIF #tStep.ET >= #T_CLAMP THEN
+	                #Status.Fault := 10;
+	                #Status.State := 90;
+	            END_IF;
+
+	        30: // Filling up to the test pressure
+	            IF #pressure >= #Recipe.TestPressure THEN
+	                #Status.State := 40;
+	            ELSIF #tStep.ET >= #Recipe.FillTimeout THEN
+	                #result := 2;              // gross leak: pressure never reached
+	                #Status.Decay := 0.0;
+	                #Status.State := 60;
+	            END_IF;
+
+	        40: // Stabilising (valves closed)
+	            IF #tStep.ET >= #Recipe.StabTime THEN
+	                #pStart := #pressure;
+	                #Status.State := 50;
+	            END_IF;
+
+	        50: // Measuring the pressure decay
+	            IF #tStep.ET >= #Recipe.MeasTime THEN
+	                #Status.Decay := (#pStart - #pressure) * 1000.0;   // mbar
+	                IF #Status.Decay <= #Recipe.MaxDecay THEN
+	                    #result := 1;
+	                ELSE
+	                    #result := 3;
+	                END_IF;
+	                #Status.State := 60;
+	            END_IF;
+
+	        60: // Venting
+	            IF #pressure < #Recipe.VentPressure THEN
+	                #Status.State := 70;
+	            ELSIF #tStep.ET >= #T_VENT THEN
+	                #Status.Fault := 12;
+	                #Status.State := 90;
+	            END_IF;
+
+	        70: // Unclamping
+	            IF #Inputs.B_ClampOpen THEN
+	                #Status.CycleTime := DINT_TO_REAL(TIME_TO_DINT(#tCycle.ET)) / 1000.0;
+	                #Status.Result := #result;
+	                #Status.CountTotal := #Status.CountTotal + 1;
+	                IF #result = 1 THEN
+	                    #Status.CountOk := #Status.CountOk + 1;
+	                ELSE
+	                    #Status.CountNok := #Status.CountNok + 1;
+	                END_IF;
+	                #Status.State := 80;
+	            ELSIF #tStep.ET >= #T_CLAMP THEN
+	                #Status.Fault := 11;
+	                #Status.State := 90;
+	            END_IF;
+
+	        80: // Unload: the operator takes the part out
+	            IF NOT #Inputs.B_PartPresent THEN
+	                IF #Status.StopPending THEN
+	                    #Status.State := 0;
+	                ELSE
+	                    #Status.State := 10;
+	                END_IF;
+	            END_IF;
+
+	        90: // Faulted: reset once the cause is gone
+	            IF #resetEdge AND #fault = 0 THEN
+	                #Status.Fault := 0;
+	                #Status.State := 0;
+	            END_IF;
+
+	        ELSE  // unknown step (should not happen): stop safely
+	            #Status.State := 0;
+	    END_CASE;
+
+	    // A stop during a cycle finishes the part first
+	    IF #stopReq AND #Status.State >= 20 AND #Status.State <= 80 THEN
+	        #Status.StopPending := TRUE;
+	    END_IF;
+	    #Status.Running := #Status.State >= 10 AND #Status.State <= 80;
+	END_REGION
+
+	REGION Outputs (one place per output)
+	    #Outputs.Y_ClampClose := #Status.State >= 20 AND #Status.State <= 60;
+	    #Outputs.Y_Fill := #Status.State = 30;
+	    // Vent open whenever the station is not holding pressure (also the safe state)
+	    #Outputs.Y_Vent := NOT (#Status.State >= 30 AND #Status.State <= 50);
+	END_REGION
+END_FUNCTION_BLOCK

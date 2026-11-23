@@ -30,6 +30,18 @@ system as a whole is an explicit requirement of the user.
   `generate_tags.py` before the user has finished day 3 (they would commission
   C06 from cells.csv). The AN01 rows have an empty `ignition_tag_path` on
   purpose, so the generator skips them.
+- **PLC training week 50 (docs/training/week-50.md): the user programs the PLC
+  (TIA Portal / PLCSIM Advanced, Machine Expert – Basic) on a Windows PC of the
+  LAN; Claude reviews.** Reach the PC only through `scripts/plc-pc`
+  (push / pull / ps; SSH alias, address and folder in `.env`:
+  `PLC_PC_SSH`, `PLC_PC_HOST`, `PLC_PC_DIR`). Never write the PC's name, IPs
+  or Tailscale addresses into versioned files (the repo is public): docs say
+  `PLC_PC_HOST`. Never start, edit or download the user's TIA project, and
+  never reset a Siemens / Schneider trial. Changes on the PC (port proxies,
+  firewall) go through `plc-training/windows/plcsim-portproxy.ps1` and are
+  removed with `-Remove` when no longer needed. The LT01 sources in
+  `plc-training/siemens/lt01/` are the reference (docs/lt01-leak-test.md cites
+  them); the user's exports go to `plc-training/*/work/`.
 - Ignition project `plant`: Perspective HMI (docs/system/hmi.md), named queries,
   and the script library `mes.cell` / `labsim.autopilot` (docs/system/mes.md),
   triggered by tag event scripts in the UDT `PIC200_Cell`. Views are now

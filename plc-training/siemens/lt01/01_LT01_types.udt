@@ -1,0 +1,104 @@
+// LT01 leak test station: data types (PLC data types, UDTs).
+// TIA Portal external source file. Spec: docs/lt01-leak-test.md.
+// Import: Project tree > PLC_1 > External source files > Add new external file,
+// then right-click > Generate blocks from source, one file at a time in order 01 .. 06.
+
+TYPE "LT01_typeIn"
+VERSION : 0.1
+   STRUCT
+      PB_Start : Bool;        // I0.0 start push button, NO contact (TRUE = pressed)
+      PB_Stop : Bool;         // I0.1 stop push button, NC contact (TRUE = NOT pressed)
+      PB_Reset : Bool;        // I0.2 fault reset push button, NO
+      EStopOK : Bool;         // I0.3 safety relay feedback (TRUE = e-stop circuit healthy)
+      SW_Auto : Bool;         // I0.4 mode selector (TRUE = automatic, FALSE = manual)
+      B_PartPresent : Bool;   // I0.5 part present in the test nest (inductive sensor)
+      B_ClampClosed : Bool;   // I0.6 clamp cylinder end position "closed"
+      B_ClampOpen : Bool;     // I0.7 clamp cylinder end position "open"
+      B_AirOK : Bool;         // I1.0 compressed air supply pressure switch (TRUE = >= 6.5 bar)
+      PT01_Raw : Int;         // IW64 test pressure transmitter, 0..27648 = 0..10 bar
+   END_STRUCT;
+END_TYPE
+
+TYPE "LT01_typeOut"
+VERSION : 0.1
+   STRUCT
+      Y_ClampClose : Bool;    // Q0.0 clamp valve (monostable: TRUE closes, FALSE opens)
+      Y_Fill : Bool;          // Q0.1 fill valve (TRUE = test volume connected to supply)
+      Y_Vent : Bool;          // Q0.2 vent valve (TRUE = test volume open to atmosphere)
+   END_STRUCT;
+END_TYPE
+
+TYPE "LT01_typeCmd"
+VERSION : 0.1
+   STRUCT
+      Start : Bool;           // from HMI: same as the start push button. The PLC clears it.
+      Stop : Bool;            // from HMI: stop at the end of the current cycle. The PLC clears it.
+      Reset : Bool;           // from HMI: fault reset. The PLC clears it.
+      ResetCounters : Bool;   // from HMI: zero the counters. The PLC clears it.
+   END_STRUCT;
+END_TYPE
+
+TYPE "LT01_typeStatus"
+VERSION : 0.1
+   STRUCT
+      State : Int;            // sequence step, see docs/lt01-leak-test.md section 5
+      Fault : Int;            // 0 = none, else fault code (section 6)
+      Result : Int;           // last part: 0 none, 1 OK, 2 NOK gross leak, 3 NOK decay
+      Running : Bool;         // automatic cycle active (State 10..80)
+      StopPending : Bool;     // stop requested, the station stops at the end of the cycle
+      Pressure : Real;        // test pressure, bar (gauge)
+      Decay : Real;           // pressure decay of the last part, mbar
+      CycleTime : Real;       // last cycle time (clamp to unclamped), s
+      StepTime : Real;        // time spent in the current step, s
+      CountTotal : DInt;      // parts tested
+      CountOk : DInt;         // parts OK
+      CountNok : DInt;        // parts NOK (gross + decay)
+   END_STRUCT;
+END_TYPE
+
+TYPE "LT01_typeRecipe"
+VERSION : 0.1
+   STRUCT
+      TestPressure : Real := 6.0;     // bar, fill until this pressure
+      MaxDecay : Real := 20.0;        // mbar, decay limit over MeasTime
+      VentPressure : Real := 0.2;     // bar, nest considered vented below this
+      FillTimeout : Time := T#5S;     // pressure not reached in time = gross leak (NOK)
+      StabTime : Time := T#2S;        // stabilisation after filling
+      MeasTime : Time := T#3S;        // measuring time
+   END_STRUCT;
+END_TYPE
+
+// ---- Simulation only (the plant model of FB "LT01_ProcessSim") ----
+
+TYPE "LT01_typeSimPanel"
+VERSION : 0.1
+   STRUCT
+      Start : Bool;           // simulated push button: set TRUE, the simulated operator releases it after 0.1 s
+      Reset : Bool;           // idem
+      StopPressed : Bool;     // TRUE = stop button held down (stays until you clear it)
+      EStopPressed : Bool;    // TRUE = emergency stop pressed (stays until you clear it)
+      Auto : Bool := TRUE;    // mode selector position
+   END_STRUCT;
+END_TYPE
+
+TYPE "LT01_typeSimProcess"
+VERSION : 0.1
+   STRUCT
+      PartInterval : Time := T#4S;   // a new part is placed in the nest this long after the last one was removed
+      LeakEvery : Int := 12;         // every n-th part has a small leak (NOK on decay); 0 = never
+      GrossEvery : Int := 40;        // every n-th part has a gross leak (pressure never reached); 0 = never
+      AutoUnload : Bool := TRUE;     // the simulated operator removes tested parts
+      AirFail : Bool;                // TRUE = compressed air supply lost
+      ClampStuck : Bool;             // TRUE = clamp cylinder does not move
+   END_STRUCT;
+END_TYPE
+
+TYPE "LT01_typeSimPlant"
+VERSION : 0.1
+   STRUCT
+      PartNo : DInt;          // parts placed in the nest since PLC start
+      PartLeakClass : Int;    // part in the nest: 0 none, 1 tight, 2 small leak, 3 gross leak
+      ClampPos : Real;        // clamp position 0.0 open .. 1.0 closed
+      Pressure : Real;        // test volume pressure, bar (gauge)
+   END_STRUCT;
+END_TYPE

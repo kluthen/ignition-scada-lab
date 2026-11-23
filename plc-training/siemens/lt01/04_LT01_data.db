@@ -1,0 +1,71 @@
+// LT01 leak test station: data blocks. Spec: docs/lt01-leak-test.md section 9.
+// Generate after 01 (types), 02 and 03 (the FBs, for the instance DBs), before 05.
+
+// I/O image of the station, written by FC "LT01_IoRead" / FB "LT01_Seq".
+DATA_BLOCK "LT01_IO"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+NON_RETAIN
+   VAR
+      Inputs : "LT01_typeIn";
+      Outputs : "LT01_typeOut";
+   END_VAR
+
+BEGIN
+
+END_DATA_BLOCK
+
+// HMI / SCADA interface. NOT optimized, so that Ignition's legacy Siemens
+// driver can address it by offset (DB10,REAL10 ...). Give it number 10
+// (Properties > General > Number, "Manual"). Retentive: counters and recipe
+// survive a PLC restart.
+DATA_BLOCK "LT01_HMI"
+{ S7_Optimized_Access := 'FALSE' }
+VERSION : 0.1
+   VAR
+      Cmd : "LT01_typeCmd";
+      Status : "LT01_typeStatus";
+      Recipe : "LT01_typeRecipe";
+   END_VAR
+
+BEGIN
+
+END_DATA_BLOCK
+
+// Simulation: switch, operator panel, model settings, simulated field signals.
+DATA_BLOCK "LT01_Sim"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+NON_RETAIN
+   VAR
+      Enable : Bool := TRUE;              // TRUE: inputs come from the plant model, not from %I
+      Panel : "LT01_typeSimPanel";
+      Process : "LT01_typeSimProcess";
+      Field : "LT01_typeIn";              // written by the model, read by FC "LT01_IoRead"
+      Plant : "LT01_typeSimPlant";
+   END_VAR
+
+BEGIN
+
+END_DATA_BLOCK
+
+// Instance data blocks of the two FBs
+DATA_BLOCK "LT01_Seq_DB"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+NON_RETAIN
+"LT01_Seq"
+
+BEGIN
+
+END_DATA_BLOCK
+
+DATA_BLOCK "LT01_ProcessSim_DB"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+NON_RETAIN
+"LT01_ProcessSim"
+
+BEGIN
+
+END_DATA_BLOCK

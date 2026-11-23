@@ -26,6 +26,7 @@ it workable with an AI coding assistant (Claude Code).
 | Ignition config as code | 5 OPC UA connections and 5 Modbus devices from templates, a cell UDT and its 5 instances generated from the registry, tag groups, a `sim` tag provider, SQL Historian (`gateway-config/`, `scripts/`) |
 | Ignition project `plant` | Perspective HMI (area overview, KPI page, cell page with mimic, commands and trends, instructor page), named queries, the MES script library (traceability, state log, orders) and the lab autopilot (`ignition/data/projects/plant/`) |
 | KPIs and daily export | OEE, downtime Pareto, rejects, hourly production as SQL functions (`db/init/20-kpi.sql`), shown on the KPI page and exported every night by the `exporter` service: PDF report, XLSX, CSVs and a manifest in `exports/daily/<date>/` |
+| PLC training (week 50) | the program of the leak test station LT01 as Siemens SCL sources with a built-in plant model (`plc-training/`), run in TIA Portal / PLCSIM Advanced on a Windows PC of the LAN (`scripts/plc-pc`) |
 | Devcontainer | Python 3.13 workspace with pymodbus, asyncua and psql (`.devcontainer/`) |
 | Tooling | `scripts/ign` (gateway REST API CLI), `scripts/opc` (OPC UA browse/read/watch), bootstrap/apply/generate scripts, `scripts/cell_smoke_test.py` |
 
@@ -89,7 +90,11 @@ the gateway web UI, and until then Modbus, the historian and Perspective stop
 | [docs/system/panorama-e2-to-ignition.md](docs/system/panorama-e2-to-ignition.md) | concept map for engineers coming from Codra Panorama E2 |
 | [docs/system/status.md](docs/system/status.md) | progress, next steps, open decisions |
 | [docs/training/week-48.md](docs/training/week-48.md) | hands-on training week: Designer UI changes, a new view, commissioning a sixth cell by hand, binding a new device (andon station) |
+| [docs/training/week-50.md](docs/training/week-50.md) | second training week: programming the PLC (Siemens S7-1500 in TIA Portal, PLCSIM Advanced; a Schneider M221 for comparison), extending the LT01 leak test station, connecting it to Ignition |
+| [docs/training/plc-options.md](docs/training/plc-options.md) | sourced research: Siemens / Schneider / CODESYS / OpenPLC trials and free licences, simulation without hardware, Windows on Linux, Ignition drivers on Maker |
+| [docs/system/plc-engineering.md](docs/system/plc-engineering.md) | the Windows PLC engineering station (a PC on the LAN): file sync, network path from the gateway to a simulated PLC (port proxy, OPC UA host override) |
 | [docs/README.md](docs/README.md) | plant design index: [plant layout](docs/plant-layout.md) ([cells.csv](docs/cells.csv)), [scenario](docs/scenario.md), [OPC UA registry](docs/opcua-registry.md) ([CSV](docs/opcua-registry.csv)), [fault catalogue](docs/fault-catalogue.md), [MES requirements](docs/mes-requirements.md) |
+| [docs/lt01-leak-test.md](docs/lt01-leak-test.md) | the leak test station LT01: I/O, sequence, faults, recipe, simulation model, program structure, HMI data block layout |
 | [CLAUDE.md](CLAUDE.md) | working rules for Claude Code in this repo |
 
 The plant (Brevent Hydraulics, finishing area, cells C01..C06) and the customer are fictional.
