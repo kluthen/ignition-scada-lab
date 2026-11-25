@@ -193,6 +193,7 @@ Last updated: 2026-11-23 (PLC training week 50 prepared: research, LT01 station 
   day is the calendar day (`mes.site.day_start` 00:00).
 - Daily export delivery: a finished folder in `exports/daily/`; e-mail or SFTP
   needs a target from the user.
-- Week 48 results: the Designer changes made so far (cell tile, header,
-  session props) sit uncommitted on `main`. By the branch rule they belong
-  on `training/week-48`, together with the doc updates that describe them.
+- Week 48 results live on branch `training/week-48` (day 1 so far: cell
+  tile, header, session props). The doc updates that describe them go there
+  too; what is worth keeping for everyone (e.g. C06 commissioned through the
+  scripts) is decided at the end of the week.
