@@ -135,6 +135,43 @@ So data generation partly continues without the trial, but trends and the HMI
 need it. Do not script trial resets: the expiry is deliberate, so that the trial
 is not used as a pseudo-production system. That is why the lab moved to Maker.
 
+## Certification gateway (`gateway-cert`)
+
+An empty Standard Edition gateway for the Core Certification
+([../training/core-certification.md](../training/core-certification.md)):
+Vision, Reporting, SQL Bridge, alarm notification and the other default
+modules, in trial mode. It is not part of the lab: no tags, no project, no
+API token; it only shares the PostgreSQL server (database `cert`).
+
+```bash
+docker compose --profile cert up -d gateway-cert   # about 20 s; also starts db
+curl -s http://127.0.0.1:8089/StatusPing           # {"state":"RUNNING"}
+docker compose stop gateway-cert                   # stop it (data kept in the volume)
+```
+
+| What | Where | Credentials |
+|---|---|---|
+| Web UI, Designer Launcher | http://127.0.0.1:8089 (add this gateway in the Designer Launcher) | `GATEWAY_ADMIN_USERNAME` / `GATEWAY_ADMIN_PASSWORD` from `.env`, until a restored backup brings its own users |
+| Database for exercises | from the cert gateway: `jdbc:postgresql://db:5432/cert` | `POSTGRES_USER` / `POSTGRES_PASSWORD` |
+
+- **Trial**: 2 hours, then reset from the banner of its web page. By hand
+  only, never scripted. Expired trial: see the table above.
+- **Fresh install** (what the practice backup and the exam ask for): drop
+  the volume, the image seeds a new data dir on the next start.
+
+  ```bash
+  docker compose stop gateway-cert && docker compose rm -f gateway-cert
+  docker volume rm ignition-lab_certdata
+  docker compose --profile cert up -d gateway-cert
+  ```
+- **Restore a backup** (`Core_Certification.gwbk` or your own): web UI,
+  Platform > Backup/Restore. Keep the files outside the repo or let
+  `.gitignore` (`*.gwbk`) hide them.
+- Memory: the host has about 11 GB; lab gateway (2 GB heap) and cert gateway
+  (1.5 GB) run together. Stop the one you do not use if the host gets short.
+- `docker compose down` without `--profile cert` leaves it running: use
+  `docker compose --profile cert down` to stop everything.
+
 ## Reset the gateway
 
 ```bash

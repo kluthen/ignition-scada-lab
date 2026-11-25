@@ -118,6 +118,18 @@ Last updated: 2026-11-23 (PLC training week 50 prepared: research, LT01 station 
 - [x] Smoke test extended with the andon; PASS on C06 and C02. Random calls
       and the auto-clear checked on C06.
 
+**Core Certification plan (2026-11-25, [../training/core-certification.md](../training/core-certification.md))**
+
+- [x] Official exam facts, the 9 sections and their skills, mapped to the
+      IU courses and to what the lab already covers; 14-session plan.
+- [x] Certification gateway `gateway-cert` (profile `cert`, port 8089):
+      empty Standard Edition trial, data in volume `certdata`, database
+      `cert` (db/init/05-cert.sql). Verified 2026-11-25: starts in about
+      20 s, edition standard, Vision / Reporting / SQL Bridge present.
+- [x] Branch rule: `main` is the clean starting point; exercise results go
+      on `training/*` branches (README).
+- [ ] Your part: branch `training/core-cert`, then session 1.
+
 **PLC training week 50 prepared (2026-11-23, [../training/week-50.md](../training/week-50.md))**
 
 - [x] Research with sources ([../training/plc-options.md](../training/plc-options.md)):
@@ -154,6 +166,9 @@ Last updated: 2026-11-23 (PLC training week 50 prepared: research, LT01 station 
    AN01 tags and screens. After it: fill `ignition_tag_path` for AN01,
    reconcile the hand-made C06 config with the scripts, update hmi.md,
    plant-layout.md, architecture.md.
+   Items 1 and 5 below are also Core Certification exercises (sessions 11
+   and 12 of core-certification.md): the user builds them on a training
+   branch; Claude does not build them on `main`.
 1. **Alarms** on `Alarms/*`, `RJ01`, `SF01` in the UDT (fault-catalogue.md
    priorities), alarm journal in schema `alarms`, alarm table on the HMI;
    alarm count in the daily report.
@@ -178,3 +193,6 @@ Last updated: 2026-11-23 (PLC training week 50 prepared: research, LT01 station 
   day is the calendar day (`mes.site.day_start` 00:00).
 - Daily export delivery: a finished folder in `exports/daily/`; e-mail or SFTP
   needs a target from the user.
+- Week 48 results: the Designer changes made so far (cell tile, header,
+  session props) sit uncommitted on `main`. By the branch rule they belong
+  on `training/week-48`, together with the doc updates that describe them.

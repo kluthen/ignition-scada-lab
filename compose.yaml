@@ -53,6 +53,33 @@ services:
       db:
         condition: service_healthy
 
+  # Core Certification sandbox (docs/training/core-certification.md): an empty
+  # Standard Edition gateway in trial mode, separate from the lab (Maker has no
+  # Vision, and the official practice backup expects Standard). Started only
+  # with the "cert" profile. Its data lives in the named volume certdata, not
+  # in git: it is a sandbox to break and restore (fresh install = drop the
+  # volume). The 2-hour trial is reset by hand, never by script.
+  gateway-cert:
+    image: inductiveautomation/ignition:${IGNITION_VERSION:-8.3.10}
+    hostname: gateway-cert
+    command: ["-n", "ignition-cert", "-m", "1536"]
+    environment:
+      ACCEPT_IGNITION_EULA: "Y"
+      TZ: ${TZ:-UTC}
+      IGNITION_EDITION: standard
+      GATEWAY_ADMIN_USERNAME: ${GATEWAY_ADMIN_USERNAME:-admin}
+      GATEWAY_ADMIN_PASSWORD: ${GATEWAY_ADMIN_PASSWORD:?set GATEWAY_ADMIN_PASSWORD in .env}
+      DISABLE_QUICKSTART: "true"
+    volumes:
+      - certdata:/usr/local/bin/ignition/data
+    ports:
+      - "127.0.0.1:8089:8088"    # cert gateway web UI, Designer launcher, Perspective
+    stop_grace_period: 60s
+    profiles: ["cert"]
+    depends_on:
+      db:
+        condition: service_healthy
+
   db:
     image: postgres:${POSTGRES_VERSION:-19}
     hostname: db
@@ -157,3 +184,4 @@ services:
 
 volumes:
   pgdata:
+  certdata:    # cert gateway data dir (sandbox, not versioned)

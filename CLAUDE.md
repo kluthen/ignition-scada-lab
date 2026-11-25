@@ -15,11 +15,14 @@ system as a whole is an explicit requirement of the user.
 
 ## Stack
 
-- `compose.yaml` services: `gateway` (Ignition 8.3.10), `db` (PostgreSQL 19),
+- `compose.yaml` services: `gateway` (Ignition 8.3.10), `gateway-cert`
+  (profile `cert`: empty Standard Edition trial on port 8089, volume
+  `certdata`, database `cert`; Core Certification sandbox, its trial is reset
+  by the user by hand, never by script), `db` (PostgreSQL 19),
   `plc-c01`..`plc-c06` (one Python cell controller per cell), `gateway-init`
   (seeds `ignition/data`), `exporter` (daily production export to
   `exports/daily/`, git-ignored), `workspace` (devcontainer, profile `dev`). Host ports
-  are on 127.0.0.1: 8088, 62541, 5432, 4841-4846 (OPC UA), 5021-5026 (Modbus).
+  are on 127.0.0.1: 8088, 8089 (gateway-cert), 62541, 5432, 4841-4846 (OPC UA), 5021-5026 (Modbus).
 - The plant is six identical cells (docs/plant-layout.md). `docs/cells.csv` is
   the single source of truth for the instances, `docs/opcua-registry.csv` for
   the signals of one cell (the type, written for C01).
@@ -42,6 +45,16 @@ system as a whole is an explicit requirement of the user.
   removed with `-Remove` when no longer needed. The LT01 sources in
   `plc-training/siemens/lt01/` are the reference (docs/lt01-leak-test.md cites
   them); the user's exports go to `plc-training/*/work/`.
+- **Core Certification (docs/training/core-certification.md)**: the user
+  prepares the Inductive Automation exam; Claude prepares and reviews, and
+  never helps during the test itself (AI tools are forbidden there).
+- **Branches**: `main` is the clean starting point for anyone who clones the
+  lab. It never receives exercise results (training weeks, certification).
+  The user's exercise work, and the doc updates that describe it, go on a
+  `training/*` branch (e.g. `training/core-cert`); lab improvements and
+  exercise instructions go on `main`. Check the current branch before
+  committing. Never commit a `.gwbk` (git-ignored), least of all IA's
+  practice backup.
 - Ignition project `plant`: Perspective HMI (docs/system/hmi.md), named queries,
   and the script library `mes.cell` / `labsim.autopilot` (docs/system/mes.md),
   triggered by tag event scripts in the UDT `PIC200_Cell`. Views are now
@@ -105,5 +118,5 @@ system as a whole is an explicit requirement of the user.
 
 ## Git
 
-Commit only when the user asks. `.gitignore` keeps only `ignition/data/config/resources/core`
+Commit only when the user asks, on the right branch (see Branches above). `.gitignore` keeps only `ignition/data/config/resources/core`
 and `ignition/data/projects` from the gateway data dir.

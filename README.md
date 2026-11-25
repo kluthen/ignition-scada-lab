@@ -15,12 +15,49 @@ and tag history accumulate on their own. Everything is configured as code
 through Ignition 8.3's file-based configuration and REST API, which also makes
 it workable with an AI coding assistant (Claude Code).
 
+## A training ground, including for the Ignition Core Certification
+
+The lab is also where we train, and since 2026-11 where we prepare the
+**Inductive Automation Ignition Core Certification** (Ignition 8.3). The plan
+[docs/training/core-certification.md](docs/training/core-certification.md)
+maps the 9 exam sections (gateway, Vision, Perspective, tags, security,
+reporting, tag history, transaction groups, alarming) to the free Inductive
+University courses and to what this lab already practises, then lays out 14
+sessions of about 2 hours. A second, empty gateway in Standard Edition trial
+(`gateway-cert`, Compose profile `cert`, port 8089) covers what the Maker lab
+cannot: Vision, the official practice backup, and the exam itself.
+
+The exam forbids AI tools, Claude included: the lab and Claude help prepare,
+never during the test.
+
+### Branches: `main` is the starting point, exercises live on branches
+
+`main` holds the lab ready to train on: the simulated plant, the Ignition
+configuration as it stands before any exercise, and the exercise
+instructions (`docs/training/`). It never receives exercise results, so
+anyone can clone it and start from the same point.
+
+Your own work goes on a branch of its own, made from `main`:
+
+```bash
+git switch main && git pull
+git switch -c training/core-cert       # or training/week-48, training/<your-name>-core-cert...
+# work in the Designer / gateway, then commit on that branch
+```
+
+Lab improvements that are not exercise results (simulator, tooling, docs,
+new exercise instructions) go to `main` and can be merged into a training
+branch with `git merge main`. Never commit the official practice backup
+(`Core_Certification.gwbk`) or anything exported from it: it belongs to
+Inductive Automation (`*.gwbk` is git-ignored).
+
 ## What's inside
 
 | Component | Details |
 |---|---|
 | Ignition Gateway 8.3.10 | official `inductiveautomation/ignition` image, Maker Edition (or the standard edition in trial mode) |
-| PostgreSQL 19 | database `mes`: MES tables (schema `mes`), tag history (schema `historian`), alarm journal later |
+| Certification gateway (optional) | `gateway-cert`, profile `cert`: an empty Standard Edition gateway in trial mode on port 8089, data in a Docker volume, database `cert` in the same PostgreSQL. Sandbox for the Core Certification |
+| PostgreSQL 19 | database `mes`: MES tables (schema `mes`), tag history (schema `historian`), alarm journal later; database `cert` for the certification gateway |
 | Simulated cell controllers (×6) | one container per cell (`plc-c01`..`plc-c06`), a Python process with a 100 ms scan running a robot cell (PackML state machine, conveyors, camera, SCARA robot, reject bin, order and traceability handshakes). Each serves an OPC UA server generated from the signal registry (asyncua) and a stdlib Modbus TCP I/O coupler (`plc/`) |
 | Plant design | scenario, plant layout and cell instance table, OPC UA / Modbus signal registry (CSV, single source of truth), fault catalogue, MES customer requirements (`docs/`) |
 | Ignition config as code | 5 OPC UA connections and 5 Modbus devices from templates, a cell UDT and its 5 instances generated from the registry, tag groups, a `sim` tag provider, SQL Historian (`gateway-config/`, `scripts/`) |
@@ -35,6 +72,7 @@ All ports bind to `127.0.0.1`:
 | Port | Service |
 |---|---|
 | 8088 | gateway |
+| 8089 | gateway-cert (profile `cert`, certification sandbox) |
 | 62541 | Ignition OPC UA server |
 | 4841..4846 | cell controllers C01..C06, OPC UA |
 | 5021..5026 | cell controllers C01..C06, Modbus TCP |
@@ -68,6 +106,11 @@ The cells start producing within seconds (lab autopilot). Then:
 
 Or open the folder in VS Code and choose "Dev Containers: Reopen in Container".
 
+Certification sandbox (optional): `docker compose --profile cert up -d gateway-cert`,
+then http://127.0.0.1:8089 with the same admin credentials. Standard Edition
+trial: reset it from its web page every 2 hours
+([docs/system/operations.md](docs/system/operations.md#certification-gateway-gateway-cert)).
+
 By running the gateway image you accept the
 [Inductive Automation software license](https://inductiveautomation.com/ignition/license)
 (`ACCEPT_IGNITION_EULA=Y` in `compose.yaml`). The lab runs Ignition Maker
@@ -91,6 +134,7 @@ the gateway web UI, and until then Modbus, the historian and Perspective stop
 | [docs/system/status.md](docs/system/status.md) | progress, next steps, open decisions |
 | [docs/training/week-48.md](docs/training/week-48.md) | hands-on training week: Designer UI changes, a new view, commissioning a sixth cell by hand, binding a new device (andon station) |
 | [docs/training/week-50.md](docs/training/week-50.md) | second training week: programming the PLC (Siemens S7-1500 in TIA Portal, PLCSIM Advanced; a Schneider M221 for comparison), extending the LT01 leak test station, connecting it to Ignition |
+| [docs/training/core-certification.md](docs/training/core-certification.md) | learning plan for the Ignition Core Certification: exam rules, the 9 sections and their skills, lab coverage, the certification gateway, 14 sessions |
 | [docs/training/plc-options.md](docs/training/plc-options.md) | sourced research: Siemens / Schneider / CODESYS / OpenPLC trials and free licences, simulation without hardware, Windows on Linux, Ignition drivers on Maker |
 | [docs/system/plc-engineering.md](docs/system/plc-engineering.md) | the Windows PLC engineering station (a PC on the LAN): file sync, network path from the gateway to a simulated PLC (port proxy, OPC UA host override) |
 | [docs/README.md](docs/README.md) | plant design index: [plant layout](docs/plant-layout.md) ([cells.csv](docs/cells.csv)), [scenario](docs/scenario.md), [OPC UA registry](docs/opcua-registry.md) ([CSV](docs/opcua-registry.csv)), [fault catalogue](docs/fault-catalogue.md), [MES requirements](docs/mes-requirements.md) |

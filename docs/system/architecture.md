@@ -37,7 +37,8 @@ host, orchestrated by `compose.yaml`, which is also the VS Code devcontainer.
 |---|---|---|---|
 | `gateway-init` | ignition:8.3.10 | Seeds `./ignition/data` from the image until the gateway is initialised, never overwriting existing (versioned) files; chowns to your uid. Exits. | none |
 | `gateway` | ignition:8.3.10 | Ignition Gateway, Maker Edition | `8088→8088` HTTP, `62541→62541` OPC UA |
-| `db` | postgres:19 | Database `mes` (schemas `mes`, `historian`, `alarms`) | `5432→5432` |
+| `gateway-cert` (profile `cert`) | ignition:8.3.10 | Core Certification sandbox: empty Ignition Gateway, Standard Edition in trial mode, data in the Docker volume `certdata` (not versioned), 1.5 GB heap. Not connected to the lab ([../training/core-certification.md](../training/core-certification.md)) | `8089→8088` HTTP |
+| `db` | postgres:19 | Database `mes` (schemas `mes`, `historian`, `alarms`); empty database `cert` for `gateway-cert` | `5432→5432` |
 | `plc-c01` .. `plc-c06` | built from `plc/Dockerfile` (python 3.13 + asyncua 2.1.0), image `ignition-lab-plc` | One simulated cell controller each: `plc/main.py` runs `programs/cell.py` every 100 ms and serves the same process image over OPC UA and Modbus TCP. `CELL_ID` selects the row of docs/cells.csv | `484n→4840` OPC UA, `502n→502` Modbus |
 | `exporter` | built from `exporter/Dockerfile` (python 3.13 + psycopg, openpyxl, reportlab), image `ignition-lab-exporter` | Daily production export: one folder per production day (PDF, XLSX, CSVs, manifest) in `./exports/daily/`, runs as your uid ([kpi.md](kpi.md)) | none |
 | `workspace` | built from `.devcontainer/` | Dev shell: Python 3.13, asyncua, pymodbus, psql (profile `dev`) | none |
@@ -152,7 +153,7 @@ plc-training/             PLC training material: LT01 SCL sources + tag table (s
                           (*/work), Windows port proxy script; synced with the PLC PC by scripts/plc-pc
 exporter/                 daily production export (daily_export.py, Dockerfile)
 exports/daily/            export output, one folder per production day (git-ignored)
-db/init/                  SQL: schemas (00), MES tables (10), KPI functions (20); re-runnable with scripts/db_apply.py
+db/init/                  SQL: schemas (00), database cert (05), MES tables (10), KPI functions (20); re-runnable with scripts/db_apply.py
 ignition/data/            Ignition data dir (bind mount); config/resources/core and projects are versioned
   projects/plant/         Perspective views (overview, cell, KPI, instructor), named queries, script library (mes, labsim)
 gateway-config/           reproducible gateway config: OPC connection and Modbus device templates (per cell),
