@@ -1,72 +1,207 @@
 {
   "custom": {
-    "state": null,
-    "stateName": null,
-    "stopText": null,
-    "speed": null,
-    "orderId": null,
-    "product": null,
-    "good": null,
-    "rejects": null,
-    "target": null,
-    "bin": null,
-    "binCap": null,
-    "auto": null,
-    "location": null
+    "rejectPct": 3.8461538461538463
   },
   "params": {
     "cell": "C01"
   },
+  "propConfig": {
+    "custom.auto": {
+      "binding": {
+        "config": {
+          "fallbackDelay": 2.5,
+          "mode": "indirect",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "tagPath": "[default]ANN/FIN/{cell}/MES/AutoRun"
+        },
+        "type": "tag"
+      }
+    },
+    "custom.bin": {
+      "binding": {
+        "config": {
+          "fallbackDelay": 2.5,
+          "mode": "indirect",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "tagPath": "[default]ANN/FIN/{cell}/RJ01/Status/Count"
+        },
+        "type": "tag"
+      }
+    },
+    "custom.binCap": {
+      "binding": {
+        "config": {
+          "fallbackDelay": 2.5,
+          "mode": "indirect",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "tagPath": "[default]ANN/FIN/{cell}/RJ01/Parameters/Capacity"
+        },
+        "type": "tag"
+      }
+    },
+    "custom.good": {
+      "binding": {
+        "config": {
+          "fallbackDelay": 2.5,
+          "mode": "indirect",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/GoodCount"
+        },
+        "type": "tag"
+      }
+    },
+    "custom.location": {
+      "binding": {
+        "config": {
+          "fallbackDelay": 2.5,
+          "mode": "indirect",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "tagPath": "[default]ANN/FIN/{cell}/Identification/Location"
+        },
+        "type": "tag"
+      }
+    },
+    "custom.orderId": {
+      "binding": {
+        "config": {
+          "fallbackDelay": 2.5,
+          "mode": "indirect",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/OrderId"
+        },
+        "type": "tag"
+      }
+    },
+    "custom.product": {
+      "binding": {
+        "config": {
+          "fallbackDelay": 2.5,
+          "mode": "indirect",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/ProductCode"
+        },
+        "type": "tag"
+      }
+    },
+    "custom.rejectPct": {
+      "binding": {
+        "config": {
+          "expression": "\nif({view.custom.good} + {view.custom.rejects} \u003d 0, -1,\n   100.0 * {view.custom.rejects} / ({view.custom.good} + {view.custom.rejects}))"
+        },
+        "type": "expr"
+      },
+      "persistent": true
+    },
+    "custom.rejects": {
+      "binding": {
+        "config": {
+          "fallbackDelay": 2.5,
+          "mode": "indirect",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/RejectCount"
+        },
+        "type": "tag"
+      }
+    },
+    "custom.speed": {
+      "binding": {
+        "config": {
+          "fallbackDelay": 2.5,
+          "mode": "indirect",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "tagPath": "[default]ANN/FIN/{cell}/Status/CurMachSpeed"
+        },
+        "type": "tag"
+      }
+    },
+    "custom.state": {
+      "binding": {
+        "config": {
+          "fallbackDelay": 2.5,
+          "mode": "indirect",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "tagPath": "[default]ANN/FIN/{cell}/Status/StateCurrent"
+        },
+        "type": "tag"
+      }
+    },
+    "custom.stateName": {
+      "binding": {
+        "config": {
+          "fallbackDelay": 2.5,
+          "mode": "indirect",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "tagPath": "[default]ANN/FIN/{cell}/Status/StateCurrentName"
+        },
+        "type": "tag"
+      }
+    },
+    "custom.stopText": {
+      "binding": {
+        "config": {
+          "fallbackDelay": 2.5,
+          "mode": "indirect",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "tagPath": "[default]ANN/FIN/{cell}/Admin/StopReasonText"
+        },
+        "type": "tag"
+      }
+    },
+    "custom.target": {
+      "binding": {
+        "config": {
+          "fallbackDelay": 2.5,
+          "mode": "indirect",
+          "references": {
+            "cell": "{view.params.cell}"
+          },
+          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/TargetQuantity"
+        },
+        "type": "tag"
+      }
+    },
+    "params.cell": {
+      "paramDirection": "input",
+      "persistent": true
+    }
+  },
   "props": {
     "defaultSize": {
-      "width": 240,
-      "height": 230
+      "height": 230,
+      "width": 240
     }
   },
   "root": {
-    "type": "ia.container.flex",
-    "meta": {
-      "name": "root"
-    },
-    "props": {
-      "direction": "column",
-      "style": {
-        "backgroundColor": "#FFFFFF",
-        "borderStyle": "solid",
-        "borderWidth": "1px",
-        "borderColor": "#B8BEC6",
-        "borderRadius": "4px",
-        "padding": "8px",
-        "cursor": "pointer"
-      }
-    },
     "children": [
       {
-        "type": "ia.container.flex",
-        "meta": {
-          "name": "Head"
-        },
-        "props": {
-          "direction": "row",
-          "style": {},
-          "alignItems": "center"
-        },
-        "position": {
-          "basis": "34px",
-          "shrink": 0
-        },
         "children": [
           {
-            "type": "ia.display.label",
             "meta": {
               "name": "Cell"
-            },
-            "props": {
-              "style": {
-                "fontSize": "22px",
-                "fontWeight": "bold",
-                "color": "#1F2933"
-              }
             },
             "position": {
               "grow": 1,
@@ -75,115 +210,108 @@
             "propConfig": {
               "props.text": {
                 "binding": {
-                  "type": "expr",
                   "config": {
                     "expression": "{view.params.cell}"
-                  }
+                  },
+                  "type": "expr"
                 }
               }
-            }
-          },
-          {
-            "type": "ia.display.label",
-            "meta": {
-              "name": "Auto"
             },
             "props": {
               "style": {
-                "fontSize": "11px",
-                "color": "#FFFFFF",
-                "backgroundColor": "#4F6D8A",
-                "borderRadius": "3px",
-                "padding": "2px 6px"
-              },
-              "text": "AUTO"
+                "color": "#1F2933",
+                "fontSize": "22px",
+                "fontWeight": "bold"
+              }
+            },
+            "type": "ia.display.label"
+          },
+          {
+            "meta": {
+              "name": "Auto"
             },
             "position": {
-              "basis": "auto",
-              "shrink": 0,
-              "grow": 0
+              "shrink": 0
             },
             "propConfig": {
               "meta.visible": {
                 "binding": {
-                  "type": "expr",
                   "config": {
                     "expression": "{view.custom.auto}"
-                  }
+                  },
+                  "type": "expr"
                 }
               }
-            }
+            },
+            "props": {
+              "style": {
+                "backgroundColor": "#4F6D8A",
+                "borderRadius": "3px",
+                "color": "#FFFFFF",
+                "fontSize": "11px",
+                "padding": "2px 6px"
+              },
+              "text": "AUTO"
+            },
+            "type": "ia.display.label"
           }
-        ]
+        ],
+        "meta": {
+          "name": "Head"
+        },
+        "position": {
+          "basis": "34px",
+          "shrink": 0
+        },
+        "props": {
+          "alignItems": "center"
+        },
+        "type": "ia.container.flex"
       },
       {
-        "type": "ia.display.label",
         "meta": {
           "name": "Location"
         },
-        "props": {
-          "style": {
-            "fontSize": "12px",
-            "color": "#5F6B7A"
-          }
-        },
         "position": {
           "basis": "16px",
-          "shrink": 0,
-          "grow": 0
+          "shrink": 0
         },
         "propConfig": {
           "props.text": {
             "binding": {
-              "type": "expr",
               "config": {
                 "expression": "{view.custom.location}"
-              }
+              },
+              "type": "expr"
             }
           }
-        }
+        },
+        "props": {
+          "style": {
+            "color": "#5F6B7A",
+            "fontSize": "12px"
+          }
+        },
+        "type": "ia.display.label"
       },
       {
-        "type": "ia.display.label",
         "meta": {
           "name": "State"
         },
-        "props": {
-          "style": {
-            "color": "#FFFFFF",
-            "fontWeight": "bold",
-            "fontSize": "16px",
-            "textAlign": "center",
-            "borderRadius": "3px",
-            "marginTop": "6px",
-            "marginBottom": "6px"
-          }
-        },
         "position": {
           "basis": "30px",
-          "shrink": 0,
-          "grow": 0
+          "shrink": 0
         },
         "propConfig": {
-          "props.text": {
-            "binding": {
-              "type": "expr",
-              "config": {
-                "expression": "{view.custom.stateName}"
-              }
-            }
-          },
           "props.style.backgroundColor": {
             "binding": {
-              "type": "expr",
               "config": {
                 "expression": "{view.custom.state}"
               },
               "transforms": [
                 {
-                  "type": "map",
+                  "fallback": "#9E9E9E",
                   "inputType": "scalar",
-                  "outputType": "color",
                   "mappings": [
                     {
                       "input": 6,
@@ -254,78 +382,90 @@
                       "output": "#8896A6"
                     }
                   ],
-                  "fallback": "#9E9E9E"
+                  "outputType": "color",
+                  "type": "map"
                 }
-              ]
+              ],
+              "type": "expr"
+            }
+          },
+          "props.text": {
+            "binding": {
+              "config": {
+                "expression": "{view.custom.stateName}"
+              },
+              "type": "expr"
             }
           }
-        }
+        },
+        "props": {
+          "style": {
+            "borderRadius": "3px",
+            "color": "#FFFFFF",
+            "fontSize": "16px",
+            "fontWeight": "bold",
+            "marginBottom": "6px",
+            "marginTop": "6px",
+            "textAlign": "center"
+          }
+        },
+        "type": "ia.display.label"
       },
       {
-        "type": "ia.display.label",
         "meta": {
           "name": "StopReason"
         },
-        "props": {
-          "style": {
-            "fontSize": "12px",
-            "color": "#D9480F"
-          }
-        },
         "position": {
           "basis": "16px",
-          "shrink": 0,
-          "grow": 0
+          "shrink": 0
         },
         "propConfig": {
           "props.text": {
             "binding": {
-              "type": "expr",
               "config": {
-                "expression": "if({view.custom.state} = 6 || {view.custom.stopText} = 'None', '', {view.custom.stopText})"
-              }
+                "expression": "if({view.custom.state} \u003d 6 || {view.custom.stopText} \u003d \u0027None\u0027, \u0027\u0027, {view.custom.stopText})"
+              },
+              "type": "expr"
             }
           }
-        }
+        },
+        "props": {
+          "style": {
+            "color": "#D9480F",
+            "fontSize": "12px"
+          }
+        },
+        "type": "ia.display.label"
       },
       {
-        "type": "ia.display.label",
         "meta": {
           "name": "Order"
         },
-        "props": {
-          "style": {
-            "fontSize": "13px",
-            "color": "#1F2933"
-          }
-        },
         "position": {
           "basis": "18px",
-          "shrink": 0,
-          "grow": 0
+          "shrink": 0
         },
         "propConfig": {
           "props.text": {
             "binding": {
-              "type": "expr",
               "config": {
-                "expression": "if(len({view.custom.orderId}) > 0, {view.custom.orderId} + '  \u00b7  ' + {view.custom.product}, 'no order')"
-              }
+                "expression": "if(len({view.custom.orderId}) \u003e 0, {view.custom.orderId} + \u0027  ·  \u0027 + {view.custom.product}, \u0027no order\u0027)"
+              },
+              "type": "expr"
             }
           }
-        }
-      },
-      {
-        "type": "ia.display.progress",
-        "meta": {
-          "name": "Progress"
         },
         "props": {
-          "max": 100,
-          "value": 0,
-          "bar": {
-            "color": "#2E7D32"
+          "style": {
+            "color": "#1F2933",
+            "fontSize": "13px"
           }
+        },
+        "type": "ia.display.label"
+      },
+      {
+        "meta": {
+          "name": "Progress"
         },
         "position": {
           "basis": "14px",
@@ -334,289 +474,166 @@
         "propConfig": {
           "props.max": {
             "binding": {
-              "type": "expr",
               "config": {
                 "expression": "max({view.custom.target}, 1)"
-              }
+              },
+              "type": "expr"
             }
           },
           "props.value": {
             "binding": {
-              "type": "expr",
               "config": {
                 "expression": "{view.custom.good}"
-              }
+              },
+              "type": "expr"
             }
           }
-        }
+        },
+        "props": {
+          "bar": {
+            "color": "#2E7D32"
+          }
+        },
+        "type": "ia.display.progress"
       },
       {
-        "type": "ia.display.label",
         "meta": {
           "name": "Counts"
         },
-        "props": {
-          "style": {
-            "fontSize": "13px",
-            "color": "#1F2933"
-          }
-        },
         "position": {
           "basis": "18px",
-          "shrink": 0,
-          "grow": 0
+          "shrink": 0
         },
         "propConfig": {
           "props.text": {
             "binding": {
-              "type": "expr",
               "config": {
-                "expression": "'Good ' + {view.custom.good} + ' / ' + {view.custom.target} + '   Rej ' + {view.custom.rejects}"
-              }
+                "expression": "\u0027Good \u0027 + {view.custom.good} + \u0027 / \u0027 + {view.custom.target} + \u0027   Rej \u0027 + {view.custom.rejects}"
+              },
+              "type": "expr"
             }
           }
-        }
+        },
+        "props": {
+          "style": {
+            "color": "#1F2933",
+            "fontSize": "13px"
+          }
+        },
+        "type": "ia.display.label"
       },
       {
-        "type": "ia.display.label",
+        "meta": {
+          "name": "RejectPct"
+        },
+        "position": {
+          "basis": "18px",
+          "shrink": 0
+        },
+        "propConfig": {
+          "props.style.color": {
+            "binding": {
+              "config": {
+                "expression": "if({view.custom.rejectPct} \u003e 4,\n   \"#eb6834\", \"#1F2933\")"
+              },
+              "type": "expr"
+            }
+          },
+          "props.text": {
+            "binding": {
+              "config": {
+                "expression": "if({view.custom.rejectPct} \u003c 0, \"\", \"Reject \" + numberFormat({view.custom.rejectPct}, \"0.0\") + \" %\")"
+              },
+              "type": "expr"
+            }
+          }
+        },
+        "props": {
+          "style": {
+            "fontSize": "13px"
+          }
+        },
+        "type": "ia.display.label"
+      },
+      {
         "meta": {
           "name": "Speed"
         },
-        "props": {
-          "style": {
-            "fontSize": "13px",
-            "color": "#1F2933"
-          }
-        },
         "position": {
           "basis": "18px",
-          "shrink": 0,
-          "grow": 0
+          "shrink": 0
         },
         "propConfig": {
           "props.text": {
             "binding": {
-              "type": "expr",
               "config": {
-                "expression": "numberFormat({view.custom.speed}, '0.0') + ' parts/min'"
-              }
+                "expression": "numberFormat({view.custom.speed}, \u00270.0\u0027) + \u0027 parts/min\u0027"
+              },
+              "type": "expr"
             }
           }
-        }
+        },
+        "props": {
+          "style": {
+            "color": "#1F2933",
+            "fontSize": "13px"
+          }
+        },
+        "type": "ia.display.label"
       },
       {
-        "type": "ia.display.label",
         "meta": {
           "name": "Bin"
         },
-        "props": {
-          "style": {
-            "fontSize": "13px",
-            "color": "#1F2933"
-          }
-        },
         "position": {
           "basis": "18px",
-          "shrink": 0,
-          "grow": 0
+          "shrink": 0
         },
         "propConfig": {
           "props.text": {
             "binding": {
-              "type": "expr",
               "config": {
-                "expression": "'Reject bin ' + {view.custom.bin} + ' / ' + {view.custom.binCap}"
-              }
+                "expression": "\u0027Reject bin \u0027 + {view.custom.bin} + \u0027 / \u0027 + {view.custom.binCap}"
+              },
+              "type": "expr"
             }
           }
-        }
+        },
+        "props": {
+          "style": {
+            "color": "#1F2933",
+            "fontSize": "13px"
+          }
+        },
+        "type": "ia.display.label"
       }
     ],
     "events": {
       "dom": {
         "onClick": {
-          "type": "script",
-          "scope": "G",
           "config": {
-            "script": "\tsystem.perspective.navigate('/cell/' + self.view.params.cell)"
-          }
-        }
-      }
-    }
-  },
-  "propConfig": {
-    "params.cell": {
-      "paramDirection": "input",
-      "persistent": true
-    },
-    "custom.state": {
-      "binding": {
-        "type": "tag",
-        "config": {
-          "mode": "indirect",
-          "tagPath": "[default]ANN/FIN/{cell}/Status/StateCurrent",
-          "references": {
-            "cell": "{view.params.cell}"
+            "script": "\tsystem.perspective.navigate(\u0027/cell/\u0027 + self.view.params.cell)"
           },
-          "fallbackDelay": 2.5
+          "scope": "G",
+          "type": "script"
         }
       }
     },
-    "custom.stateName": {
-      "binding": {
-        "type": "tag",
-        "config": {
-          "mode": "indirect",
-          "tagPath": "[default]ANN/FIN/{cell}/Status/StateCurrentName",
-          "references": {
-            "cell": "{view.params.cell}"
-          },
-          "fallbackDelay": 2.5
-        }
+    "meta": {
+      "name": "root"
+    },
+    "props": {
+      "direction": "column",
+      "style": {
+        "backgroundColor": "#FFFFFF",
+        "borderColor": "#B8BEC6",
+        "borderRadius": "4px",
+        "borderStyle": "solid",
+        "borderWidth": "1px",
+        "cursor": "pointer",
+        "padding": "8px"
       }
     },
-    "custom.stopText": {
-      "binding": {
-        "type": "tag",
-        "config": {
-          "mode": "indirect",
-          "tagPath": "[default]ANN/FIN/{cell}/Admin/StopReasonText",
-          "references": {
-            "cell": "{view.params.cell}"
-          },
-          "fallbackDelay": 2.5
-        }
-      }
-    },
-    "custom.speed": {
-      "binding": {
-        "type": "tag",
-        "config": {
-          "mode": "indirect",
-          "tagPath": "[default]ANN/FIN/{cell}/Status/CurMachSpeed",
-          "references": {
-            "cell": "{view.params.cell}"
-          },
-          "fallbackDelay": 2.5
-        }
-      }
-    },
-    "custom.orderId": {
-      "binding": {
-        "type": "tag",
-        "config": {
-          "mode": "indirect",
-          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/OrderId",
-          "references": {
-            "cell": "{view.params.cell}"
-          },
-          "fallbackDelay": 2.5
-        }
-      }
-    },
-    "custom.product": {
-      "binding": {
-        "type": "tag",
-        "config": {
-          "mode": "indirect",
-          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/ProductCode",
-          "references": {
-            "cell": "{view.params.cell}"
-          },
-          "fallbackDelay": 2.5
-        }
-      }
-    },
-    "custom.good": {
-      "binding": {
-        "type": "tag",
-        "config": {
-          "mode": "indirect",
-          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/GoodCount",
-          "references": {
-            "cell": "{view.params.cell}"
-          },
-          "fallbackDelay": 2.5
-        }
-      }
-    },
-    "custom.rejects": {
-      "binding": {
-        "type": "tag",
-        "config": {
-          "mode": "indirect",
-          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/RejectCount",
-          "references": {
-            "cell": "{view.params.cell}"
-          },
-          "fallbackDelay": 2.5
-        }
-      }
-    },
-    "custom.target": {
-      "binding": {
-        "type": "tag",
-        "config": {
-          "mode": "indirect",
-          "tagPath": "[default]ANN/FIN/{cell}/Order/Active/TargetQuantity",
-          "references": {
-            "cell": "{view.params.cell}"
-          },
-          "fallbackDelay": 2.5
-        }
-      }
-    },
-    "custom.bin": {
-      "binding": {
-        "type": "tag",
-        "config": {
-          "mode": "indirect",
-          "tagPath": "[default]ANN/FIN/{cell}/RJ01/Status/Count",
-          "references": {
-            "cell": "{view.params.cell}"
-          },
-          "fallbackDelay": 2.5
-        }
-      }
-    },
-    "custom.binCap": {
-      "binding": {
-        "type": "tag",
-        "config": {
-          "mode": "indirect",
-          "tagPath": "[default]ANN/FIN/{cell}/RJ01/Parameters/Capacity",
-          "references": {
-            "cell": "{view.params.cell}"
-          },
-          "fallbackDelay": 2.5
-        }
-      }
-    },
-    "custom.auto": {
-      "binding": {
-        "type": "tag",
-        "config": {
-          "mode": "indirect",
-          "tagPath": "[default]ANN/FIN/{cell}/MES/AutoRun",
-          "references": {
-            "cell": "{view.params.cell}"
-          },
-          "fallbackDelay": 2.5
-        }
-      }
-    },
-    "custom.location": {
-      "binding": {
-        "type": "tag",
-        "config": {
-          "mode": "indirect",
-          "tagPath": "[default]ANN/FIN/{cell}/Identification/Location",
-          "references": {
-            "cell": "{view.params.cell}"
-          },
-          "fallbackDelay": 2.5
-        }
-      }
-    }
+    "type": "ia.container.flex"
   }
 }

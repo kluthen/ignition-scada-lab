@@ -3,131 +3,165 @@
   "params": {},
   "props": {
     "defaultSize": {
-      "width": 1400,
-      "height": 50
+      "height": 50,
+      "width": 1400
     }
   },
   "root": {
-    "type": "ia.container.flex",
-    "meta": {
-      "name": "root"
-    },
-    "props": {
-      "direction": "row",
-      "style": {
-        "backgroundColor": "#2B3A4A",
-        "padding": "6px 12px",
-        "alignItems": "center"
-      },
-      "alignItems": "center"
-    },
     "children": [
       {
-        "type": "ia.display.label",
         "meta": {
           "name": "Title"
-        },
-        "props": {
-          "style": {
-            "fontSize": "18px",
-            "fontWeight": "bold",
-            "color": "#FFFFFF"
-          },
-          "text": "Brevent Hydraulics \u00b7 Annecy \u00b7 Finishing area (FIN)"
         },
         "position": {
           "grow": 1,
           "shrink": 0
-        }
+        },
+        "props": {
+          "style": {
+            "color": "#FFFFFF",
+            "fontSize": "18px",
+            "fontWeight": "bold"
+          },
+          "text": "Brevent Hydraulics · Annecy · Finishing area (FIN)"
+        },
+        "type": "ia.display.label"
       },
       {
-        "type": "ia.input.button",
+        "meta": {
+          "name": "ToggleTheme"
+        },
+        "position": {
+          "basis": "96px"
+        },
+        "propConfig": {
+          "props.label.text": {
+            "binding": {
+              "config": {
+                "expression": "if({this.props.selected}, \"Dark\", \"Light\")"
+              },
+              "type": "expr"
+            }
+          },
+          "props.selected": {
+            "binding": {
+              "config": {
+                "expression": "{session.props.theme}\u003d \"dark\""
+              },
+              "type": "expr"
+            },
+            "onChange": {
+              "enabled": null,
+              "script": "\tself.session.props.theme \u003d \"dark\" if currentValue.value else \"light\""
+            }
+          }
+        },
+        "props": {
+          "label": {}
+        },
+        "type": "ia.input.toggle-switch"
+      },
+      {
+        "events": {
+          "dom": {
+            "onClick": {
+              "config": {
+                "script": "\tsystem.perspective.navigate(\u0027/\u0027)"
+              },
+              "scope": "G",
+              "type": "script"
+            }
+          }
+        },
         "meta": {
           "name": "Overview"
         },
-        "props": {
-          "text": "Overview",
-          "primary": false,
-          "style": {
-            "marginLeft": "8px"
-          }
-        },
         "position": {
           "basis": "120px",
           "shrink": 0
         },
+        "props": {
+          "primary": false,
+          "style": {
+            "marginLeft": "8px"
+          },
+          "text": "Overview"
+        },
+        "type": "ia.input.button"
+      },
+      {
         "events": {
           "dom": {
             "onClick": {
-              "type": "script",
-              "scope": "G",
               "config": {
-                "script": "\tsystem.perspective.navigate('/')"
-              }
+                "script": "\tsystem.perspective.navigate(\u0027/kpi\u0027)"
+              },
+              "scope": "G",
+              "type": "script"
             }
           }
-        }
-      },
-      {
-        "type": "ia.input.button",
+        },
         "meta": {
           "name": "Kpi"
         },
-        "props": {
-          "text": "KPI",
-          "primary": false,
-          "style": {
-            "marginLeft": "8px"
-          }
-        },
         "position": {
           "basis": "120px",
           "shrink": 0
         },
+        "props": {
+          "primary": false,
+          "style": {
+            "marginLeft": "8px"
+          },
+          "text": "KPI"
+        },
+        "type": "ia.input.button"
+      },
+      {
         "events": {
           "dom": {
             "onClick": {
-              "type": "script",
-              "scope": "G",
               "config": {
-                "script": "\tsystem.perspective.navigate('/kpi')"
-              }
+                "script": "\tsystem.perspective.navigate(\u0027/instructor\u0027)"
+              },
+              "scope": "G",
+              "type": "script"
             }
           }
-        }
-      },
-      {
-        "type": "ia.input.button",
+        },
         "meta": {
           "name": "Instructor"
         },
-        "props": {
-          "text": "Instructor",
-          "primary": false,
-          "style": {
-            "marginLeft": "8px"
-          }
-        },
         "position": {
           "basis": "120px",
           "shrink": 0
         },
-        "events": {
-          "dom": {
-            "onClick": {
-              "type": "script",
-              "scope": "G",
-              "config": {
-                "script": "\tsystem.perspective.navigate('/instructor')"
-              }
-            }
-          }
-        }
+        "props": {
+          "primary": false,
+          "style": {
+            "marginLeft": "8px"
+          },
+          "text": "Instructor"
+        },
+        "type": "ia.input.button"
       },
       {
-        "type": "ia.display.label",
         "meta": {
           "name": "Clock"
+        },
+        "position": {
+          "basis": "170px",
+          "shrink": 0
+        },
+        "propConfig": {
+          "props.text": {
+            "binding": {
+              "config": {
+                "expression": "dateFormat(now(1000), \u0027dd/MM/yyyy HH:mm:ss\u0027)"
+              },
+              "type": "expr"
+            }
+          }
         },
         "props": {
           "style": {
@@ -136,22 +170,20 @@
             "textAlign": "right"
           }
         },
-        "position": {
-          "basis": "170px",
-          "shrink": 0,
-          "grow": 0
-        },
-        "propConfig": {
-          "props.text": {
-            "binding": {
-              "type": "expr",
-              "config": {
-                "expression": "dateFormat(now(1000), 'dd/MM/yyyy HH:mm:ss')"
-              }
-            }
-          }
-        }
+        "type": "ia.display.label"
       }
-    ]
+    ],
+    "meta": {
+      "name": "root"
+    },
+    "props": {
+      "alignItems": "center",
+      "style": {
+        "alignItems": "center",
+        "backgroundColor": "#2B3A4A",
+        "padding": "6px 12px"
+      }
+    },
+    "type": "ia.container.flex"
   }
 }
